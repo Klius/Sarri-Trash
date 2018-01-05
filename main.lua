@@ -3,7 +3,7 @@ local sti = require "libs/sti"
 local shine = require "libs/shine"
 Object = require "libs/classic"
 require "objects/music"
-Moan = require('libs/Moan')
+Moan = require('libs/moan')
 function love.load()
    -- Load map file
    map = sti("assets/testmap.lua")
