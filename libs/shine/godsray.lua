@@ -43,9 +43,9 @@ return {
 	new = function(self)
 		self.canvas = love.graphics.newCanvas()
 		self.shader = love.graphics.newShader[[
-			extern number exposure = 0.2;
+			extern number exposure = 0.25;
 			extern number decay = .95;
-			extern number density = .00;
+			extern number density = .0;
 			extern number weight = .25;
 			extern vec2 light_position= vec2(0.5,0.5);
 			extern number samples = 70.0 ;

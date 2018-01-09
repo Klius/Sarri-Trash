@@ -1,24 +1,27 @@
 -- Include Simple Tiled Implementation into project
 local sti = require "libs/sti"
 local shine = require "libs/shine"
+bump = require "libs/bump"
+bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
 require "objects/music"
-Moan = require('libs/Moan')
+
 function love.load()
    -- Load map file
-   map = sti("assets/testmap.lua")
-   bloom = shine.godsray()
+   map = sti("assets/testmap.lua",{"bump"})
+   bloom = shine.glowsimple()
    audiomanager = MusicManager()
-   Moan.speak("Title", {"Hello World!--Möan.lua!"})
+   world = bump.newWorld()
+   map:bump_init(world)
    --Spawn player
    spawnPlayer()
 end
 
 function love.update(dt)
    -- Update world
+   updatePlayer(dt)
    map:update(dt)
    audiomanager:PlayMusic()
-   Moan.update(dt)
 end
 
 function love.draw()
@@ -28,123 +31,125 @@ function love.draw()
    local screen_height = love.graphics.getHeight() / scale
 
    -- Translate world so that player is always centred
-   local player = map.layers["Sprites"].player
    local tx = math.floor(player.x - screen_width / 2)
    local ty = math.floor(player.y - screen_height / 2)
 
    -- Translate world
    -- love.graphics.scale(scale)
    -- love.graphics.translate(-tx, -ty)
-
+    love.graphics.scale(scale)
+    love.graphics.translate(-tx, -ty)
    -- Draw world
    bloom:draw(function()
    map:draw(-tx, -ty, scale,scale)
+   drawPlayer()
+   
   end)
-  Moan.draw()
-   --map:draw(-tx, -ty, scale,scale)
+map:bump_draw(world)
+--bump_debug.draw(world)
+  -- map:draw(-tx, -ty, scale,scale)
 end
-
-function love.keyreleased(key)
-    Moan.keyreleased(key) -- or Moan.keypressed(key)
-end
-
 function spawnPlayer()
-  ---- Create new dynamic data layer called "Sprites" as the 4th layer
-  local layer = map:addCustomLayer("Sprites", 3)
-
-   -- Get player spawn object
-   local player
+ local sprite = love.graphics.newImage("assets/car-test.png")
+   local spritesheet = getAnimations(sprite,32,32)
+   local spawn
    for k, object in pairs(map.objects) do
       if object.name == "Player" then
-	 player = object
+	 spawn = object
 	 break
       end
    end
-
-   -- Create player object
-   local sprite = love.graphics.newImage("assets/walking-man.png")
-   local spritesheet = getAnimations(sprite,32,32)
-   layer.player = {
+   player = {
       sprite = sprite,
       frames = spritesheet,
-      frameDuration = 0.1,
+      frameDuration = 0.5,
       frameCount = 0,
       currentFrame = 0,
-      x      = player.x,
-      y      = player.y,
-      width = 32,
-      height = 32,
-      ox     = 32 / 2,
-      oy     = 32 / 1.35
-      
+      x      = spawn.x,
+      y      = spawn.y,
+      w = 32,
+      h = 32,
+      ox     = 16 ,
+      oy     = 16 ,
+      orientation = 0,
+      currentSpeed = 0,
+      topSpeed = 8,
+      acceleration = 5,
+      steering = 150,
+      braking = 10
    }
-
-   -- Add controls to player
-   layer.update = function(self, dt)
-      -- 150 pixels per second
-      local speed = 150
-      local moving = false
-      -- Move player up
-      if love.keyboard.isDown("w") or love.keyboard.isDown("up") then
-      self.player.y = self.player.y - speed * dt
-      moving = true
-      end
-
-      -- Move player down
-      if love.keyboard.isDown("s") or love.keyboard.isDown("down") then
-	 self.player.y = self.player.y + speed * dt
-   moving = true
-      end
-
-      -- Move player left
-      if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
-	 self.player.x = self.player.x - speed * dt
-   moving = true
-      end
-
-      -- Move player right
-    if love.keyboard.isDown("d") or love.keyboard.isDown("right") then
-     self.player.x = self.player.x + speed * dt
-     moving = true
-    end
-    --change frame of animation
-    if moving then
-      self.player.frameCount = self.player.frameCount + dt
-    else
-      self.player.currentFrame = 1  
-    end
-    if self.player.frameCount > self.player.frameDuration then
-      self.player.frameCount = 0
-      self.player.currentFrame = 1 + self.player.currentFrame
-      if self.player.currentFrame > 3 then
-        self.player.currentFrame = 0
-      end
-    end
-   end
+   world:add(player,player.x,player.y,player.w,player.h)
+   map:removeLayer("Spawn Point")
    
-   -- Draw player
-   layer.draw = function(self)
-      love.graphics.draw(
-                         self.player.sprite,
-                         self.player.frames[self.player.currentFrame],
-                         math.floor(self.player.x),
-                         math.floor(self.player.y),	 
-                         0,
+end
+function drawPlayer()
+  love.graphics.draw(
+                         player.sprite,
+                         player.frames[player.currentFrame],
+                         math.floor(player.x+player.ox),
+                         math.floor(player.y+player.oy),	 
+                         player.orientation,
                          1,
                          1,
-                         self.player.ox,
-                         self.player.oy
+                         player.ox,
+                         player.oy
                             )
 
       -- Temporarily draw a point at our location so we know
       -- that our sprite is offset properly
-      love.graphics.setPointSize(5)
-      love.graphics.points(math.floor(self.player.x), math.floor(self.player.y))
-   end
-
-   map:removeLayer("Spawn Point")
+      love.graphics.setPointSize(1)
+      love.graphics.rectangle('line', world:getRect(player))
+      love.graphics.print(player.currentSpeed,player.x,player.y)
 end
+function updatePlayer(dt)
+  local speed = player.acceleration * dt
+      local brakes = player.braking * dt
+      --Acceleration
+      if love.keyboard.isDown("space") then
+        player.currentSpeed = player.currentSpeed + speed
+        if player.currentSpeed > player.topSpeed then
+          player.currentSpeed = player.topSpeed
+        end
+      else
+        player.currentSpeed = player.currentSpeed - speed
+        if player.currentSpeed < 0 then
+          player.currentSpeed = 0
+        end
+      end
+      if love.keyboard.isDown("s") then
+        player.currentSpeed = player.currentSpeed - brakes
+        if player.currentSpeed < -2 then
+          player.currentSpeed = -2
+        end
+      end
 
+    -- ORIENTATION
+    if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+      player.orientation = player.orientation - (player.steering * dt) * math.pi / 180
+    elseif love.keyboard.isDown("d") or love.keyboard.isDown("right") then
+      player.orientation = player.orientation + (player.steering * dt) * math.pi / 180
+    end
+    
+    --Change position
+    
+    goalX = player.x - math.cos(player.orientation)*player.currentSpeed
+    goalY = player.y - math.sin(player.orientation)*player.currentSpeed
+    player.x, player.y = world:move(player, goalX, goalY)
+    --ANIMATION
+    if player.currentSpeed > 0 then
+      player.frameCount = player.frameCount + dt
+    else
+      player.currentFrame = 0  
+    end
+    if player.frameCount > player.frameDuration then
+      player.frameCount = 0
+      player.currentFrame = 1 + player.currentFrame
+      if player.currentFrame > 3 then
+        player.currentFrame = 0
+      end
+    end
+
+end
 
 
 function getAnimations(sprite,width,height)
