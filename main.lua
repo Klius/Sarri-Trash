@@ -50,6 +50,12 @@ function love.load()
           releaseRotateRight      = function() player.rotatingRight = false end,
           brake      = function() player.braking = true end,
           releaseBrake      = function() player.braking = false end,
+          reloadMap         = function() 
+                                map = sti("assets/maps/race-test.lua",{"bump"})
+                                world = bump.newWorld()
+                                map:bump_init(world)
+                                spawnPlayer()
+                              end 
           
       },
       keys = {
@@ -71,6 +77,7 @@ function love.load()
           x       = "brake",
           dpleft  = "rotateLeft",
           dpright = "rotateRight",
+          back    = "reloadMap"
       },
       buttonsReleased = {
         a = "releaseGas",

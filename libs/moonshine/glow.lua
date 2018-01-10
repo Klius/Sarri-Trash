@@ -99,6 +99,6 @@ return function(moonshine)
     name = "glow",
     draw = draw,
     setters = setters,
-    defaults = {min_luma=.8, strength = 2}
+    defaults = {min_luma=.85, strength = 2}
   }
 end
