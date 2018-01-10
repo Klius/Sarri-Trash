@@ -1,6 +1,6 @@
 -- Include Simple Tiled Implementation into project
 local sti = require "libs/sti"
-local shine = require "libs/shine"
+local moonshine = require "libs/moonshine"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
@@ -8,13 +8,124 @@ require "objects/music"
 
 function love.load()
    -- Load map file
-   map = sti("assets/testmap.lua",{"bump"})
-   bloom = shine.glowsimple()
+   map = sti("assets/maps/race-test.lua",{"bump"})
+   effect = moonshine(moonshine.effects.glow)
+
    audiomanager = MusicManager()
    world = bump.newWorld()
    map:bump_init(world)
-   --Spawn player
+   gameStates = {}
+   keydebug =""
+  gameStates.menu = {
+      bindings = {
+          backToGame = function()  state = gameStates.gameLoop  end,
+          scrollUp   = function()  end,
+          scrollDown = function()  end,
+          select     = function()  end,
+      },
+      keys = {
+          space     = "backToGame",
+          up         = "scrollUp",
+          down       = "scrollDown",
+          ["return"] = "select",
+      },
+      keysReleased = {},
+      buttons = {
+          start = "backToGame",
+          up   = "scrollUp",
+          down = "scrollDown",
+          a    = "select",
+      },
+      buttonsReleased = {}
+      -- <...>
+  }
+  gameStates.gameLoop = {
+      bindings = {
+          openMenu   = function()  state = gameStates.menu  end,
+          gas       = function() player.accelerating = true end,
+          releaseGas       = function() player.accelerating = false end,
+          rotateLeft       = function() player.rotatingLeft = true end,
+          rotateRight      = function() player.rotatingRight = true end,
+          releaseRotateLeft       = function() player.rotatingLeft = false end,
+          releaseRotateRight      = function() player.rotatingRight = false end,
+          brake      = function() player.braking = true end,
+          releaseBrake      = function() player.braking = false end,
+          
+      },
+      keys = {
+          escape = "openMenu",
+          space = "gas",
+          left   = "rotateLeft",
+          right  = "rotateRight",
+          x = "brake"
+      },
+      keysReleased = {
+        space = "releaseGas",
+        x       = "releaseBrake",
+        left  = "releaseRotateLeft",
+        right = "releaseRotateRight",
+      },
+      buttons = {
+          start    = "openMenu",
+          a       = "gas",
+          x       = "brake",
+          dpleft  = "rotateLeft",
+          dpright = "rotateRight",
+      },
+      buttonsReleased = {
+        a = "releaseGas",
+        x       = "releaseBrake",
+        dpleft  = "releaseRotateLeft",
+        dpright = "releaseRotateRight",
+      }
+      -- <...>
+  }
+  state = gameStates.menu
+  --Spawn player
    spawnPlayer()
+   camera = {
+      
+     scale = 2,
+     screen_width = love.graphics.getWidth() / 2,
+     screen_height = love.graphics.getHeight() / 2,
+     scene = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight()),
+
+   -- Translate world so that player is always centred
+     tx = math.floor(player.x - (love.graphics.getWidth() / 2) / 2),
+     ty = math.floor(player.y - (love.graphics.getHeight() / 2) / 2),
+     scaleIntervals = 0.5,
+     zoomIn = 2,
+     zoomOut = 1.5,
+     update = function(self,dt) 
+                if player.currentSpeed> player.topSpeed/2 then
+                  self.scale = self.scale - self.scaleIntervals*dt
+                  if self.scale < self.zoomOut then
+                    self.scale=self.zoomOut
+                  end
+                else
+                  self.scale = self.scale + self.scaleIntervals*dt
+                  if self.scale > self.zoomIn then
+                    self.scale=self.zoomIn
+                  end
+                end  
+                self.screen_width = love.graphics.getWidth() / self.scale
+                self.screen_height = love.graphics.getHeight() / self.scale
+
+              -- Translate world so that player is always centred
+                self.tx = math.floor(player.x - self.screen_width / 2)
+                self.ty = math.floor(player.y - self.screen_height / 2)
+                
+                --Scene
+                love.graphics.setCanvas(self.scene)
+                love.graphics.scale(self.scale)
+                love.graphics.translate(-self.tx, -self.ty)
+                map:draw(-self.tx, -self.ty, self.scale,self.scale)
+                drawPlayer()
+                
+                love.graphics.setCanvas()
+                
+              end
+    }
 end
 
 function love.update(dt)
@@ -22,30 +133,36 @@ function love.update(dt)
    updatePlayer(dt)
    map:update(dt)
    audiomanager:PlayMusic()
+   camera:update(dt)
 end
 
 function love.draw()
-   -- Scale world
-   local scale = 2
-   local screen_width = love.graphics.getWidth() / scale
-   local screen_height = love.graphics.getHeight() / scale
-
-   -- Translate world so that player is always centred
-   local tx = math.floor(player.x - screen_width / 2)
-   local ty = math.floor(player.y - screen_height / 2)
-
-   -- Translate world
-   -- love.graphics.scale(scale)
-   -- love.graphics.translate(-tx, -ty)
-    love.graphics.scale(scale)
-    love.graphics.translate(-tx, -ty)
-   -- Draw world
-   bloom:draw(function()
-   map:draw(-tx, -ty, scale,scale)
-   drawPlayer()
+  if state == gameStates.gameLoop then
    
-  end)
-map:bump_draw(world)
+
+   
+    
+
+   -- Draw world
+    effect(function()
+      love.graphics.draw(camera.scene)
+      --love.graphics.scale(camera.scale)
+      --love.graphics.translate(-camera.tx, -camera.ty)
+      --map:draw(-camera.tx, -camera.ty, camera.scale,camera.scale)
+     
+     --drawPlayer()
+    end)
+    
+  elseif gameStates.menu then
+    
+    love.graphics.print("Key pressed:"..keydebug)
+    love.graphics.print("Pulsa [Espacio] para empezar",125,love.graphics.getHeight()/2)
+    love.graphics.print("Pulsa [<-] para mover el coche a la izquierda",125,love.graphics.getHeight()/2+20)
+    love.graphics.print("Pulsa [->] para mover el coche a la derecha",125,love.graphics.getHeight()/2+40)
+    love.graphics.print("Pulsa [x] para frenar/marcha atras el coche",125,love.graphics.getHeight()/2+60)
+    love.graphics.print("Pulsa [espacio] para acelerar el coche",125,love.graphics.getHeight()/2+80)
+  end
+--map:bump_draw(world)
 --bump_debug.draw(world)
   -- map:draw(-tx, -ty, scale,scale)
 end
@@ -76,7 +193,11 @@ function spawnPlayer()
       topSpeed = 8,
       acceleration = 5,
       steering = 150,
-      braking = 10
+      brakes = 10,
+      rotatingLeft = false,
+      rotatingRight = false,
+      accelerating = false,
+      braking = false
    }
    world:add(player,player.x,player.y,player.w,player.h)
    map:removeLayer("Spawn Point")
@@ -98,25 +219,25 @@ function drawPlayer()
       -- Temporarily draw a point at our location so we know
       -- that our sprite is offset properly
       love.graphics.setPointSize(1)
-      love.graphics.rectangle('line', world:getRect(player))
+      --love.graphics.rectangle('line', world:getRect(player))
       love.graphics.print(player.currentSpeed,player.x,player.y)
 end
 function updatePlayer(dt)
   local speed = player.acceleration * dt
-      local brakes = player.braking * dt
+      local brakes = player.brakes * dt
       --Acceleration
-      if love.keyboard.isDown("space") then
+      if player.accelerating then
         player.currentSpeed = player.currentSpeed + speed
         if player.currentSpeed > player.topSpeed then
           player.currentSpeed = player.topSpeed
         end
       else
         player.currentSpeed = player.currentSpeed - speed
-        if player.currentSpeed < 0 then
+        if player.currentSpeed < 0 and player.braking == false then
           player.currentSpeed = 0
         end
       end
-      if love.keyboard.isDown("s") then
+      if player.braking then
         player.currentSpeed = player.currentSpeed - brakes
         if player.currentSpeed < -2 then
           player.currentSpeed = -2
@@ -124,9 +245,9 @@ function updatePlayer(dt)
       end
 
     -- ORIENTATION
-    if love.keyboard.isDown("a") or love.keyboard.isDown("left") then
+    if player.rotatingLeft then
       player.orientation = player.orientation - (player.steering * dt) * math.pi / 180
-    elseif love.keyboard.isDown("d") or love.keyboard.isDown("right") then
+    elseif player.rotatingRight then
       player.orientation = player.orientation + (player.steering * dt) * math.pi / 180
     end
     
@@ -152,6 +273,7 @@ function updatePlayer(dt)
 end
 
 
+
 function getAnimations(sprite,width,height)
   local spritesheet = {}
   local i = 0
@@ -164,4 +286,36 @@ function getAnimations(sprite,width,height)
   end
   return spritesheet
   
+end
+
+  --[
+  -- HANDLING
+  --]
+
+
+function inputHandler( input )
+    local action = state.bindings[input]
+    if action then  return action()  end
+end
+
+function love.keypressed( k )
+    -- you might want to keep track of this to change display prompts
+    INPUTMETHOD = "keyboard"
+    local binding = state.keys[k]
+    return inputHandler( binding )
+end
+function love.keyreleased( k )
+    local binding = state.keysReleased[k]
+    return inputHandler( binding )
+end
+function love.gamepadpressed( gamepad, button )
+    -- you might want to keep track of this to change display prompts
+    INPUTMETHOD = "gamepad"
+    keydebug = button
+    local binding = state.buttons[button]
+    return inputHandler( binding )
+end
+function love.gamepadreleased( gamepad, button )
+    local binding = state.buttonsReleased[button]
+    return inputHandler( binding )
 end
