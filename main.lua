@@ -1,92 +1,24 @@
 -- Include Simple Tiled Implementation into project
-local sti = require "libs/sti"
-local moonshine = require "libs/moonshine"
+sti = require "libs/sti"
+moonshine = require "libs/moonshine"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
+require "objects/mapManager"
 require "objects/music"
-
+require "objects/gamestates"
 function love.load()
    -- Load map file
-   map = sti("assets/maps/race-test.lua",{"bump"})
-   effect = moonshine(moonshine.effects.glow)
 
+   effect = moonshine(moonshine.effects.glow)
+   maplist:loadMaps()
+   print(maplist.maps[maplist.selectedMap])
    audiomanager = MusicManager()
+   map = sti(maplist.maps[maplist.selectedMap],{"bump"})
    world = bump.newWorld()
    map:bump_init(world)
-   gameStates = {}
-   keydebug =""
-  gameStates.menu = {
-      bindings = {
-          backToGame = function()  state = gameStates.gameLoop  end,
-          scrollUp   = function()  end,
-          scrollDown = function()  end,
-          select     = function()  end,
-      },
-      keys = {
-          space     = "backToGame",
-          up         = "scrollUp",
-          down       = "scrollDown",
-          ["return"] = "select",
-      },
-      keysReleased = {},
-      buttons = {
-          start = "backToGame",
-          up   = "scrollUp",
-          down = "scrollDown",
-          a    = "select",
-      },
-      buttonsReleased = {}
-      -- <...>
-  }
-  gameStates.gameLoop = {
-      bindings = {
-          openMenu   = function()  state = gameStates.menu  end,
-          gas       = function() player.accelerating = true end,
-          releaseGas       = function() player.accelerating = false end,
-          rotateLeft       = function() player.rotatingLeft = true end,
-          rotateRight      = function() player.rotatingRight = true end,
-          releaseRotateLeft       = function() player.rotatingLeft = false end,
-          releaseRotateRight      = function() player.rotatingRight = false end,
-          brake      = function() player.braking = true end,
-          releaseBrake      = function() player.braking = false end,
-          reloadMap         = function() 
-                                map = sti("assets/maps/race-test.lua",{"bump"})
-                                world = bump.newWorld()
-                                map:bump_init(world)
-                                spawnPlayer()
-                              end 
-          
-      },
-      keys = {
-          escape = "openMenu",
-          space = "gas",
-          left   = "rotateLeft",
-          right  = "rotateRight",
-          x = "brake"
-      },
-      keysReleased = {
-        space = "releaseGas",
-        x       = "releaseBrake",
-        left  = "releaseRotateLeft",
-        right = "releaseRotateRight",
-      },
-      buttons = {
-          start    = "openMenu",
-          a       = "gas",
-          x       = "brake",
-          dpleft  = "rotateLeft",
-          dpright = "rotateRight",
-          back    = "reloadMap"
-      },
-      buttonsReleased = {
-        a = "releaseGas",
-        x       = "releaseBrake",
-        dpleft  = "releaseRotateLeft",
-        dpright = "releaseRotateRight",
-      }
-      -- <...>
-  }
+   
+  keydebug =""
   state = gameStates.menu
   --Spawn player
    spawnPlayer()
@@ -161,8 +93,9 @@ function love.draw()
     end)
     
   elseif gameStates.menu then
-    
+    love.graphics.draw(maplist.preview,love.graphics.getWidth()-500,love.graphics.getHeight()-400)
     love.graphics.print("Key pressed:"..keydebug)
+    love.graphics.print("SelectedMap: "..maplist.maps[maplist.selectedMap],125,love.graphics.getHeight()/2-20)
     love.graphics.print("Pulsa [Espacio] para empezar",125,love.graphics.getHeight()/2)
     love.graphics.print("Pulsa [<-] para mover el coche a la izquierda",125,love.graphics.getHeight()/2+20)
     love.graphics.print("Pulsa [->] para mover el coche a la derecha",125,love.graphics.getHeight()/2+40)
