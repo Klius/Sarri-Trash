@@ -140,7 +140,7 @@ function spawnPlayer()
       braking = false
    }
    world:add(player,player.x,player.y,player.w,player.h)
-   map:removeLayer("Spawn Point")
+   --map:removeLayer("Spawn Point")
    
 end
 function drawPlayer()
