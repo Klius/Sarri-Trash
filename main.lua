@@ -9,7 +9,7 @@ require "objects/music"
 require "objects/gamestates"
 function love.load()
    -- Load map file
-
+   debug = false
    effect = moonshine(moonshine.effects.glow)
    maplist:loadMaps()
    print(maplist.maps[maplist.selectedMap])
@@ -83,14 +83,14 @@ function love.draw()
     
 
    -- Draw world
-    effect(function()
+    --effect(function()
       love.graphics.draw(camera.scene)
       --love.graphics.scale(camera.scale)
       --love.graphics.translate(-camera.tx, -camera.ty)
       --map:draw(-camera.tx, -camera.ty, camera.scale,camera.scale)
      
      --drawPlayer()
-    end)
+    --end)
     
   elseif gameStates.menu then
     love.graphics.draw(maplist.preview,love.graphics.getWidth()-500,love.graphics.getHeight()-400)

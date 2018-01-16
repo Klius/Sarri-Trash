@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="testroad" tilewidth="32" tileheight="32" tilecount="32" columns="8">
+<tileset name="testroad" tilewidth="32" tileheight="32" tilecount="24" columns="8">
  <image source="testroad.png" width="256" height="96"/>
  <tile id="0">
   <objectgroup draworder="index">
@@ -33,10 +33,87 @@
   </objectgroup>
  </tile>
  <tile id="20">
-  <objectgroup draworder="index"/>
+  <objectgroup draworder="index">
+   <object id="1" x="0" y="15.125" width="14.875" height="16.8125">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="2" x="7" y="11.087" width="3.95652" height="3.95652">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="3" x="2.65217" y="7" width="4.26087" height="8">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="4" x="0" y="3.08696" width="2.95652" height="3.73913">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="5" x="14.8696" y="19" width="4.04348" height="5">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="6" x="18.913" y="23.087" width="4.13043" height="4.73913">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="7" x="23.0435" y="27.1304" width="3.91304" height="4.95652">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="21">
-  <objectgroup draworder="index"/>
+  <objectgroup draworder="index">
+   <object id="1" x="3" y="0.0909091" width="5.54545" height="4">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="2" x="7.05682" y="4.30682" width="6.72727" height="3.63636">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="3" x="11.0909" y="8.25" width="4.72727" height="3.72727">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="4" x="15" y="0.346591" width="16.9545" height="15.5625">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="5" x="19" y="15.9091" width="6.90909" height="4">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="6" x="22.1818" y="20" width="5.36364" height="3">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="8" x="26.0625" y="22.9375" width="5.90625" height="4">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="9" x="30.0313" y="26.9688" width="1.9375" height="3.84375">
+    <properties>
+     <property name="collidable" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="22">
   <objectgroup draworder="index">
@@ -84,157 +161,37 @@
  </tile>
  <tile id="23">
   <objectgroup draworder="index">
-   <object id="22" x="0" y="29.4032" width="0.956522" height="1.56287">
+   <object id="55" x="0.181818" y="0.0909091" width="15.7273" height="15.8182">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="23" x="1" y="28.8807" width="0.96875" height="1.11932">
+   <object id="56" x="0.0909091" y="16.2727" width="7.81818" height="7.63636">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="24" x="2.09375" y="27.9403" width="0.875" height="0.997159">
+   <object id="57" x="-0.0909091" y="22.8182" width="4" height="5.09091">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="25" x="2.96875" y="26.6875" width="1" height="1.28125">
+   <object id="58" x="16" y="0.181818" width="7.90909" height="7.45455">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="26" x="4" y="25.2813" width="0.96875" height="1.6875">
+   <object id="59" x="23.9091" y="0.272727" width="4.09091" height="3.63636">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="27" x="5.03125" y="24.625" width="0.96875" height="1.34375">
+   <object id="60" x="16" y="7.36364" width="3.90909" height="4.45455">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
    </object>
-   <object id="28" x="5.875" y="23.5" width="1.0625" height="1.5">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="29" x="6.96875" y="22.7813" width="0.96875" height="1.1875">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="30" x="7.90625" y="21.1875" width="1.0625" height="1.78125">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="31" x="9.03125" y="20.6563" width="0.96875" height="1.34375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="32" x="10.0938" y="19.75" width="0.84375" height="1.25">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="33" x="11.0313" y="18.9063" width="0.9375" height="1.0625">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="34" x="11.875" y="17.4688" width="1.09375" height="1.5">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="35" x="13.0938" y="16.625" width="0.90625" height="1.34375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="36" x="14.0313" y="15.5938" width="0.9375" height="1.375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="37" x="14.9063" y="14.6875" width="1.03125" height="1.25">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="38" x="15.8438" y="13.9063" width="1.09375" height="1.0625">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="39" x="16.9375" y="12.5938" width="1.0625" height="1.375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="40" x="18.0313" y="11.7813" width="0.9375" height="1.21875">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="41" x="18.8438" y="10.625" width="1.15625" height="1.34375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="42" x="20.0938" y="9.53125" width="0.875" height="1.46875">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="43" x="21" y="8.84375" width="0.9375" height="1.09375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="44" x="21.875" y="7.90625" width="1.09375" height="1.03125">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="45" x="22.7188" y="6.875" width="1.25" height="1.09375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="46" x="23.8438" y="5.875" width="1.125" height="1.0625">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="49" x="24.875" y="5.0625" width="1.09375" height="0.875">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="50" x="25.875" y="3.6875" width="1.09375" height="1.3125">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="51" x="26.8438" y="2.625" width="1.125" height="1.3125">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="52" x="28" y="1.9375" width="0.9375" height="1.09375">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="53" x="28.9063" y="0.84375" width="1.0625" height="1.1875">
-    <properties>
-     <property name="collidable" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="54" x="30.0313" y="-0.0625" width="0.96875" height="1.03125">
+   <object id="61" x="8.90909" y="16.0909" width="3.09091" height="3.72727">
     <properties>
      <property name="collidable" type="bool" value="true"/>
     </properties>
