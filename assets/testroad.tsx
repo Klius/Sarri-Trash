@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset name="testroad" tilewidth="32" tileheight="32" tilecount="24" columns="8">
- <image source="testroad.png" width="256" height="96"/>
+<tileset name="testroad" tilewidth="32" tileheight="32" tilecount="32" columns="8">
+ <image source="testroad.png" width="256" height="128"/>
  <tile id="0">
   <objectgroup draworder="index">
    <object id="7" x="0" y="0" height="32"/>
@@ -197,5 +197,8 @@
     </properties>
    </object>
   </objectgroup>
+ </tile>
+ <tile id="24">
+  <objectgroup draworder="index"/>
  </tile>
 </tileset>

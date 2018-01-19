@@ -91,6 +91,10 @@ function love.draw()
      
      --drawPlayer()
     --end)
+    if debug then
+      love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
+      love.graphics.print ("Checkpoint 1: "..player.checkPoints[1])
+    end
     
   elseif gameStates.menu then
     love.graphics.draw(maplist.preview,love.graphics.getWidth()-500,love.graphics.getHeight()-400)
@@ -137,7 +141,8 @@ function spawnPlayer()
       rotatingLeft = false,
       rotatingRight = false,
       accelerating = false,
-      braking = false
+      braking = false,
+      checkPoints = { false,false,false}
    }
    world:add(player,player.x,player.y,player.w,player.h)
    --map:removeLayer("Spawn Point")
@@ -195,7 +200,24 @@ function updatePlayer(dt)
     
     goalX = player.x - math.cos(player.orientation)*player.currentSpeed
     goalY = player.y - math.sin(player.orientation)*player.currentSpeed
-    player.x, player.y = world:move(player, goalX, goalY)
+    local playerFilter = function(item, other)
+      if other.properties.isCheckpoint   then return 'cross'
+      else return 'slide'
+      end
+    
+      end
+    local actualX, actualY, cols, len = world:move(player, goalX, goalY, playerFilter)
+    player.x, player.y = actualX, actualY
+    --COLISIONS
+    for i=1,len do
+      local other = cols[i].other
+      if other.properties.isCheckpoint then
+        addCheckpoint(other.properties.checkpointNum)
+      else
+        
+      end
+    end
+    
     --ANIMATION
     if player.currentSpeed > 0 then
       player.frameCount = player.frameCount + dt
@@ -211,7 +233,11 @@ function updatePlayer(dt)
     end
 
 end
-
+function addCheckpoint (index)
+  if player.checkPoints[index] == false then
+    player.checkPoints[index] = true
+  end
+end
 
 
 function getAnimations(sprite,width,height)

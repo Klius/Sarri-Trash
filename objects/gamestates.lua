@@ -40,7 +40,14 @@ gameStates.menu = {
           releaseBrake      = function() player.braking = false end,
           reloadMap         = function() 
                                 maplist:loadMap()
-                              end 
+                              end,
+          debug = function() 
+                    if debug then 
+                      debug = false
+                    else
+                      debug = true
+                    end 
+                  end
           
       },
       keys = {
@@ -48,7 +55,8 @@ gameStates.menu = {
           space = "gas",
           left   = "rotateLeft",
           right  = "rotateRight",
-          x = "brake"
+          x = "brake",
+          d = "debug"
       },
       keysReleased = {
         space = "releaseGas",
