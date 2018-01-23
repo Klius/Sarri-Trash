@@ -8,6 +8,7 @@ require "objects/mapManager"
 require "objects/music"
 require "objects/gamestates"
 function love.load()
+  require "objects/race"
    -- Load map file
    debug = false
    effect = moonshine(moonshine.effects.glow)
@@ -17,7 +18,7 @@ function love.load()
    map = sti(maplist.maps[maplist.selectedMap],{"bump"})
    world = bump.newWorld()
    map:bump_init(world)
-   
+  
   keydebug =""
   state = gameStates.menu
   --Spawn player
@@ -69,10 +70,15 @@ end
 
 function love.update(dt)
    -- Update world
-   updatePlayer(dt)
-   map:update(dt)
-   audiomanager:PlayMusic()
-   camera:update(dt)
+   if state == gameStates.gameLoop then
+     updatePlayer(dt)
+     map:update(dt)
+     camera:update(dt)
+     race:update(dt)
+     if race.endRace then
+      state = gameStates.resultScreen
+     end
+   end
 end
 
 function love.draw()
@@ -85,6 +91,7 @@ function love.draw()
    -- Draw world
     --effect(function()
       love.graphics.draw(camera.scene)
+      race:draw()
       --love.graphics.scale(camera.scale)
       --love.graphics.translate(-camera.tx, -camera.ty)
       --map:draw(-camera.tx, -camera.ty, camera.scale,camera.scale)
@@ -93,10 +100,11 @@ function love.draw()
     --end)
     if debug then
       love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
-      love.graphics.print ("Checkpoint 1: "..player.checkPoints[1])
+      love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
+      love.graphics.print(race.currentTime,0,40)
     end
     
-  elseif gameStates.menu then
+  elseif state == gameStates.menu then
     love.graphics.draw(maplist.preview,love.graphics.getWidth()-500,love.graphics.getHeight()-400)
     love.graphics.print("Key pressed:"..keydebug)
     love.graphics.print("SelectedMap: "..maplist.maps[maplist.selectedMap],125,love.graphics.getHeight()/2-20)
@@ -105,6 +113,8 @@ function love.draw()
     love.graphics.print("Pulsa [->] para mover el coche a la derecha",125,love.graphics.getHeight()/2+40)
     love.graphics.print("Pulsa [x] para frenar/marcha atras el coche",125,love.graphics.getHeight()/2+60)
     love.graphics.print("Pulsa [espacio] para acelerar el coche",125,love.graphics.getHeight()/2+80)
+  elseif state == gameStates.resultScreen then
+    love.graphics.print("this is the result screen, press space to continue")
   end
 --map:bump_draw(world)
 --bump_debug.draw(world)
@@ -201,7 +211,7 @@ function updatePlayer(dt)
     goalX = player.x - math.cos(player.orientation)*player.currentSpeed
     goalY = player.y - math.sin(player.orientation)*player.currentSpeed
     local playerFilter = function(item, other)
-      if other.properties.isCheckpoint   then return 'cross'
+      if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
       else return 'slide'
       end
     
@@ -213,8 +223,12 @@ function updatePlayer(dt)
       local other = cols[i].other
       if other.properties.isCheckpoint then
         addCheckpoint(other.properties.checkpointNum)
+      elseif other.properties.isFinishLine then
+        finishLineCrossed()
       else
-        
+        --Decelerate car
+        player.currentSpeed = player.currentSpeed - player.currentSpeed/16
+
       end
     end
     
@@ -235,11 +249,31 @@ function updatePlayer(dt)
 end
 function addCheckpoint (index)
   if player.checkPoints[index] == false then
-    player.checkPoints[index] = true
+    if index > 1 then
+      if player.checkPoints[index -1] then
+        player.checkPoints[index] = true
+      end
+    elseif index == 1 then
+      player.checkPoints[index] = true
+    end
   end
 end
 
+function resetCheckpoint()
+  player.checkPoints[1] = false
+  player.checkPoints[2] = false
+  player.checkPoints[3] = false
+end
 
+function finishLineCrossed()
+  if player.checkPoints[1] and player.checkPoints[2] and player.checkPoints[3] then
+    race:nextLap()
+    resetCheckpoint()
+  end
+  if race.isTiming == false then
+    race:timerStart()
+  end
+end
 function getAnimations(sprite,width,height)
   local spritesheet = {}
   local i = 0

@@ -1,7 +1,9 @@
 gameStates = {}
 gameStates.menu = {
       bindings = {
-          backToGame = function()  maplist:loadMap() 
+          backToGame = function()  
+                        maplist:loadMap() 
+                        race:reset()
                         state = gameStates.gameLoop  
                         end,
           changeMapMin = function() maplist:changeSelectedMap(-1) end,
@@ -77,6 +79,32 @@ gameStates.menu = {
         x       = "releaseBrake",
         dpleft  = "releaseRotateLeft",
         dpright = "releaseRotateRight",
+      }
+      -- <...>
+  }
+    gameStates.resultScreen = {
+      bindings = {
+          returnToStartScreen   = function()  state = gameStates.menu  end
+      },
+      keys = {
+          escape = "returnToStartScreen",
+          space = "returnToStartScreen",
+          left   = "returnToStartScreen",
+          right  = "returnToStartScreen",
+          x = "returnToStartScreen",
+          d = "returnToStartScreen"
+      },
+      keysReleased = {
+      },
+      buttons = {
+          start    = "returnToStartScreen",
+          a       = "returnToStartScreen",
+          x       = "returnToStartScreen",
+          dpleft  = "returnToStartScreen",
+          dpright = "returnToStartScreen",
+          back    = "returnToStartScreen"
+      },
+      buttonsReleased = {
       }
       -- <...>
   }
