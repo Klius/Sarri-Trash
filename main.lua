@@ -1,6 +1,6 @@
 -- Include Simple Tiled Implementation into project
 sti = require "libs/sti"
-moonshine = require "libs/moonshine"
+--moonshine = require "libs/moonshine"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
@@ -9,9 +9,11 @@ require "objects/music"
 require "objects/gamestates"
 function love.load()
   require "objects/race"
+  require "objects/phoneui"
    -- Load map file
    debug = false
-   effect = moonshine(moonshine.effects.glow)
+   touchdebug = {x = 0,y = 0,dx = 10, dy = 10}
+   --effect = moonshine(moonshine.effects.glow)
    maplist:loadMaps()
    print(maplist.maps[maplist.selectedMap])
    audiomanager = MusicManager()
@@ -82,6 +84,7 @@ function love.update(dt)
 end
 
 function love.draw()
+  
   if state == gameStates.gameLoop then
    
 
@@ -116,6 +119,8 @@ function love.draw()
   elseif state == gameStates.resultScreen then
     love.graphics.print("this is the result screen, press space to continue")
   end
+  phoneUI:draw()
+  love.graphics.rectangle("line",touchdebug.x,touchdebug.y,touchdebug.dx,touchdebug.dy)
 --map:bump_draw(world)
 --bump_debug.draw(world)
   -- map:draw(-tx, -ty, scale,scale)
@@ -318,4 +323,15 @@ end
 function love.gamepadreleased( gamepad, button )
     local binding = state.buttonsReleased[button]
     return inputHandler( binding )
+end
+
+function love.touchpressed( id, x, y, dx, dy, pressure )
+  local binding = state.buttons[phoneUI:checkButtonTouched(x,y,10,10)]
+  touchdebug = {x = x,y = y, dx = 10, dy = 10}
+  return inputHandler( binding )
+end
+function love.touchreleased( id, x, y, dx, dy, pressure )
+  local binding = state.buttonsReleased[phoneUI:checkButtonTouched(x,y,10,10)]
+  touchdebug = {x = x,y = y, dx = 10, dy = 10}
+  return inputHandler( binding )
 end

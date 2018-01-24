@@ -23,10 +23,10 @@ gameStates.menu = {
           start = "backToGame",
           dpleft   = "changeMapMin",
           dpright = "changeMapPl",
-          a    = "select",
+          a    = "backToGame",
           y = "quit"
       },
-      buttonsReleased = {}
+      buttonsReleased = {},
       -- <...>
   }
   gameStates.gameLoop = {
