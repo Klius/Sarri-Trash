@@ -7,13 +7,15 @@ phoneUI = {
                         {x = 192, y=love.graphics.getHeight()-192, width = 128, height = 128, key = "dpright"}
                       }
           }
-phoneUI.draw = function(self) 
-                  love.graphics.draw(self.sprite,self.spritesheet[0],self.buttons[1]["x"],self.buttons[1]["y"])
-                  love.graphics.draw(self.sprite,self.spritesheet[1],self.buttons[2]["x"],self.buttons[2]["y"])
-                  love.graphics.draw(self.sprite,self.spritesheet[2],self.buttons[3]["x"],self.buttons[3]["y"])
-                  love.graphics.draw(self.sprite,self.spritesheet[3],self.buttons[4]["x"],self.buttons[4]["y"])
-                  --DEBUG
-                  love.graphics.points(self.buttons[1].x+self.buttons[1].width,self.buttons[1].y+self.buttons[1].height)
+phoneUI.draw = function(self)
+                  if love.system.getOS() == "Android" then
+                    love.graphics.draw(self.sprite,self.spritesheet[0],self.buttons[1]["x"],self.buttons[1]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[1],self.buttons[2]["x"],self.buttons[2]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[2],self.buttons[3]["x"],self.buttons[3]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[3],self.buttons[4]["x"],self.buttons[4]["y"])
+                    --DEBUG
+                    --love.graphics.points(self.buttons[1].x+self.buttons[1].width,self.buttons[1].y+self.buttons[1].height)
+                  end
                 end
 phoneUI.checkButtonTouched = function(self,touchX,touchY,touchWidth,touchHeight)
                                 for k in pairs(self.buttons) do
