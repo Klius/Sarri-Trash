@@ -1,7 +1,11 @@
 maplist = { 
             maps = {},
             selectedMap = 1,
-            preview = love.graphics.newCanvas(3200, 3200)
+            preview = love.graphics.newCanvas(400, 275),
+            selectedMapName = "Undisclosed Location",
+            selectedMapRecords = { 99999,99999,99999 },
+            selectedMapRecordsName = {"AAA","BBB","CCC"},
+            selectedMapLapRecord = 999999
           }
 maplist.loadMaps = function (self)
                         local dir = "assets/maps"
@@ -32,12 +36,36 @@ maplist.loadMap = function (self)
                     spawnPlayer()
                   end
 maplist.loadPreview = function (self)
-                        local mp = sti(maplist.maps[maplist.selectedMap])
+                        local mp = sti(self.maps[self.selectedMap])
                         local spawn
+                        self:resetDefaults()
                          for k, object in pairs(mp.objects) do
                             if object.name == "Player" then
                               spawn = object
                               break
+                            end
+                         end
+                         for k, layer in pairs(mp.layers) do
+                            if layer.properties.circuitName then
+                              self.selectedMapName = layer.properties.circuitName
+                            end
+                            if layer.properties.first then
+                              self.selectedMapRecords[1] = layer.properties.first
+                            end
+                            if layer.properties.second then
+                              self.selectedMapRecords[2] = layer.properties.second
+                            end
+                            if layer.properties.third then
+                              self.selectedMapRecords[3] = layer.properties.third
+                            end
+                            if layer.properties.firstName then
+                              self.selectedMapRecordsName[1] = layer.properties.firstName
+                            end
+                            if layer.properties.secondName then
+                              self.selectedMapRecordsName[2] = layer.properties.secondName
+                            end
+                            if layer.properties.thirdName then
+                              self.selectedMapRecordsName[3] = layer.properties.thirdName
                             end
                          end
                         love.graphics.setCanvas(self.preview)
@@ -46,4 +74,10 @@ maplist.loadPreview = function (self)
                         mp:draw(-1600,-1600, 0.5)
                                              
                         love.graphics.setCanvas()
+                      end
+maplist.resetDefaults = function (self)
+                        self.selectedMapName = "Undisclosed Location"
+                        self.selectedMapRecords = { 99999,99999,99999 }
+                        self.selectedMapRecordsName = {"AAA","BBB","CCC"}
+                        self.selectedMapLapRecord = 999999
                       end

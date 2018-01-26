@@ -9,6 +9,7 @@ require "objects/music"
 require "objects/gamestates"
 function love.load()
   require "objects/race"
+  require "objects/mapSelect"
   require "objects/phoneui"
    -- Load map file
    debug = false
@@ -22,7 +23,7 @@ function love.load()
    map:bump_init(world)
   
   keydebug =""
-  state = gameStates.menu
+  state = gameStates.mapSelect
   --Spawn player
    spawnPlayer()
    camera = {
@@ -107,15 +108,8 @@ function love.draw()
       love.graphics.print(race.currentTime,0,40)
     end
     
-  elseif state == gameStates.menu then
-    love.graphics.draw(maplist.preview,love.graphics.getWidth()-500,love.graphics.getHeight()-400)
-    love.graphics.print("Key pressed:"..keydebug)
-    love.graphics.print("SelectedMap: "..maplist.maps[maplist.selectedMap],125,love.graphics.getHeight()/2-20)
-    love.graphics.print("Pulsa [Espacio] para empezar",125,love.graphics.getHeight()/2)
-    love.graphics.print("Pulsa [<-] para mover el coche a la izquierda",125,love.graphics.getHeight()/2+20)
-    love.graphics.print("Pulsa [->] para mover el coche a la derecha",125,love.graphics.getHeight()/2+40)
-    love.graphics.print("Pulsa [x] para frenar/marcha atras el coche",125,love.graphics.getHeight()/2+60)
-    love.graphics.print("Pulsa [espacio] para acelerar el coche",125,love.graphics.getHeight()/2+80)
+  elseif state == gameStates.mapSelect then
+    mapSelect:draw()
   elseif state == gameStates.resultScreen then
     love.graphics.print("this is the result screen, press space to continue")
   end

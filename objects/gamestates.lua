@@ -1,5 +1,5 @@
 gameStates = {}
-gameStates.menu = {
+gameStates.mapSelect = {
       bindings = {
           backToGame = function()  
                         maplist:loadMap() 
@@ -31,7 +31,7 @@ gameStates.menu = {
   }
   gameStates.gameLoop = {
       bindings = {
-          openMenu   = function()  state = gameStates.menu  end,
+          openMenu   = function()  state = gameStates.mapSelect  end,
           gas       = function() player.accelerating = true end,
           releaseGas       = function() player.accelerating = false end,
           rotateLeft       = function() player.rotatingLeft = true end,
@@ -84,7 +84,7 @@ gameStates.menu = {
   }
     gameStates.resultScreen = {
       bindings = {
-          returnToStartScreen   = function()  state = gameStates.menu  end
+          returnToStartScreen   = function()  state = gameStates.mapSelect  end
       },
       keys = {
           escape = "returnToStartScreen",
