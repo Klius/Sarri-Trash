@@ -14,10 +14,11 @@ maplist.loadMaps = function (self)
                         for k, file in ipairs(files) do
                           if string.find(file, ".lua") then
                           --outputs something like "1. main.lua"
-                            print(k .. ". " .. file)
+                            --print(k .. ". " .. file)
                             table.insert(self.maps,dir.."/"..file)
                           end
                         end
+                        self:loadPreview()
                        end
                        
 maplist.changeSelectedMap = function (self,increment)
@@ -33,7 +34,7 @@ maplist.loadMap = function (self)
                     map = sti(self.maps[self.selectedMap],{"bump"})
                     world = bump.newWorld()
                     map:bump_init(world)
-                    spawnPlayer()
+                    player:spawnPlayer()
                   end
 maplist.loadPreview = function (self)
                         local mp = sti(self.maps[self.selectedMap])

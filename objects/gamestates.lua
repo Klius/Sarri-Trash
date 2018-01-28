@@ -1,10 +1,43 @@
 gameStates = {}
+gameStates.carSelect = {
+  bindings = {
+      enterRace = function()
+                    player.car = carlist.cars[carlist.selectedCar]
+                    race:reset()
+                    state = gameStates.gameLoop
+                  end,
+      changeCarMin = function()
+                        carlist:changeSelectedCar(-1)
+                      end,
+      changeCarPl = function()
+                        carlist:changeSelectedCar(1)                    
+                    end,
+      back = function()
+                state = gameStates.mapSelect
+              end
+  },
+  keys = {
+      space     = "enterRace",
+      left         = "changeCarMin",
+      right       = "changeCarPl",
+      escape = "back"
+  },
+  keysReleased = {},
+  buttons = {
+      start = "backToGame",
+      dpleft   = "changeMapMin",
+      dpright = "changeMapPl",
+      a    = "backToGame",
+      y = "quit"
+  },
+  buttonsReleased = {},
+  
+}
 gameStates.mapSelect = {
       bindings = {
-          backToGame = function()  
+          selectCar = function()  
                         maplist:loadMap() 
-                        race:reset()
-                        state = gameStates.gameLoop  
+                        state = gameStates.carSelect 
                         end,
           changeMapMin = function() maplist:changeSelectedMap(-1) end,
           changeMapPl = function() maplist:changeSelectedMap(1) end,
@@ -12,7 +45,7 @@ gameStates.mapSelect = {
           quit       = function() love.event.quit() end,
       },
       keys = {
-          space     = "backToGame",
+          space     = "selectCar",
           left         = "changeMapMin",
           right       = "changeMapPl",
           ["return"] = "select",
@@ -20,7 +53,7 @@ gameStates.mapSelect = {
       },
       keysReleased = {},
       buttons = {
-          start = "backToGame",
+          start = "selectCar",
           dpleft   = "changeMapMin",
           dpright = "changeMapPl",
           a    = "backToGame",

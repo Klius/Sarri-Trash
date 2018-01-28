@@ -15,6 +15,7 @@ phoneUI.draw = function(self)
                     love.graphics.draw(self.sprite,self.spritesheet[3],self.buttons[4]["x"],self.buttons[4]["y"])
                     --DEBUG
                     --love.graphics.points(self.buttons[1].x+self.buttons[1].width,self.buttons[1].y+self.buttons[1].height)
+                    love.graphics.rectangle("line",touchdebug.x,touchdebug.y,touchdebug.dx,touchdebug.dy)
                   end
                 end
 phoneUI.checkButtonTouched = function(self,touchX,touchY,touchWidth,touchHeight)

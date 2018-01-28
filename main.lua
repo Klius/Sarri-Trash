@@ -7,15 +7,18 @@ Object = require "libs/classic"
 require "objects/mapManager"
 require "objects/music"
 require "objects/gamestates"
+require "objects/mapSelect"
+require "objects/carSelect"
 function love.load()
   require "objects/race"
-  require "objects/mapSelect"
   require "objects/phoneui"
+  require "objects/carManager"
+  require "objects/player"
    -- Load map file
    debug = false
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10}
-   --effect = moonshine(moonshine.effects.glow)
    maplist:loadMaps()
+   carlist:loadCars()
    print(maplist.maps[maplist.selectedMap])
    audiomanager = MusicManager()
    map = sti(maplist.maps[maplist.selectedMap],{"bump"})
@@ -25,7 +28,7 @@ function love.load()
   keydebug =""
   state = gameStates.mapSelect
   --Spawn player
-   spawnPlayer()
+   player:spawnPlayer()
    camera = {
       
      scale = 2,
@@ -40,7 +43,7 @@ function love.load()
      zoomIn = 2,
      zoomOut = 1.5,
      update = function(self,dt) 
-                if player.currentSpeed> player.topSpeed/2 then
+                if player.currentSpeed> player.car.topSpeed/2 then
                   self.scale = self.scale - self.scaleIntervals*dt
                   if self.scale < self.zoomOut then
                     self.scale=self.zoomOut
@@ -63,7 +66,7 @@ function love.load()
                 love.graphics.scale(self.scale)
                 love.graphics.translate(-self.tx, -self.ty)
                 map:draw(-self.tx, -self.ty, self.scale,self.scale)
-                drawPlayer()
+                player:draw()
                 
                 love.graphics.setCanvas()
                 
@@ -74,7 +77,7 @@ end
 function love.update(dt)
    -- Update world
    if state == gameStates.gameLoop then
-     updatePlayer(dt)
+     player:update(dt)
      map:update(dt)
      camera:update(dt)
      race:update(dt)
@@ -87,12 +90,7 @@ end
 function love.draw()
   
   if state == gameStates.gameLoop then
-   
-
-   
-    
-
-   -- Draw world
+    -- Draw world
     --effect(function()
       love.graphics.draw(camera.scene)
       race:draw()
@@ -110,142 +108,20 @@ function love.draw()
     
   elseif state == gameStates.mapSelect then
     mapSelect:draw()
+  elseif state == gameStates.carSelect then
+    carSelect:draw()
   elseif state == gameStates.resultScreen then
     love.graphics.print("this is the result screen, press space to continue")
   end
   phoneUI:draw()
-  love.graphics.rectangle("line",touchdebug.x,touchdebug.y,touchdebug.dx,touchdebug.dy)
+  
 --map:bump_draw(world)
 --bump_debug.draw(world)
   -- map:draw(-tx, -ty, scale,scale)
 end
-function spawnPlayer()
- local sprite = love.graphics.newImage("assets/car-test.png")
-   local spritesheet = getAnimations(sprite,32,32)
-   local spawn
-   for k, object in pairs(map.objects) do
-      if object.name == "Player" then
-	 spawn = object
-	 break
-      end
-   end
-   player = {
-      sprite = sprite,
-      frames = spritesheet,
-      frameDuration = 0.5,
-      frameCount = 0,
-      currentFrame = 0,
-      x      = spawn.x,
-      y      = spawn.y,
-      w = 32,
-      h = 32,
-      ox     = 16 ,
-      oy     = 16 ,
-      orientation = 0,
-      currentSpeed = 0,
-      topSpeed = 8,
-      acceleration = 5,
-      steering = 150,
-      brakes = 10,
-      rotatingLeft = false,
-      rotatingRight = false,
-      accelerating = false,
-      braking = false,
-      checkPoints = { false,false,false}
-   }
-   world:add(player,player.x,player.y,player.w,player.h)
-   --map:removeLayer("Spawn Point")
-   
-end
-function drawPlayer()
-  love.graphics.draw(
-                         player.sprite,
-                         player.frames[player.currentFrame],
-                         math.floor(player.x+player.ox),
-                         math.floor(player.y+player.oy),	 
-                         player.orientation,
-                         1,
-                         1,
-                         player.ox,
-                         player.oy
-                            )
 
-      -- Temporarily draw a point at our location so we know
-      -- that our sprite is offset properly
-      love.graphics.setPointSize(1)
-      --love.graphics.rectangle('line', world:getRect(player))
-      love.graphics.print(player.currentSpeed,player.x,player.y)
-end
-function updatePlayer(dt)
-  local speed = player.acceleration * dt
-      local brakes = player.brakes * dt
-      --Acceleration
-      if player.accelerating then
-        player.currentSpeed = player.currentSpeed + speed
-        if player.currentSpeed > player.topSpeed then
-          player.currentSpeed = player.topSpeed
-        end
-      else
-        player.currentSpeed = player.currentSpeed - speed
-        if player.currentSpeed < 0 and player.braking == false then
-          player.currentSpeed = 0
-        end
-      end
-      if player.braking then
-        player.currentSpeed = player.currentSpeed - brakes
-        if player.currentSpeed < -2 then
-          player.currentSpeed = -2
-        end
-      end
 
-    -- ORIENTATION
-    if player.rotatingLeft then
-      player.orientation = player.orientation - (player.steering * dt) * math.pi / 180
-    elseif player.rotatingRight then
-      player.orientation = player.orientation + (player.steering * dt) * math.pi / 180
-    end
-    
-    --Change position
-    
-    goalX = player.x - math.cos(player.orientation)*player.currentSpeed
-    goalY = player.y - math.sin(player.orientation)*player.currentSpeed
-    local playerFilter = function(item, other)
-      if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
-      else return 'slide'
-      end
-    
-      end
-    local actualX, actualY, cols, len = world:move(player, goalX, goalY, playerFilter)
-    player.x, player.y = actualX, actualY
-    --COLISIONS
-    for i=1,len do
-      local other = cols[i].other
-      if other.properties.isCheckpoint then
-        addCheckpoint(other.properties.checkpointNum)
-      elseif other.properties.isFinishLine then
-        finishLineCrossed()
-      else
-        --Decelerate car
-        player.currentSpeed = player.currentSpeed - player.currentSpeed/16
 
-      end
-    end
-    
-    --ANIMATION
-    if player.currentSpeed > 0 then
-      player.frameCount = player.frameCount + dt
-    else
-      player.currentFrame = 0  
-    end
-    if player.frameCount > player.frameDuration then
-      player.frameCount = 0
-      player.currentFrame = 1 + player.currentFrame
-      if player.currentFrame > 3 then
-        player.currentFrame = 0
-      end
-    end
-
-end
 function addCheckpoint (index)
   if player.checkPoints[index] == false then
     if index > 1 then
