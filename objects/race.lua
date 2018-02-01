@@ -11,10 +11,12 @@ race = {
         }
 race.nextLap = function (self) 
                   self.currentLap = self.currentLap+1
-                  self.times[self.currentLap] = self.currentTime
-                  self.timer = love.timer.getTime()
                   if self.currentLap == self.lapsTotal then
                     self.endRace = true
+                    self.currentLap = self.lapsTotal -1
+                  else
+                    self.times[self.currentLap] = self.currentTime
+                    self.timer = love.timer.getTime()
                   end
                 end
 race.reset = function (self)

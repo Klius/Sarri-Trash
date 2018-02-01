@@ -9,7 +9,9 @@ require "objects/music"
 require "objects/gamestates"
 require "objects/mapSelect"
 require "objects/carSelect"
+require "objects/resultScreen"
 function love.load()
+
   require "objects/race"
   require "objects/phoneui"
   require "objects/carManager"
@@ -112,7 +114,7 @@ function love.draw()
   elseif state == gameStates.carSelect then
     carSelect:draw()
   elseif state == gameStates.resultScreen then
-    love.graphics.print("this is the result screen, press space to continue")
+    resultScreen:draw()
   end
   phoneUI:draw()
   

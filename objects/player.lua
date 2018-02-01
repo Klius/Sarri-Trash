@@ -65,13 +65,13 @@ player.update = function (self,dt)
                       local speed = self.car.acceleration * dt
                       local brakes = self.car.brakes * dt
                       --Acceleration
-                      if self.accelerating then
+                      if self.braking or self.accelerating and braking then
+                        self.currentSpeed = self.currentSpeed - brakes
+                      elseif self.accelerating then
                         self.currentSpeed = self.currentSpeed + speed
                         if self.currentSpeed > self.car.topSpeed then
                           self.currentSpeed = self.car.topSpeed
                         end
-                      elseif self.braking then
-                        self.currentSpeed = self.currentSpeed - brakes
                       else
                         local braker = self.currentSpeed/16
                         
