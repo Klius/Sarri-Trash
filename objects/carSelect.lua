@@ -5,5 +5,5 @@ carSelect.draw = function (self)
                     love.graphics.setColor(255,255,255,255)
                     love.graphics.draw(carlist.preview,love.graphics.getWidth()/2-16,25)
                     love.graphics.print(carlist.cars[carlist.selectedCar].name,love.graphics.getWidth()/2-32,25+32)
-                    
+                    love.graphics.print(carlist.cars[carlist.selectedCar].description,25,100)
                   end

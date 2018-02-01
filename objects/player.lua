@@ -70,19 +70,25 @@ player.update = function (self,dt)
                         if self.currentSpeed > self.car.topSpeed then
                           self.currentSpeed = self.car.topSpeed
                         end
-                      else
-                        self.currentSpeed = self.currentSpeed - speed
-                        if self.currentSpeed < 0 and self.braking == false then
-                          self.currentSpeed = 0
-                        end
-                      end
-                      if self.braking then
+                      elseif self.braking then
                         self.currentSpeed = self.currentSpeed - brakes
-                        if self.currentSpeed < -2 then
-                          self.currentSpeed = -2
+                      else
+                        local braker = self.currentSpeed/16
+                        
+                        if self.currentSpeed > 0  then
+                          self.currentSpeed = self.currentSpeed - braker
+                        elseif self.currentSpeed < 0 and self.braking == false then
+                          self.currentSpeed = self.currentSpeed - braker
                         end
                       end
-
+                      
+                      
+                      if self.currentSpeed < self.car.topSpeed * -1 then
+                        self.currentSpeed = self.car.topSpeed * -1
+                      elseif self.currentSpeed > self.car.topSpeed then
+                        self.currentSpeed = self.car.topSpeed
+                      end
+                      
                     -- ORIENTATION
                     if self.rotatingLeft then
                       self.orientation = self.orientation - (self.car.steering * dt) * math.pi / 180
@@ -96,8 +102,8 @@ player.update = function (self,dt)
                     goalY = self.y - math.sin(self.orientation)*self.currentSpeed
                     local playerFilter = function(item, other)
                       if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
-                      else return 'slide'
-                      end
+                        else return 'slide'
+                        end
                     
                       end
                     local actualX, actualY, cols, len = world:move(self, goalX, goalY, playerFilter)
@@ -117,7 +123,7 @@ player.update = function (self,dt)
                     end
                     
                     --ANIMATION
-                    if self.currentSpeed > 0 then
+                    if self.currentSpeed > 0.5 or self.currentSpeed < 0 then
                       self.frameCount = self.frameCount + dt
                     else
                       self.currentFrame = 0  

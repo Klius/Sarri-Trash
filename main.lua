@@ -104,6 +104,7 @@ function love.draw()
       love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
       love.graphics.print(race.currentTime,0,40)
+      love.graphics.print (player.currentSpeed,0,60)
     end
     
   elseif state == gameStates.mapSelect then
