@@ -27,8 +27,8 @@ gameStates.carSelect = {
       start = "enterRace",
       dpleft   = "changeCarMin",
       dpright = "changeCarPl",
-      a    = "backToGame",
-      y = "quit"
+      a    = "enterRace",
+      y = "back"
   },
   buttonsReleased = {},
   
