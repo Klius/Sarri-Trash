@@ -24,11 +24,11 @@ gameStates.carSelect = {
   },
   keysReleased = {},
   buttons = {
-      start = "backToGame",
-      dpleft   = "changeMapMin",
-      dpright = "changeMapPl",
-      a    = "backToGame",
-      y = "quit"
+      start = "enterRace",
+      dpleft   = "changeCarMin",
+      dpright = "changeCarPl",
+      a    = "enterRace",
+      y = "back"
   },
   buttonsReleased = {},
   
@@ -56,7 +56,7 @@ gameStates.mapSelect = {
           start = "selectCar",
           dpleft   = "changeMapMin",
           dpright = "changeMapPl",
-          a    = "backToGame",
+          a    = "selectCar",
           y = "quit"
       },
       buttonsReleased = {},
