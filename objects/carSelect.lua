@@ -14,7 +14,7 @@ carSelect.draw = function (self)
                     love.graphics.setFont(self.bigFont)
                     love.graphics.print(carlist.cars[carlist.selectedCar].name,love.graphics.getWidth()/2-66,25+142)
                     love.graphics.setFont(self.defaultFont)
-
+                    love.graphics.print(carlist.cars[carlist.selectedCar].description,10,love.graphics.getHeight()/2)
 
 
                   end
