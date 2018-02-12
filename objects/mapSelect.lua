@@ -7,14 +7,11 @@ mapSelect = {
             }
 mapSelect.draw = function (self)
   
-                    --selectedMapRecords = { 99999,99999,99999 },
-                    --selectedMapRecordsName = {"AAA","BBB","CCC"},
-                    --selectedMapLapRecord = 999999
                     love.graphics.setColor(223,113,38,255)
                     love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
                     love.graphics.setColor(255,255,255,255)
-                    love.graphics.rectangle("line",199,24,402,277)
-                    love.graphics.draw(maplist.preview,200,25)
+                    love.graphics.rectangle("line",love.graphics.getWidth()/2-201,24,402,277)
+                    love.graphics.draw(maplist.preview,love.graphics.getWidth()/2-200,25)
                     love.graphics.setFont(self.bigFont)
                     love.graphics.print(maplist.selectedMapName,love.graphics.getWidth()/2-200,love.graphics.getHeight()/2+10)
                     love.graphics.setFont(self.defaultFont)
