@@ -9,7 +9,9 @@ require "objects/music"
 require "objects/gamestates"
 require "objects/mapSelect"
 require "objects/carSelect"
+require "objects/resultScreen"
 function love.load()
+
   require "objects/race"
   require "objects/phoneui"
   require "objects/carManager"
@@ -104,6 +106,7 @@ function love.draw()
       love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
       love.graphics.print(race.currentTime,0,40)
+      love.graphics.print (player.currentSpeed,0,60)
     end
     
   elseif state == gameStates.mapSelect then
@@ -111,7 +114,7 @@ function love.draw()
   elseif state == gameStates.carSelect then
     carSelect:draw()
   elseif state == gameStates.resultScreen then
-    love.graphics.print("this is the result screen, press space to continue")
+    resultScreen:draw()
   end
   phoneUI:draw()
   

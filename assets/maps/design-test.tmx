@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="11">
+<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="12">
  <tileset firstgid="1" source="../testroad.tsx"/>
  <layer name="circuit" width="100" height="100">
   <data encoding="csv">
@@ -318,7 +318,7 @@
  </layer>
  <objectgroup name="Capa de Objetos 1" visible="0">
   <properties>
-   <property name="circuitName" value="Fonso Ring"/>
+   <property name="circuitName" value="Big Cap"/>
    <property name="first" type="int" value="540"/>
    <property name="firstName" value="556"/>
    <property name="lap" type="int" value="1000"/>
