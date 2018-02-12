@@ -87,6 +87,9 @@ function love.update(dt)
       state = gameStates.resultScreen
      end
    end
+   if state == gameStates.mapSelect then
+    mapSelect:update(dt)
+   end
 end
 
 function love.draw()

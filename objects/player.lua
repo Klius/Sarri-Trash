@@ -39,7 +39,7 @@ player.spawnPlayer = function (self)
                          self.y = spawn.y
                          world:add(self,self.x,self.y,self.w,self.h)
                          self.currentSpeed = 0
-                         self.orientation = 0
+                         self.orientation = spawn.rotation
                          self.rotatingLeft = false
                          self.rotatingRight = false
                          self.accelerating = false

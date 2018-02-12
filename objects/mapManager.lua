@@ -1,11 +1,14 @@
 maplist = { 
             maps = {},
             selectedMap = 1,
-            preview = love.graphics.newCanvas(400, 275),
+            preview = love.graphics.newCanvas(400, 275), --400,275
             selectedMapName = "Undisclosed Location",
             selectedMapRecords = { 99999,99999,99999 },
             selectedMapRecordsName = {"AAA","BBB","CCC"},
-            selectedMapLapRecord = 999999
+            selectedMapLapRecord = 999999,
+            previewPoints = {{x=800,y=800}},
+            currentPreviewPoint = 1,
+            mp = null
           }
 maplist.loadMaps = function (self)
                         local dir = "assets/maps"
@@ -37,16 +40,11 @@ maplist.loadMap = function (self)
                     player:spawnPlayer()
                   end
 maplist.loadPreview = function (self)
-                        local mp = sti(self.maps[self.selectedMap])
+                        self.mp = sti(self.maps[self.selectedMap])
                         local spawn
                         self:resetDefaults()
-                         for k, object in pairs(mp.objects) do
-                            if object.name == "Player" then
-                              spawn = object
-                              break
-                            end
-                         end
-                         for k, layer in pairs(mp.layers) do
+                         
+                         for k, layer in pairs(self.mp.layers) do
                             if layer.properties.circuitName then
                               self.selectedMapName = layer.properties.circuitName
                             end
@@ -68,11 +66,25 @@ maplist.loadPreview = function (self)
                             if layer.properties.thirdName then
                               self.selectedMapRecordsName[3] = layer.properties.thirdName
                             end
+                            if layer.name == "preview" then
+                              for k, object in pairs(layer.objects) do
+                                local point = {x=object.x,y=object.y}
+                                self.previewPoints[tonumber(object.name)] = point
+                                
+                              end
+                            end
                          end
                         love.graphics.setCanvas(self.preview)
-                        local tx = math.floor(1600 - 500 / 2)
-                        local ty = math.floor(1600 - 400 / 2)
-                        mp:draw(-1600,-1600, 0.5)
+                        local tx = 800 -- math.floor(1600 - 400 / 2)
+                        local ty = 800 --math.floor(1600 - 275 / 2)
+                        self.mp:draw(-self.previewPoints[1].x,-self.previewPoints[1].y, 0.5)
+                        
+                        love.graphics.setCanvas()
+                      end
+maplist.drawPreview = function (self,tx,ty)
+                        self.mp = sti(self.maps[self.selectedMap])
+                        love.graphics.setCanvas(self.preview)
+                        self.mp:draw(-tx,-ty, 0.5)
                                              
                         love.graphics.setCanvas()
                       end
@@ -81,4 +93,7 @@ maplist.resetDefaults = function (self)
                         self.selectedMapRecords = { 99999,99999,99999 }
                         self.selectedMapRecordsName = {"AAA","BBB","CCC"}
                         self.selectedMapLapRecord = 999999
+                        self.previewPoints = {{x=800,y=800}}
+                        self.currentPreviewPoint = 1
                       end
+                      
