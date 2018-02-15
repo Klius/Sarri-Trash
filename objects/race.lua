@@ -7,13 +7,16 @@ race = {
           currentTime = 0,
           timer = 0,
           isTiming = false,
-          times = {0,0,0}
+          times = {0,0,0},
+          totalTime = 0
         }
 race.nextLap = function (self) 
                   self.currentLap = self.currentLap+1
                   if self.currentLap == self.lapsTotal then
                     self.endRace = true
                     self.currentLap = self.lapsTotal -1
+                    self.totalTime = self.times[1]+self.times[2]+self.times[3]
+                    resultScreen:Initialize()
                   else
                     self.times[self.currentLap] = self.currentTime
                     self.timer = love.timer.getTime()
