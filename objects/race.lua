@@ -35,13 +35,18 @@ race.update = function (self,dt)
                   self.currentTime = love.timer.getTime() - self.timer
                   self.times[self.currentLap+1] = self.currentTime
                 end
+                speedometer:update(dt)
               end
 race.draw = function (self)
-              love.graphics.draw(self.sprite,self.spritesheet[self.currentLap],50,50,0,1,1)
+              love.graphics.draw(self.sprite,self.spritesheet[self.currentLap],80,50,0,1,1)
+              if (self.currentLap == 2) then
+                love.graphics.draw(self.sprite,self.spritesheet[3],80-32,50,0,1,1)
+              end
               love.graphics.print("TIME",love.graphics.getWidth()-100,25)
               love.graphics.print("1:"..self:formatTime(self.times[1]),love.graphics.getWidth()-150,40)
               love.graphics.print("2:"..self:formatTime(self.times[2]),love.graphics.getWidth()-150,60)
               love.graphics.print("3:"..self:formatTime(self.times[3]),love.graphics.getWidth()-150,80)
+              speedometer:draw()
             end
 race.timerStart = function (self)
                     self.isTiming = true

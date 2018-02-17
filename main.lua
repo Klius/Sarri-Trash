@@ -16,6 +16,7 @@ function love.load()
   require "objects/phoneui"
   require "objects/carManager"
   require "objects/player"
+  require "objects/speedometer"
    -- Load map file
    debug = false
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10}

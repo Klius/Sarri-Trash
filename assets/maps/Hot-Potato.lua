@@ -1064,12 +1064,12 @@ return {
       draworder = "topdown",
       properties = {
         ["circuitName"] = "Hot Potato",
-        ["first"] = 18.556,
+        ["first"] = 40.556,
         ["firstName"] = "556",
         ["lapName"] = "AAA",
-        ["second"] = 20.56,
+        ["second"] = 50.56,
         ["secondName"] = "BBB",
-        ["third"] = 30.45,
+        ["third"] = 60.45,
         ["thirdName"] = "CCC"
       },
       objects = {
