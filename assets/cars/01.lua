@@ -1,5 +1,5 @@
  car = {
-        name = "Richie",
+        name = "Richie The Cat",
         description = "it's a cat!",
         sprite = love.graphics.newImage("assets/richie-grey.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/richie-grey.png"),32,32),
