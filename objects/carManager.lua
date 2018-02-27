@@ -10,11 +10,11 @@ carlist.loadCars = function (self)
                         for k, file in ipairs(files) do
                           if string.find(file, ".lua") then
                           --outputs something like "1. main.lua"
-                            print(k .. ". " .. file)
+                            --print(k .. ". " .. file)
                             local ok,chunk = pcall( love.filesystem.load, dir.."/"..file )
                             local car = chunk()
                             table.insert(self.cars,car)
-                            print(car.name.."-"..car.description)
+                            --print(car.name.."-"..car.description)
                           end
                         end
                         self:loadPreview()

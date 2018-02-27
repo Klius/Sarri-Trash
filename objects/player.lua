@@ -88,14 +88,12 @@ player.update = function (self,dt)
                       elseif self.currentSpeed > self.car.topSpeed then
                         self.currentSpeed = self.car.topSpeed
                       end
-                      
-                    -- ORIENTATION
+                    --ORIENTATION
                     if self.rotatingLeft then
-                      self.orientation = self.orientation - (self.car.steering * dt) * math.pi / 180
+                      self.orientation = self.orientation - (self.car.steering * love.timer.getDelta()) * math.pi / 180
                     elseif self.rotatingRight then
-                      self.orientation = self.orientation + (self.car.steering * dt) * math.pi / 180
+                      self.orientation = self.orientation + (self.car.steering * love.timer.getDelta()) * math.pi / 180
                     end
-                    
                     --Change position
                     
                     goalX = self.x - math.cos(self.orientation)*self.currentSpeed
@@ -136,4 +134,12 @@ player.update = function (self,dt)
                       end
                     end
 
+end
+--this function is only called on input
+player.rotate = function (self,rotate)
+                  if rotate then --rotate left
+                      self.rotatingLeft = true
+                  else --rotate right
+                     self.rotatingRight = true
+                  end
 end

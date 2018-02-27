@@ -1,18 +1,18 @@
 phoneUI = {
             sprite = love.graphics.newImage("assets/touch-butt.png"),
-            spritesheet = getAnimations(love.graphics.newImage("assets/touch-butt.png"),128,128),
-            buttons= {  {x = love.graphics.getWidth()-128, y=love.graphics.getHeight()-192, width = 128, height = 128, key = "a"},--a button
-                        {x = love.graphics.getWidth()-256, y=love.graphics.getHeight()-192, width = 128, height = 128, key = "x"},
-                        {x = 64, y=love.graphics.getHeight()-192, width = 128, height = 128, key = "dpleft"},
-                        {x = 192, y=love.graphics.getHeight()-192, width = 128, height = 128, key = "dpright"}
+            spritesheet = getAnimations(love.graphics.newImage("assets/touch-butt.png"),256,256),
+            buttons= {  {x = love.graphics.getWidth()-256, y=love.graphics.getHeight()-192, width = 256, height = 256, key = "a"},--a button
+                        {x = love.graphics.getWidth()-384, y=love.graphics.getHeight()-192, width = 256, height = 256, key = "x"},
+                        {x = 12, y=love.graphics.getHeight()-256, width = 256, height = 256, key = "dpleft"},
+                        {x = 256, y=love.graphics.getHeight()-256, width = 256, height = 256, key = "dpright"}
                       }
           }
 phoneUI.draw = function(self)
                   if love.system.getOS() == "Android" then
-                    love.graphics.draw(self.sprite,self.spritesheet[0],self.buttons[1]["x"],self.buttons[1]["y"])
-                    love.graphics.draw(self.sprite,self.spritesheet[1],self.buttons[2]["x"],self.buttons[2]["y"])
-                    love.graphics.draw(self.sprite,self.spritesheet[2],self.buttons[3]["x"],self.buttons[3]["y"])
-                    love.graphics.draw(self.sprite,self.spritesheet[3],self.buttons[4]["x"],self.buttons[4]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[4],self.buttons[1]["x"],self.buttons[1]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[5],self.buttons[2]["x"],self.buttons[2]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[3],self.buttons[3]["x"],self.buttons[3]["y"])
+                    love.graphics.draw(self.sprite,self.spritesheet[2],self.buttons[4]["x"],self.buttons[4]["y"])
                     --DEBUG
                     --love.graphics.points(self.buttons[1].x+self.buttons[1].width,self.buttons[1].y+self.buttons[1].height)
                     love.graphics.rectangle("line",touchdebug.x,touchdebug.y,touchdebug.dx,touchdebug.dy)

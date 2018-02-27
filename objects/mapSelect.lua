@@ -27,7 +27,7 @@ mapSelect.draw = function (self)
                     --love.graphics.print("Pulsa [->] para mover el coche a la derecha",125,love.graphics.getHeight()/2+40)
                     --love.graphics.print("Pulsa [x] para frenar/marcha atras el coche",125,love.graphics.getHeight()/2+60)
                     --love.graphics.print("Pulsa [espacio] para acelerar el coche",125,love.graphics.getHeight()/2+80)
-                  end
+end
                   
 mapSelect.update = function (self,dt)
                       local origin = maplist.previewPoints[1]
@@ -56,9 +56,6 @@ mapSelect.update = function (self,dt)
                         or dy > 0 and math.floor(self.currentPoint.y) > destiny.y then
                         maplist.currentPreviewPoint = nextPoint
                         --self.currentPoint = destiny
-                      end
-                      if math.floor(self.currentPoint.x) == destiny.x and math.floor(self.currentPoint.y) == destiny.y then
-                        --maplist.currentPreviewPoint = nextPoint
                       end
                       --print("currentPoint:X->"..math.floor(self.currentPoint.x).." Y->"..math.floor(self.currentPoint.y))
                       maplist:drawPreview(self.currentPoint.x,self.currentPoint.y)

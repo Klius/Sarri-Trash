@@ -67,9 +67,9 @@ gameStates.mapSelect = {
           openMenu   = function()  state = gameStates.mapSelect  end,
           gas       = function() player.accelerating = true end,
           releaseGas       = function() player.accelerating = false end,
-          rotateLeft       = function() player.rotatingLeft = true end,
-          rotateRight      = function() player.rotatingRight = true end,
-          releaseRotateLeft       = function() player.rotatingLeft = false end,
+          rotateLeft       = function() player:rotate(true) end,
+          rotateRight      = function() player:rotate(false) end,
+          releaseRotate      = function() player.rotatingLeft = false player.rotatingRight = false end,
           releaseRotateRight      = function() player.rotatingRight = false end,
           brake      = function() player.braking = true end,
           releaseBrake      = function() player.braking = false end,
@@ -96,8 +96,8 @@ gameStates.mapSelect = {
       keysReleased = {
         space = "releaseGas",
         x       = "releaseBrake",
-        left  = "releaseRotateLeft",
-        right = "releaseRotateRight",
+        left  = "releaseRotate",
+        right = "releaseRotate",
       },
       buttons = {
           start    = "openMenu",
@@ -110,8 +110,8 @@ gameStates.mapSelect = {
       buttonsReleased = {
         a = "releaseGas",
         x       = "releaseBrake",
-        dpleft  = "releaseRotateLeft",
-        dpright = "releaseRotateRight",
+        dpleft  = "releaseRotate",
+        dpright = "releaseRotate",
       }
       -- <...>
   }

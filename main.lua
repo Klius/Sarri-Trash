@@ -209,6 +209,6 @@ function love.touchpressed( id, x, y, dx, dy, pressure )
 end
 function love.touchreleased( id, x, y, dx, dy, pressure )
   local binding = state.buttonsReleased[phoneUI:checkButtonTouched(x,y,10,10)]
-  touchdebug = {x = x,y = y, dx = 10, dy = 10}
+  touchdebug = {x = dx,y = dy, dx = 10, dy = 10}
   return inputHandler( binding )
 end

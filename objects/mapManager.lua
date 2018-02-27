@@ -6,7 +6,7 @@ maplist = {
             selectedMapRecords = { 99999,99999,99999 },
             selectedMapRecordsName = {"AAA","BBB","CCC"},
             selectedMapLapRecord = 999999,
-            previewPoints = {{x=800,y=800}},
+            previewPoints = {{x=800,y=800},{x=800,y=800},{x=1600,y=800}},
             currentPreviewPoint = 1,
             mp = null
           }
@@ -67,6 +67,7 @@ maplist.loadPreview = function (self)
                               self.selectedMapRecordsName[3] = layer.properties.thirdName
                             end
                             if layer.name == "preview" then
+                              self.previewPoints = {}
                               for k, object in pairs(layer.objects) do
                                 local point = {x=object.x,y=object.y}
                                 self.previewPoints[tonumber(object.name)] = point
@@ -93,7 +94,7 @@ maplist.resetDefaults = function (self)
                         self.selectedMapRecords = { 99999,99999,99999 }
                         self.selectedMapRecordsName = {"AAA","BBB","CCC"}
                         self.selectedMapLapRecord = 999999
-                        self.previewPoints = {{x=800,y=800}}
+                        self.previewPoints = {{x=800,y=800},{x=800,y=800},{x=1600,y=800},{x=1600,y=1600},{x=800,y=1600}}
                         self.currentPreviewPoint = 1
                       end
                       
