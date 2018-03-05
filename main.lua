@@ -10,6 +10,7 @@ require "objects/gamestates"
 require "objects/mapSelect"
 require "objects/carSelect"
 require "objects/resultScreen"
+require "objects/save"
 function love.load()
 
   require "objects/race"

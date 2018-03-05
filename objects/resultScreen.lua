@@ -7,6 +7,14 @@ resultScreen = {
               [3] = "Congratulations!! With more effort you can do it better!",
               [0] = "Keep on trying you are getting there!"
             },
+    alphabet = {
+                "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P",
+                "Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5",
+                "6","7","8","9","$","@","#","!","?","=","&","*","-","<",">","¬"
+              },
+    currentLetter = 1,
+    currentSpace = 1,
+    recordName = {1,1,1},
 }
 resultScreen.draw = function (self)
                       local y = 100
@@ -20,6 +28,7 @@ resultScreen.draw = function (self)
                       end
                       love.graphics.print(race:formatTime(race.totalTime),200,y)
                       love.graphics.print(self.texts[self.currentPosition],200,400)
+                      love.graphics.print(self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]],200,300)
                     end
 resultScreen.Initialize = function(self)
                             if race.totalTime < maplist.selectedMapRecords[1] then
@@ -38,3 +47,5 @@ resultScreen.Initialize = function(self)
                              self.currentPosition = 0 
                             end
                           end
+  --TODO: PRogram name entry
+  

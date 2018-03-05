@@ -117,12 +117,14 @@ gameStates.mapSelect = {
   }
     gameStates.resultScreen = {
       bindings = {
-          returnToStartScreen   = function()  state = gameStates.mapSelect  end
+          returnToStartScreen   = function()  state = gameStates.mapSelect  end,
+          incrementRecordSpace = function() resultScreen:nextSpace(1) end,
+          decrementRecordSpace = function() resultScreen:nextSpace(-1) end
       },
       keys = {
           escape = "returnToStartScreen",
           space = "returnToStartScreen",
-          left   = "returnToStartScreen",
+          left   = "incrementRecordSpace",
           right  = "returnToStartScreen",
           x = "returnToStartScreen",
           d = "returnToStartScreen"
@@ -133,7 +135,7 @@ gameStates.mapSelect = {
           start    = "returnToStartScreen",
           a       = "returnToStartScreen",
           x       = "returnToStartScreen",
-          dpleft  = "returnToStartScreen",
+          dpleft  = "incrementRecordSpace",
           dpright = "returnToStartScreen",
           back    = "returnToStartScreen"
       },
