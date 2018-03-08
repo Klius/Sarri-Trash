@@ -4,8 +4,8 @@ mapSelect = {
               defaultFont = love.graphics.newFont(18),
               currentPoint = {x=0,y=0},
               time = 0.5,
-              leftArrow = Arrow (2,love.graphics.getWidth()/12,love.graphics.getHeight()/6),
-              rightArrow= Arrow (1,love.graphics.getWidth()-194,love.graphics.getHeight()/6)
+              leftArrow = Arrow (2,love.graphics.getWidth()/12,love.graphics.getHeight()/6,2),
+              rightArrow= Arrow (1,love.graphics.getWidth()-194,love.graphics.getHeight()/6,2)
             }
 mapSelect.draw = function (self)
   

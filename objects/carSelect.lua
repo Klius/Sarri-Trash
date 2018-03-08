@@ -1,6 +1,8 @@
 carSelect = {
               bigFont = love.graphics.newFont(30),
-              defaultFont = love.graphics.newFont(18)
+              defaultFont = love.graphics.newFont(18),
+              leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/10),
+              rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/2.42,love.graphics.getHeight()/10)
             }
 carSelect.draw = function (self)
                     love.graphics.setColor(223,113,38,255)
@@ -16,6 +18,6 @@ carSelect.draw = function (self)
                     love.graphics.print(carlist.cars[carlist.selectedCar].name,love.graphics.getWidth()/2-125,25+142)
                     love.graphics.setFont(self.defaultFont)
                     love.graphics.print(carlist.cars[carlist.selectedCar].description,10,love.graphics.getHeight()/2)
-
-
-                  end
+                    self.leftArrow:draw()
+                    self.rightArrow:draw()
+end

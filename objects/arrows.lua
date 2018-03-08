@@ -12,9 +12,9 @@ function Arrow:update(dt)
   end
 end
 function Arrow:draw()
-  love.graphics.draw(self.sprites[self.type],self.spritesheet[self.currentFrame],self.x,self.y,0,2)
+  love.graphics.draw(self.sprites[self.type],self.spritesheet[self.currentFrame],self.x,self.y,0,self.scale)
 end
-function Arrow:new(type,x,y)
+function Arrow:new(type,x,y,scale)
   self.sprites = {
                       [1] = love.graphics.newImage("assets/arrow-right.png"),
                       [2] = love.graphics.newImage("assets/arrow-left.png")
@@ -26,4 +26,5 @@ function Arrow:new(type,x,y)
   self.frameDuration = 0.05
   self.frameCount = 0
   self.currentFrame = 0
+  self.scale = scale or 1
 end
