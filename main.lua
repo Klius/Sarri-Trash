@@ -4,6 +4,8 @@ sti = require "libs/sti"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
+require "objects/animations"
+require "objects/arrows"
 require "objects/mapManager"
 require "objects/music"
 require "objects/gamestates"
@@ -18,6 +20,7 @@ function love.load()
   require "objects/carManager"
   require "objects/player"
   require "objects/speedometer"
+  
    -- Load map file
    debug = false
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10}
@@ -157,19 +160,7 @@ function finishLineCrossed()
     race:timerStart()
   end
 end
-function getAnimations(sprite,width,height)
-  local spritesheet = {}
-  local i = 0
-  local y = 0
-  local x = 0
-  while x < sprite:getWidth() do
-    spritesheet[i] = love.graphics.newQuad(x,y,width,height,sprite:getDimensions())
-    x = x+width
-    i = i+1
-  end
-  return spritesheet
-  
-end
+
 
   --[
   -- HANDLING

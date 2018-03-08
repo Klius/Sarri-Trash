@@ -3,7 +3,9 @@ mapSelect = {
               bigFont = love.graphics.newFont(30),
               defaultFont = love.graphics.newFont(18),
               currentPoint = {x=0,y=0},
-              time = 0.5
+              time = 0.5,
+              leftArrow = Arrow (2,love.graphics.getWidth()/12,love.graphics.getHeight()/6),
+              rightArrow= Arrow (1,love.graphics.getWidth()-194,love.graphics.getHeight()/6)
             }
 mapSelect.draw = function (self)
   
@@ -20,13 +22,9 @@ mapSelect.draw = function (self)
                       times = times..self.positions[i].."  ".."/  "..race:formatTime(maplist.selectedMapRecords[i]).."  /  "..maplist.selectedMapRecordsName[i] .."\n"
                     end
                     love.graphics.print(times,love.graphics.getWidth()/2-150,love.graphics.getHeight()/2+60)
-                    love.graphics.print("currentPoint:X->"..math.floor(self.currentPoint.x).." Y->"..math.floor(self.currentPoint.y),0,0)
-                    --love.graphics.print("Key pressed:"..keydebug)
-                    --love.graphics.print("Pulsa [Espacio] para empezar",love.graphics.getWidth()/2,love.graphics.getHeight()/2+25)
-                    --love.graphics.print("Pulsa [<-] para mover el coche a la izquierda",125,love.graphics.getHeight()/2+20)
-                    --love.graphics.print("Pulsa [->] para mover el coche a la derecha",125,love.graphics.getHeight()/2+40)
-                    --love.graphics.print("Pulsa [x] para frenar/marcha atras el coche",125,love.graphics.getHeight()/2+60)
-                    --love.graphics.print("Pulsa [espacio] para acelerar el coche",125,love.graphics.getHeight()/2+80)
+                    love.graphics.print(" Select a circuit",0,0)
+                    self.leftArrow:draw()
+                    self.rightArrow:draw()
 end
                   
 mapSelect.update = function (self,dt)
@@ -59,5 +57,6 @@ mapSelect.update = function (self,dt)
                       end
                       --print("currentPoint:X->"..math.floor(self.currentPoint.x).." Y->"..math.floor(self.currentPoint.y))
                       maplist:drawPreview(self.currentPoint.x,self.currentPoint.y)
-                      
+                      self.leftArrow:update(dt)
+                      self.rightArrow:update(dt)
                     end

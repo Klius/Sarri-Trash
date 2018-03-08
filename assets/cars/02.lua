@@ -1,5 +1,5 @@
 car = {
-        name = "Utande FX55",
+        name = "Utande Interceptor",
         description = "it's a car!",
         sprite = love.graphics.newImage("assets/fx.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/fx.png"),32,32),
