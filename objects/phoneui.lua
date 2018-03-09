@@ -1,11 +1,11 @@
 phoneUI = {
             sprite = love.graphics.newImage("assets/touch-butt.png"),
             spritesheet = getAnimations(love.graphics.newImage("assets/touch-butt.png"),256,256),
-            buttons= {  {x = love.graphics.getWidth()-256, y=love.graphics.getHeight()-192, width = 256, height = 256, key = "a"},--a button
-                        {x = love.graphics.getWidth()-384, y=love.graphics.getHeight()-192, width = 256, height = 256, key = "x"},
-                        {x = 12, y=love.graphics.getHeight()-256, width = 256, height = 256, key = "dpleft"},
-                        {x = 256, y=love.graphics.getHeight()-256, width = 256, height = 256, key = "dpright"}
-                      }
+            buttons= {  {x = love.graphics.getWidth()-256, y=love.graphics.getHeight()-192, width = 256, height = 256, key = "a",isdown = false},--a button
+                        {x = love.graphics.getWidth()-384, y=love.graphics.getHeight()-192, width = 256, height = 256, key = "x",isdown = false},
+                        {x = 12, y=love.graphics.getHeight()-256, width = 256, height = 256, key = "dpleft",isdown = false},
+                        {x = 256, y=love.graphics.getHeight()-256, width = 256, height = 256, key = "dpright",isdown = false}
+                      },
           }
 phoneUI.draw = function(self)
                   if love.system.getOS() == "Android" then

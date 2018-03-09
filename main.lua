@@ -23,7 +23,7 @@ function love.load()
   
    -- Load map file
    debug = false
-   touchdebug = {x = 0,y = 0,dx = 10, dy = 10}
+   touchdebug = {x = 0,y = 0,dx = 10, dy = 10, id = 0}
    maplist:loadMaps()
    carlist:loadCars()
    print(maplist.maps[maplist.selectedMap])
@@ -48,7 +48,7 @@ function love.load()
      ty = math.floor(player.y - (love.graphics.getHeight() / 2) / 2),
      scaleIntervals = 0.5,
      zoomIn = 2,
-     zoomOut = 1.5,
+     zoomOut = 1,
      update = function(self,dt) 
                 if player.currentSpeed> player.car.topSpeed/2 then
                   self.scale = self.scale - self.scaleIntervals*dt
@@ -65,6 +65,7 @@ function love.load()
                 self.screen_height = love.graphics.getHeight() / self.scale
 
               -- Translate world so that player is always centred
+                
                 self.tx = math.floor(player.x - self.screen_width / 2)
                 self.ty = math.floor(player.y - self.screen_height / 2)
                 
@@ -94,6 +95,9 @@ function love.update(dt)
    end
    if state == gameStates.mapSelect then
     mapSelect:update(dt)
+   end
+   if state == gameStates.carSelect then
+     carSelect:update(dt)
    end
 end
 
@@ -125,7 +129,6 @@ function love.draw()
     resultScreen:draw()
   end
   phoneUI:draw()
-  
 --map:bump_draw(world)
 --bump_debug.draw(world)
   -- map:draw(-tx, -ty, scale,scale)
@@ -195,12 +198,12 @@ function love.gamepadreleased( gamepad, button )
 end
 
 function love.touchpressed( id, x, y, dx, dy, pressure )
-  local binding = state.buttons[phoneUI:checkButtonTouched(x,y,10,10)]
-  touchdebug = {x = x,y = y, dx = 10, dy = 10}
+  local binding = state.buttons[phoneUI:checkButtonTouched(x,y,10,10,id)]
+  touchdebug = {x = x,y = y, dx = 10, dy = 10, id= id}
   return inputHandler( binding )
 end
 function love.touchreleased( id, x, y, dx, dy, pressure )
-  local binding = state.buttonsReleased[phoneUI:checkButtonTouched(x,y,10,10)]
-  touchdebug = {x = dx,y = dy, dx = 10, dy = 10}
+  local binding = state.buttonsReleased[phoneUI:checkButtonTouched(x,y,10,10,id)]
+  touchdebug = {x = dx,y = dy, dx = 10, dy = 10 ,id= id}
   return inputHandler( binding )
 end

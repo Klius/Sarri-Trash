@@ -21,3 +21,7 @@ carSelect.draw = function (self)
                     self.leftArrow:draw()
                     self.rightArrow:draw()
 end
+carSelect.update = function (self,dt)
+  self.leftArrow:update(dt)
+  self.rightArrow:update(dt)
+end

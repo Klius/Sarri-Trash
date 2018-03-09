@@ -48,7 +48,7 @@ gameStates.mapSelect = {
           space     = "selectCar",
           left         = "changeMapMin",
           right       = "changeMapPl",
-          ["return"] = "select",
+          ["return"] = "selectCar",
           escape = "quit"
       },
       keysReleased = {},
@@ -69,13 +69,14 @@ gameStates.mapSelect = {
           releaseGas       = function() player.accelerating = false end,
           rotateLeft       = function() player:rotate(true) end,
           rotateRight      = function() player:rotate(false) end,
-          releaseRotate      = function() player.rotatingLeft = false player.rotatingRight = false end,
-          releaseRotateRight      = function() player.rotatingRight = false end,
+          releaseRotateRight     = function() player.rotatingRight = false end,
+          releaseRotateLeft     = function() player.rotatingLeft = false end,
           brake      = function() player.braking = true end,
           releaseBrake      = function() player.braking = false end,
           reloadMap         = function() 
                                 maplist:loadMap()
                               end,
+          releaseAll = function() player.rotatingLeft = false player.rotatingRight = false player.accelerating = false player.braking = false end,
           debug = function() 
                     if debug then 
                       debug = false
@@ -96,8 +97,8 @@ gameStates.mapSelect = {
       keysReleased = {
         space = "releaseGas",
         x       = "releaseBrake",
-        left  = "releaseRotate",
-        right = "releaseRotate",
+        left  = "releaseRotateLeft",
+        right = "releaseRotateRight",
       },
       buttons = {
           start    = "openMenu",
@@ -112,6 +113,7 @@ gameStates.mapSelect = {
         x       = "releaseBrake",
         dpleft  = "releaseRotate",
         dpright = "releaseRotate",
+        jk      = "releaseAll"
       }
       -- <...>
   }
