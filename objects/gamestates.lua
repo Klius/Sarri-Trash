@@ -121,13 +121,17 @@ gameStates.mapSelect = {
       bindings = {
           returnToStartScreen   = function()  state = gameStates.mapSelect  end,
           incrementRecordSpace = function() resultScreen:nextSpace(1) end,
-          decrementRecordSpace = function() resultScreen:nextSpace(-1) end
+          decrementRecordSpace = function() resultScreen:nextSpace(-1) end,
+          incrementRecordLetter = function() resultScreen:nextLetter(1) end,
+          decrementRecordLetter = function() resultScreen:nextLetter(-1) end
       },
       keys = {
           escape = "returnToStartScreen",
           space = "returnToStartScreen",
-          left   = "incrementRecordSpace",
-          right  = "returnToStartScreen",
+          left   = "decrementRecordSpace",
+          right  = "incrementRecordSpace",
+          up = "incrementRecordLetter",
+          down = "decrementRecordLetter",
           x = "returnToStartScreen",
           d = "returnToStartScreen"
       },

@@ -48,4 +48,24 @@ resultScreen.Initialize = function(self)
                             end
                           end
   --TODO: PRogram name entry
-  
+resultScreen.nextSpace = function(self,increment)
+  newSpace = self.currentSpace + increment
+  if newSpace < 1 then
+    newSpace = 1
+  elseif newSpace > 4 then
+    newSpace = 4
+  end
+  self.currentSpace = newSpace
+  self.currentLetter = self.recordName[self.currentSpace] 
+end
+--Changes Letters
+resultScreen.nextLetter = function(self,increment)
+  newLetter = self.currentLetter + increment
+  if newLetter < 1 then
+    newLetter = #self.alphabet
+  elseif newLetter > #self.alphabet then
+    newLetter = 1
+  end
+  self.currentLetter = newLetter
+  self.recordName[self.currentSpace] = newLetter
+end
