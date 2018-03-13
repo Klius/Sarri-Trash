@@ -99,6 +99,9 @@ function love.update(dt)
    if state == gameStates.carSelect then
      carSelect:update(dt)
    end
+   if state == gameStates.resultScreen then
+     resultScreen:update(dt)
+   end
 end
 
 function love.draw()

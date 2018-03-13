@@ -1,8 +1,8 @@
 carSelect = {
               bigFont = love.graphics.newFont(30),
               defaultFont = love.graphics.newFont(18),
-              leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/10),
-              rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/2.42,love.graphics.getHeight()/10)
+              leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/7),
+              rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/3,love.graphics.getHeight()/7)
             }
 carSelect.draw = function (self)
                     love.graphics.setColor(223,113,38,255)
