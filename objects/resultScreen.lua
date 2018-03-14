@@ -102,3 +102,9 @@ resultScreen.nextLetter = function(self,increment)
     self.letterArrowDown:pressed()
   end
 end
+--Confirm
+resultScreen.confirm = function(self)
+  if self.currentSpace == 4 and self.enteringName then
+  
+  end
+end

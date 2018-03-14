@@ -47,8 +47,8 @@ function love.load()
      tx = math.floor(player.x - (love.graphics.getWidth() / 2) / 2),
      ty = math.floor(player.y - (love.graphics.getHeight() / 2) / 2),
      scaleIntervals = 0.5,
-     zoomIn = 1.5,
-     zoomOut = 1,
+     zoomIn = 2,
+     zoomOut = 1.0,
      update = function(self,dt) 
                 if player.currentSpeed > player.car.topSpeed/4 then
                   self.scale = self.scale - self.scaleIntervals*dt
