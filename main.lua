@@ -47,15 +47,15 @@ function love.load()
      tx = math.floor(player.x - (love.graphics.getWidth() / 2) / 2),
      ty = math.floor(player.y - (love.graphics.getHeight() / 2) / 2),
      scaleIntervals = 0.5,
-     zoomIn = 2,
+     zoomIn = 1.5,
      zoomOut = 1,
      update = function(self,dt) 
-                if player.currentSpeed> player.car.topSpeed/2 then
+                if player.currentSpeed > player.car.topSpeed/4 then
                   self.scale = self.scale - self.scaleIntervals*dt
                   if self.scale < self.zoomOut then
                     self.scale=self.zoomOut
                   end
-                else
+                elseif player.currentSpeed < player.car.topSpeed/2 then
                   self.scale = self.scale + self.scaleIntervals*dt
                   if self.scale > self.zoomIn then
                     self.scale=self.zoomIn

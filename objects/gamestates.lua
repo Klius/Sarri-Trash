@@ -76,7 +76,6 @@ gameStates.mapSelect = {
           reloadMap         = function() 
                                 maplist:loadMap()
                               end,
-          releaseAll = function() player.rotatingLeft = false player.rotatingRight = false player.accelerating = false player.braking = false end,
           debug = function() 
                     if debug then 
                       debug = false
@@ -111,9 +110,8 @@ gameStates.mapSelect = {
       buttonsReleased = {
         a = "releaseGas",
         x       = "releaseBrake",
-        dpleft  = "releaseRotate",
-        dpright = "releaseRotate",
-        jk      = "releaseAll"
+        dpleft  = "releaseRotateLeft",
+        dpright = "releaseRotateRight",
       }
       -- <...>
   }
@@ -123,7 +121,8 @@ gameStates.mapSelect = {
           incrementRecordSpace = function() resultScreen:nextSpace(1) end,
           decrementRecordSpace = function() resultScreen:nextSpace(-1) end,
           incrementRecordLetter = function() resultScreen:nextLetter(1) end,
-          decrementRecordLetter = function() resultScreen:nextLetter(-1) end
+          decrementRecordLetter = function() resultScreen:nextLetter(-1) end,
+          confirm = function() resultScreen:confirm() end
       },
       keys = {
           escape = "returnToStartScreen",
@@ -139,10 +138,12 @@ gameStates.mapSelect = {
       },
       buttons = {
           start    = "returnToStartScreen",
-          a       = "returnToStartScreen",
+          a       = "confirm",
           x       = "returnToStartScreen",
-          dpleft  = "incrementRecordSpace",
-          dpright = "returnToStartScreen",
+          dpleft  = "decrementRecordSpace",
+          dpright = "incrementRecordSpace",
+          dpup = "incrementRecordLetter",
+          dpdown = "decrementRecordLetter",
           back    = "returnToStartScreen"
       },
       buttonsReleased = {

@@ -4,7 +4,6 @@ player = {
         description = "it's a cat!",
         sprite = love.graphics.newImage("assets/richie-grey.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/richie-grey.png"),32,32),
-        frameDuration = 0.1,
         orientation = 0,
         topSpeed = 8,
         acceleration = 5,
@@ -13,6 +12,13 @@ player = {
       },
       frameCount = 0,
       currentFrame = 0,
+      frameDuration = 0.1,
+      animationSpeeds = { 
+        [1] = 0.2,
+        [2] = 0.1,
+        [3] = 0.05,
+        [4] = 0.01
+      },
       x      = 0,
       y      = 0,
       w = 32,
@@ -126,7 +132,16 @@ player.update = function (self,dt)
                     else
                       self.currentFrame = 0  
                     end
-                    if self.frameCount > self.car.frameDuration then
+                    if self.currentSpeed > self.car.topSpeed - self.car.topSpeed/3 then
+                      self.frameDuration = self.animationSpeeds[4]
+                    elseif self.currentSpeed > self.car.topSpeed / 2 then
+                      self.frameDuration = self.animationSpeeds[3]
+                    elseif self.currentSpeed > self.car.topSpeed / 3 then
+                      self.frameDuration = self.animationSpeeds[2]
+                    else
+                      self.frameDuration = self.animationSpeeds[1]
+                    end
+                    if self.frameCount > self.frameDuration then
                       self.frameCount = 0
                       self.currentFrame = 1 + self.currentFrame
                       if self.currentFrame > #self.car.spritesheet then
