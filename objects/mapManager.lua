@@ -2,7 +2,7 @@ maplist = {
             maps = {},
             selectedMap = 1,
             preview = love.graphics.newCanvas(400, 275), --400,275
-            selectedMapName = "Undisclosed Location",
+            selectedMapName = "Under Construction",
             selectedMapRecords = { 99999,99999,99999 },
             selectedMapRecordsName = {"AAA","BBB","CCC"},
             selectedMapLapRecord = 999999,
@@ -90,7 +90,7 @@ maplist.drawPreview = function (self,tx,ty)
                         love.graphics.setCanvas()
                       end
 maplist.resetDefaults = function (self)
-                        self.selectedMapName = "Undisclosed Location"
+                        self.selectedMapName = "Under Construction"
                         self.selectedMapRecords = { 99999,99999,99999 }
                         self.selectedMapRecordsName = {"AAA","BBB","CCC"}
                         self.selectedMapLapRecord = 999999
