@@ -44,30 +44,50 @@ function love.load()
      scene = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight()),
 
    -- Translate world so that player is always centred
-     tx = math.floor(player.x - (love.graphics.getWidth() / 2) / 2),
-     ty = math.floor(player.y - (love.graphics.getHeight() / 2) / 2),
+     tx = math.floor(player.x - (love.graphics.getWidth() / 2)),
+     ty = math.floor(player.y - (love.graphics.getHeight() / 2)),
      scaleIntervals = 0.5,
      zoomIn = 2,
-     zoomOut = 1.0,
+     zoomOut = 1.5,
+     offsetOut = 200,
+     offsetIn = 0,
+     offsetIntervals = 50,
+     offset = 0,
+     degrees = 0,
+     speed = 3,
+     goalX = 0,
+     goalY = 0,
      update = function(self,dt) 
                 if player.currentSpeed > player.car.topSpeed/4 then
                   self.scale = self.scale - self.scaleIntervals*dt
+                  self.offset = self.offset + self.offsetIntervals*dt
                   if self.scale < self.zoomOut then
                     self.scale=self.zoomOut
                   end
+                  if self.offset > self.offsetOut then
+                    self.offset = self.offsetOut
+                  end
                 elseif player.currentSpeed < player.car.topSpeed/2 then
                   self.scale = self.scale + self.scaleIntervals*dt
+                  self.offset = self.offset - self.offsetIntervals*dt
                   if self.scale > self.zoomIn then
                     self.scale=self.zoomIn
+                  end
+                  if self.offset < self.offsetIn then
+                    self.offset = self.offsetIn
                   end
                 end  
                 self.screen_width = love.graphics.getWidth() / self.scale
                 self.screen_height = love.graphics.getHeight() / self.scale
 
               -- Translate world so that player is always centred
-                
-                self.tx = math.floor(player.x - self.screen_width / 2)
-                self.ty = math.floor(player.y - self.screen_height / 2)
+                local goalX = player.x -math.cos(player.orientation)*self.offset
+                local goalY = player.y -math.sin(player.orientation)*self.offset
+                self.tx = self.tx - (self.tx - (math.floor(goalX - self.screen_width /2 )))*dt*self.speed
+                self.ty = self.ty - (self.ty - (math.floor(goalY - self.screen_height /2 ))) * dt * self.speed              
+              
+                --self.tx = self.tx - (self.tx - (math.floor(player.x - self.screen_width /2 )))*dt*self.speed
+                --self.ty = self.ty - (self.ty - (math.floor(player.y - self.screen_height /2 ))) * dt * self.speed
                 
                 --Scene
                 love.graphics.setCanvas(self.scene)
@@ -75,7 +95,6 @@ function love.load()
                 love.graphics.translate(-self.tx, -self.ty)
                 map:draw(-self.tx, -self.ty, self.scale,self.scale)
                 player:draw()
-                
                 love.graphics.setCanvas()
                 
               end
@@ -122,6 +141,9 @@ function love.draw()
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
       love.graphics.print(race.currentTime,0,40)
       love.graphics.print (player.currentSpeed,0,60)
+      love.graphics.print("tx:"..math.cos(player.orientation)*player.currentSpeed,0,80)
+      love.graphics.print("ty"..math.sin(player.orientation)*player.currentSpeed,0,100)
+      love.graphics.print("grados"..camera.degrees,0,120)
     end
     
   elseif state == gameStates.mapSelect then
