@@ -49,45 +49,39 @@ function love.load()
      scaleIntervals = 0.5,
      zoomIn = 2,
      zoomOut = 1.5,
-     offsetOut = 200,
-     offsetIn = 0,
-     offsetIntervals = 50,
-     offset = 0,
-     degrees = 0,
-     speed = 3,
+     offsetX = 2,
+     offsetY = 2,
+     currentox = 2,
+     currentoy = 2,
+     intervalY = 1,
+     intervalX = 1,
+     speed = 1,
      goalX = 0,
      goalY = 0,
      update = function(self,dt) 
                 if player.currentSpeed > player.car.topSpeed/4 then
                   self.scale = self.scale - self.scaleIntervals*dt
-                  self.offset = self.offset + self.offsetIntervals*dt
                   if self.scale < self.zoomOut then
                     self.scale=self.zoomOut
                   end
-                  if self.offset > self.offsetOut then
-                    self.offset = self.offsetOut
-                  end
                 elseif player.currentSpeed < player.car.topSpeed/2 then
                   self.scale = self.scale + self.scaleIntervals*dt
-                  self.offset = self.offset - self.offsetIntervals*dt
                   if self.scale > self.zoomIn then
                     self.scale=self.zoomIn
-                  end
-                  if self.offset < self.offsetIn then
-                    self.offset = self.offsetIn
                   end
                 end  
                 self.screen_width = love.graphics.getWidth() / self.scale
                 self.screen_height = love.graphics.getHeight() / self.scale
-
               -- Translate world so that player is always centred
-                local goalX = player.x -math.cos(player.orientation)*self.offset
-                local goalY = player.y -math.sin(player.orientation)*self.offset
-                self.tx = self.tx - (self.tx - (math.floor(goalX - self.screen_width /2 )))*dt*self.speed
-                self.ty = self.ty - (self.ty - (math.floor(goalY - self.screen_height /2 ))) * dt * self.speed              
+                local goalX = (player.x-player.w/2) --math.cos(player.orientation)--*self.offset
+                local goalY = (player.y-player.h/2) --math.sin(player.orientation)--*self.offset
+          
+                self:getCurrentOffset(dt)
+                self.tx = self.tx - (self.tx - (math.floor(goalX - (self.screen_width -self.screen_width/self.currentox) )))--*dt*self.speed
+                self.ty = self.ty - (self.ty - (math.floor(goalY - (self.screen_height -self.screen_height/self.currentoy) )))--*dt * self.speed      
               
-                --self.tx = self.tx - (self.tx - (math.floor(player.x - self.screen_width /2 )))*dt*self.speed
-                --self.ty = self.ty - (self.ty - (math.floor(player.y - self.screen_height /2 ))) * dt * self.speed
+                --self.tx = math.floor(goalX - self.screen_width /4)
+                --self.ty = math.floor(goalY - self.screen_height /4)
                 
                 --Scene
                 love.graphics.setCanvas(self.scene)
@@ -97,8 +91,56 @@ function love.load()
                 player:draw()
                 love.graphics.setCanvas()
                 
-              end
+              end,
+    getCurrentOffset = function(self,dt)
+      local ox = math.cos(player.orientation)*1
+                local oy = math.sin(player.orientation)*1
+                if player.currentSpeed >player.car.topSpeed/2 then
+                  if oy > 0.95 then
+                    self.offsetY = 3
+                  elseif oy < -0.95 then
+                    self.offsetY = 1.5
+                  else
+                    self.offsetY = 2
+                  end
+                  if ox > 0.95 then
+                    self.offsetX = 3
+                  elseif ox < -0.95 then
+                    self.offsetX = 1.5
+                  else
+                    self.offsetX = 2
+                  end
+                else
+                  self.offsetX = 2
+                  self.offsetY = 2
+                end
+                  if self.currentoy > self.offsetY then  
+                    self.intervalY = -(dt*self.speed)
+                  elseif self.currentoy < self.offsetY then
+                    self.intervalY = dt*self.speed
+                  end
+                  self.currentoy = self.currentoy + self.intervalY
+                  
+                  if self.currentox > self.offsetX then 
+                    self.intervalX = -(dt*self.speed)
+                  elseif self.currentox < self.offsetX then
+                    self.intervalX = dt*self.speed
+                  end
+                  self.currentox = self.currentox + self.intervalX
+                
+                if self.intervalY > 0 and self.offsetY / self.currentoy < 1 then
+                  self.currentoy = self.offsetY
+                elseif self.intervalY < 0 and self.currentoy /  self.offsetY < 1 then
+                  self.currentoy = self.offsetY
+                end
+                if self.intervalX < 0 and self.currentox / self.offsetX  < 1 then
+                  self.currentox = self.offsetX
+                elseif self.intervalX > 0 and  self.offsetX / self.currentox  < 1 then
+                  self.currentox = self.offsetX
+                end
+      end
     }
+    
 end
 
 function love.update(dt)
@@ -141,9 +183,11 @@ function love.draw()
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
       love.graphics.print(race.currentTime,0,40)
       love.graphics.print (player.currentSpeed,0,60)
-      love.graphics.print("tx:"..math.cos(player.orientation)*player.currentSpeed,0,80)
-      love.graphics.print("ty"..math.sin(player.orientation)*player.currentSpeed,0,100)
-      love.graphics.print("grados"..camera.degrees,0,120)
+      love.graphics.print("tx:"..math.cos(player.orientation)*1,0,80)
+      love.graphics.print("ty"..math.sin(player.orientation)*1,0,100)
+      love.graphics.print("ox:"..camera.currentox,0,120)
+      love.graphics.print("oy:"..camera.currentoy,0,140)
+      love.graphics.print("MEM"..collectgarbage('count').."KB",400,0)
     end
     
   elseif state == gameStates.mapSelect then
