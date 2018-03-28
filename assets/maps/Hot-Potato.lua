@@ -1,7 +1,7 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.1.0",
+  tiledversion = "1.1.1",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 100,
@@ -1064,12 +1064,12 @@ return {
       draworder = "topdown",
       properties = {
         ["circuitName"] = "Hot Potato",
-        ["first"] = 18.556,
+        ["first"] = 28.556,
         ["firstName"] = "556",
         ["lapName"] = "AAA",
-        ["second"] = 20.56,
+        ["second"] = 30.556,
         ["secondName"] = "BBB",
-        ["third"] = 30.45,
+        ["third"] = 35.556,
         ["thirdName"] = "CCC"
       },
       objects = {

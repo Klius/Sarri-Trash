@@ -20,7 +20,7 @@ function love.load()
   require "objects/carManager"
   require "objects/player"
   require "objects/speedometer"
-  
+  love.mouse.setVisible( false )
    -- Load map file
    debug = false
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10, id = 0}
@@ -56,8 +56,6 @@ function love.load()
      intervalY = 1,
      intervalX = 1,
      speed = 1,
-     goalX = 0,
-     goalY = 0,
      update = function(self,dt) 
                 if player.currentSpeed > player.car.topSpeed/4 then
                   self.scale = self.scale - self.scaleIntervals*dt
@@ -89,6 +87,8 @@ function love.load()
                 love.graphics.translate(-self.tx, -self.ty)
                 map:draw(-self.tx, -self.ty, self.scale,self.scale)
                 player:draw()
+                --love.graphics.setPointSize(5)
+                --love.graphics.points(player.x,player.y)
                 love.graphics.setCanvas()
                 
               end,
@@ -183,11 +183,13 @@ function love.draw()
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
       love.graphics.print(race.currentTime,0,40)
       love.graphics.print (player.currentSpeed,0,60)
-      love.graphics.print("tx:"..math.cos(player.orientation)*1,0,80)
-      love.graphics.print("ty"..math.sin(player.orientation)*1,0,100)
-      love.graphics.print("ox:"..camera.currentox,0,120)
-      love.graphics.print("oy:"..camera.currentoy,0,140)
-      love.graphics.print("MEM"..collectgarbage('count').."KB",400,0)
+      love.graphics.print("x:"..player.x,0,80)
+      love.graphics.print("y:"..player.y,0,100)
+      love.graphics.print("tx:"..math.cos(player.orientation)*1,0,120)
+      love.graphics.print("ty"..math.sin(player.orientation)*1,0,140)
+      love.graphics.print("ox:"..camera.currentox,0,160)
+      love.graphics.print("oy:"..camera.currentoy,0,180)
+      love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",400,0)
     end
     
   elseif state == gameStates.mapSelect then

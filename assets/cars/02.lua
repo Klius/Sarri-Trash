@@ -8,7 +8,7 @@ car = {
         topSpeed = 12,
         acceleration = 5,
         steering = 150,
-        brakes = 10,
+        brakes = 7,
       }
 
 return car

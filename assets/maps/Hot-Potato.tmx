@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="6">
+<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="6">
  <tileset firstgid="1" source="../testroad.tsx"/>
  <layer name="Track" width="100" height="100">
   <data encoding="csv">
@@ -316,12 +316,12 @@
  <objectgroup name="Capa de Objetos 1" visible="0">
   <properties>
    <property name="circuitName" value="Hot Potato"/>
-   <property name="first" type="float" value="18.556"/>
+   <property name="first" type="float" value="28.556"/>
    <property name="firstName" value="556"/>
    <property name="lapName" value="AAA"/>
-   <property name="second" type="float" value="20.56"/>
+   <property name="second" type="float" value="30.556"/>
    <property name="secondName" value="BBB"/>
-   <property name="third" type="float" value="30.45"/>
+   <property name="third" type="float" value="35.556"/>
    <property name="thirdName" value="CCC"/>
   </properties>
   <object id="1" name="Player" x="1888" y="2752" width="32" height="32"/>

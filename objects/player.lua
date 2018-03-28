@@ -71,7 +71,7 @@ player.update = function (self,dt)
                       local speed = self.car.acceleration * dt
                       local brakes = self.car.brakes * dt
                       --Acceleration
-                      if self.braking or self.accelerating and braking then
+                      if self.braking or self.accelerating and self.braking then
                         self.currentSpeed = self.currentSpeed - brakes
                       elseif self.accelerating then
                         self.currentSpeed = self.currentSpeed + speed
@@ -79,12 +79,12 @@ player.update = function (self,dt)
                           self.currentSpeed = self.car.topSpeed
                         end
                       else
-                        local braker = self.currentSpeed/16
-                        
-                        if self.currentSpeed > 0  then
-                          self.currentSpeed = self.currentSpeed - braker
+                        --if you let go of accelerator when speeding or reversing it slows down
+                        local frictionbrake = self.currentSpeed/32
+                        if self.currentSpeed > 0  and self.accelerating == false then
+                          self.currentSpeed = self.currentSpeed - frictionbrake
                         elseif self.currentSpeed < 0 and self.braking == false then
-                          self.currentSpeed = self.currentSpeed - braker
+                          self.currentSpeed = self.currentSpeed - frictionbrake
                         end
                       end
                       
@@ -95,24 +95,38 @@ player.update = function (self,dt)
                         self.currentSpeed = self.car.topSpeed
                       end
                     --ORIENTATION
-                    if self.rotatingLeft then
-                      self.orientation = self.orientation - (self.car.steering * love.timer.getDelta()) * math.pi / 180
-                    elseif self.rotatingRight then
-                      self.orientation = self.orientation + (self.car.steering * love.timer.getDelta()) * math.pi / 180
+                    if self.rotatingLeft and self.accelerating or self.rotatingLeft and self.braking or self.rotatingLeft and math.floor(self.currentSpeed) > 0 then
+                      if self.braking and self.accelerating then
+                        self.orientation = self.orientation - ((self.car.steering*1.5) * dt) * math.pi / 180
+                      else
+                        self.orientation = self.orientation - (self.car.steering * dt) * math.pi / 180
+                      end
+                    elseif self.rotatingRight and self.accelerating or self.rotatingRight and self.braking or self.rotatingRight and math.floor(self.currentSpeed) > 0 then
+                      if self.braking and self.accelerating then
+                        self.orientation = self.orientation + ((self.car.steering*1.5) * dt) * math.pi / 180
+                      else
+                        self.orientation = self.orientation + (self.car.steering * dt) * math.pi / 180
+                      end
                     end
                     --Change position
+                    local testx = self.x+self.w/2
+                    local testy = self.y+self.h
                     
                     goalX = self.x - math.cos(self.orientation)*self.currentSpeed
                     goalY = self.y - math.sin(self.orientation)*self.currentSpeed
+                    --goalX = self.x - math.cos(self.orientation)*self.currentSpeed
+                    --goalY = self.y - math.sin(self.orientation)*self.currentSpeed
+                    
+                    --COLISIONS
                     local playerFilter = function(item, other)
                       if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
                         else return 'slide'
                         end
                     
-                      end
+                    end
+                    
                     local actualX, actualY, cols, len = world:move(self, goalX, goalY, playerFilter)
                     self.x, self.y = actualX, actualY
-                    --COLISIONS
                     for i=1,len do
                       local other = cols[i].other
                       if other.properties.isCheckpoint then

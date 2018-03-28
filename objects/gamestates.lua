@@ -75,6 +75,7 @@ gameStates.mapSelect = {
           releaseBrake      = function() player.braking = false end,
           reloadMap         = function() 
                                 maplist:loadMap()
+                                race:reset()
                               end,
           debug = function() 
                     if debug then 
@@ -103,6 +104,7 @@ gameStates.mapSelect = {
           start    = "openMenu",
           a       = "gas",
           x       = "brake",
+          y       = "debug",
           dpleft  = "rotateLeft",
           dpright = "rotateRight",
           back    = "reloadMap"
