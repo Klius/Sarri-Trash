@@ -28,26 +28,27 @@ resultScreen.draw = function (self)
   love.graphics.setColor(223,113,38,255)
   love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
   love.graphics.setColor(255,255,255,255)
-                      local y = 100
-                      for k,time in pairs(race.times) do
-                        love.graphics.print(race:formatTime(time),100,y)
-                        if debug then
-                          love.graphics.print(time,200,y)
-                        end
-                        y = y+20
-                        
-                      end
-                      love.graphics.print(race:formatTime(race.totalTime),200,y)
-                      love.graphics.print(self.texts[self.currentPosition],200,400)
-                      local x = 200
-                      for k,letter in pairs(self.recordName) do
-                        love.graphics.print(self.alphabet[letter],x,300)
-                        x= x+20
-                      end
-                      --love.graphics.print(self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]],200,300)
-                      self.letterArrowUp:draw()
-                      self.letterArrowDown:draw()
-                    end
+  local y = 100
+  local x = 200
+  --print race times
+  for k,time in pairs(race.times) do
+    love.graphics.print(k.."-"..race:formatTime(time),100,y)
+    y = y+20
+  end
+  --print total time just below
+  love.graphics.line(100,y,200,y)
+  y=y+10
+  love.graphics.print("Total-"..race:formatTime(race.totalTime),100,y)
+  love.graphics.print(self.texts[self.currentPosition],200,400)
+  for k,letter in pairs(self.recordName) do
+    love.graphics.print(self.alphabet[letter],x,300)
+    x= x+20
+  end
+    love.graphics.draw(love.graphics.newImage("assets/arrow-enter.png"),x-5,300)
+    --love.graphics.print(self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]],200,300)
+    self.letterArrowUp:draw()
+    self.letterArrowDown:draw()
+end
 resultScreen.Initialize = function(self)
   if race.totalTime < maplist.selectedMapRecords[1] then
     self.currentPosition = 1

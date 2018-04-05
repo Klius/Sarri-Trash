@@ -23,6 +23,7 @@ function love.load()
   love.mouse.setVisible( false )
    -- Load map file
    debug = false
+   cheat = ""
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10, id = 0}
    maplist:loadMaps()
    carlist:loadCars()
@@ -150,6 +151,7 @@ function love.update(dt)
      map:update(dt)
      camera:update(dt)
      race:update(dt)
+     checkForCheats()
      if race.endRace then
       state = gameStates.resultScreen
      end
@@ -189,7 +191,8 @@ function love.draw()
       love.graphics.print("ty"..math.sin(player.orientation)*1,0,140)
       love.graphics.print("ox:"..camera.currentox,0,160)
       love.graphics.print("oy:"..camera.currentoy,0,180)
-      love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",400,0)
+      love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",200,0)
+      love.graphics.print("ch:"..cheat,400,0)
     end
     
   elseif state == gameStates.mapSelect then
@@ -235,10 +238,33 @@ function finishLineCrossed()
   end
 end
 
-
-  --[
-  -- HANDLING
-  --]
+--[[
+  CHEATS
+]]
+function checkForCheats()
+  local cheats = {
+    weiner = function() 
+              for i=1,3 do
+                race:nextLap()
+              end
+             end,
+    cls = function()
+            cheat = ""
+          end
+  }
+  for i,v in pairs(cheats) do
+    if string.find(cheat,i) then
+      cheats[i]()
+      cheat =""
+    end
+  end
+  if cheat:len() > 10 then
+    cheat = ""
+  end
+end
+  --[[
+   HANDLING
+  ]]
 
 
 function inputHandler( input )
@@ -249,6 +275,7 @@ end
 function love.keypressed( k )
     -- you might want to keep track of this to change display prompts
     INPUTMETHOD = "keyboard"
+    cheat = cheat .. k
     local binding = state.keys[k]
     return inputHandler( binding )
 end
