@@ -2,17 +2,17 @@ speedometer = {
                 fullSquares = 0,
                 squares = 9,
                 colors = { 
-                            [0]={r=255,b=255,g=255,o=255},
-                            [1]={r=255,b=255,g=255,o=255},
-                            [2]={r=255,b=255,g=255,o=255},
-                            [3]={r=255,b=255,g=255,o=255},
-                            [4]={r=255,b=255,g=255,o=255},
-                            [5]={r=255,b=255,g=255,o=255},
-                            [6]={r=255,b=255,g=255,o=255},
-                            [7]={r=255,b=255,g=255,o=255},
-                            [8]={r=253,b=50,g=50,o=255},
-                            [9]={r=255,b=0,g=0,o=255},
-                            [10] = {r=255,b=0,g=0,o=255}
+                            [0]={r=1,b=1,g=1,o=1},
+                            [1]={r=1,b=1,g=1,o=1},
+                            [2]={r=1,b=1,g=1,o=1},
+                            [3]={r=1,b=1,g=1,o=1},
+                            [4]={r=1,b=1,g=1,o=1},
+                            [5]={r=1,b=1,g=1,o=1},
+                            [6]={r=1,b=1,g=1,o=1},
+                            [7]={r=1,b=1,g=1,o=1},
+                            [8]={r=0.99,b=0.19,g=0.19,o=1},
+                            [9]={r=1,b=0,g=0,o=1},
+                            [10] = {r=1,b=0,g=0,o=1}
                           },
                 uiSpeed = 0
               }
@@ -21,7 +21,7 @@ speedometer.draw = function (self)
                       local x = love.graphics.getHeight()/2
                       local y = 50
                       for i=0,self.squares do
-                        love.graphics.setColor(0,0,0,255)
+                        love.graphics.setColor(0,0,0,1)
                         love.graphics.rectangle("line",x,y,16,16)
                         if self.fullSquares > 0 then 
                           love.graphics.setColor(self.colors[i].r,self.colors[i].b,self.colors[i].g,self.colors[i].o)
@@ -31,10 +31,10 @@ speedometer.draw = function (self)
                         
                         x = x+16
                       end
-                      love.graphics.setColor(0,0,0,255)
+                      love.graphics.setColor(0,0,0,1)
                       love.graphics.rectangle("line",x,y-8,48,32)
                       love.graphics.rectangle("fill",x,y-8,48,32)
-                      love.graphics.setColor(255,255,255,255)
+                      love.graphics.setColor(1,1,1,1)
                       love.graphics.print(self.uiSpeed,x+5,y-4,0)
                    end
                    

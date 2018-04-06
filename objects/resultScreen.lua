@@ -25,9 +25,9 @@ resultScreen = {
     letterArrowDown = Arrow(4,208,328),
 }
 resultScreen.draw = function (self)
-  love.graphics.setColor(223,113,38,255)
+  love.graphics.setColor(223/255,113/255,38/255,1)
   love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
-  love.graphics.setColor(255,255,255,255)
+  love.graphics.setColor(1,1,1,1)
   local y = 100
   local x = 200
   --print race times

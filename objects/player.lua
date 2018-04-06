@@ -24,14 +24,17 @@ player = {
       w = 32,
       h = 32,
       ox     = 16 ,
-      oy     = 16 ,
+      oy     = 16,
+      driftangle = 0,
       orientation = 0,
+      spriterotation = 0,
       currentSpeed = 0,
       rotatingLeft = false,
       rotatingRight = false,
       accelerating = false,
       braking = false,
-      checkPoints = { false,false,false}
+      checkPoints = { false,false,false},
+      skidPool = SkidPool()
    }
 player.spawnPlayer = function (self)
                          local spawn
@@ -46,6 +49,8 @@ player.spawnPlayer = function (self)
                          world:add(self,self.x,self.y,self.w,self.h)
                          self.currentSpeed = 0
                          self.orientation = spawn.rotation
+                         self.spriteRotation = self.orientation
+                         self.driftangle = self.orientation * 1
                          self.rotatingLeft = false
                          self.rotatingRight = false
                          self.accelerating = false
@@ -55,12 +60,13 @@ player.spawnPlayer = function (self)
                          
                     end
 player.draw = function (self)
+                        self.skidPool:draw()
                         love.graphics.draw(
                              self.car.sprite,
                              self.car.spritesheet[self.currentFrame],
                              math.floor(self.x+self.ox),
                              math.floor(self.y+self.oy),	 
-                             self.orientation,
+                             self.spriteRotation,
                              1,
                              1,
                              self.ox,
@@ -68,6 +74,7 @@ player.draw = function (self)
                         )
 end
 player.update = function (self,dt)
+                      self.skidPool:update(dt)
                       local speed = self.car.acceleration * dt
                       local brakes = self.car.brakes * dt
                       --Acceleration
@@ -94,26 +101,40 @@ player.update = function (self,dt)
                       elseif self.currentSpeed > self.car.topSpeed then
                         self.currentSpeed = self.car.topSpeed
                       end
+                      
+                      local drifting = self.braking and self.accelerating
+                      
                     --ORIENTATION
                     if self.rotatingLeft and self.accelerating or self.rotatingLeft and self.braking or self.rotatingLeft and math.floor(self.currentSpeed) > 0 then
-                      if self.braking and self.accelerating then
-                        self.orientation = self.orientation - ((self.car.steering*1.5) * dt) * math.pi / 180
+                      if drifting then
+                        self.orientation = self.orientation - ((self.car.steering*2) * dt) * math.pi / 180
+                        self.driftangle = self.orientation -0.5 * -1
+                        self.spriteRotation = self.orientation -0.5 
                       else
                         self.orientation = self.orientation - (self.car.steering * dt) * math.pi / 180
+                        self.driftangle = self.orientation -0.5 * -1
                       end
                     elseif self.rotatingRight and self.accelerating or self.rotatingRight and self.braking or self.rotatingRight and math.floor(self.currentSpeed) > 0 then
-                      if self.braking and self.accelerating then
-                        self.orientation = self.orientation + ((self.car.steering*1.5) * dt) * math.pi / 180
+                      if drifting then
+                        self.orientation = self.orientation + ((self.car.steering*2) * dt) * math.pi / 180
+                        self.driftangle = self.orientation-0.5 * 1
+                        self.spriteRotation = self.orientation +0.5
                       else
                         self.orientation = self.orientation + (self.car.steering * dt) * math.pi / 180
+                        self.driftangle = self.orientation-0.5 * 1
                       end
                     end
                     --Change position
                     local testx = self.x+self.w/2
                     local testy = self.y+self.h
-                    
-                    goalX = self.x - math.cos(self.orientation)*self.currentSpeed
-                    goalY = self.y - math.sin(self.orientation)*self.currentSpeed
+                    if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
+                      goalX = self.x - math.cos(self.driftangle) *self.currentSpeed
+                      goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
+                    else
+                      goalX = self.x - math.cos(self.orientation)*self.currentSpeed
+                      goalY = self.y - math.sin(self.orientation)*self.currentSpeed
+                      self.spriteRotation = self.orientation
+                    end
                     --goalX = self.x - math.cos(self.orientation)*self.currentSpeed
                     --goalY = self.y - math.sin(self.orientation)*self.currentSpeed
                     

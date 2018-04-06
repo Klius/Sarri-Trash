@@ -7,9 +7,9 @@ function MusicManager:new()
   --self.backgroundMusic = love.audio.newSource("assets/sfx/music/back.mp3")
   ---self.backgroundMusic:setLooping(true)
   --self.backgroundMusic:setVolume(1)
-  self.sea = love.audio.newSource("assets/sfx/sea.ogg")
-  self.sea:setVolume(0.5)
-  self.sea:setLooping(true)
+  --self.sea = love.audio.newSource("assets/sfx/sea.ogg")
+  --self.sea:setVolume(0.5)
+  --self.sea:setLooping(true)
   --self.currentMusic = self.backgroundMusic
 end
 

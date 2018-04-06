@@ -18,8 +18,12 @@ function love.load()
   require "objects/race"
   require "objects/phoneui"
   require "objects/carManager"
+  require "objects/skid"
+  require "objects/skidpools"
   require "objects/player"
   require "objects/speedometer"
+  
+  
   love.mouse.setVisible( false )
    -- Load map file
    debug = false
@@ -191,6 +195,10 @@ function love.draw()
       love.graphics.print("ty"..math.sin(player.orientation)*1,0,140)
       love.graphics.print("ox:"..camera.currentox,0,160)
       love.graphics.print("oy:"..camera.currentoy,0,180)
+      love.graphics.print("orientation:"..player.orientation,0,200)
+      love.graphics.print("DriftAngle:"..player.driftangle,0,220)
+      love.graphics.print("driftX:"..player.x + math.cos(player.driftangle)*player.currentSpeed,0,240)
+      love.graphics.print("DriftY:"..player.y + math.sin(player.driftangle)*player.currentSpeed,0,260)
       love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",200,0)
       love.graphics.print("ch:"..cheat,400,0)
     end
