@@ -1,8 +1,9 @@
  car = {
         name = "Richie The Cat",
         description = "it's a cat!",
-        sprite = love.graphics.newImage("assets/richie-grey.png"),
-        spritesheet = getAnimations(love.graphics.newImage("assets/richie-grey.png"),32,32),
+        sprite = love.graphics.newImage("assets/cars/sprites/richie-grey.png"),
+        spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/richie-grey.png"),32,32),
+        skid = "assets/cars/sprites/skid-richie.png",
         frameDuration = 0.1,
         currentSpeed = 0,
         topSpeed = 12,

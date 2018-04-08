@@ -1,8 +1,9 @@
 car = {
         name = "A-Eccles Sdrawkcab",
         description = "In a bold stylistic move, scandinavian chair maker A-Eccles designed and manufactered\nthe first car that drives backwards.\nOnly 2 units out of 10000 were sold, the fact that you had to look all the time\ninto the rear-view mirror didn't make it more popular...\nPressing the brake will accelerate and flooring the accelerator will brake it.",
-        sprite = love.graphics.newImage("assets/sdrawkcab.png"),
-        spritesheet = getAnimations(love.graphics.newImage("assets/sdrawkcab.png"),32,32),
+        sprite = love.graphics.newImage("assets/cars/sprites/sdrawkcab.png"),
+        spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/sdrawkcab.png"),32,32),
+        skid = "assets/cars/sprites/skid-sdrawkcab.png",
         frameDuration = 0.1,
         frameCount = 0,
         currentFrame = 0,

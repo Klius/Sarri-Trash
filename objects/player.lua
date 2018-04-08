@@ -2,8 +2,9 @@ player = {
       car ={
         name = "Richie",
         description = "it's a cat!",
-        sprite = love.graphics.newImage("assets/richie-grey.png"),
-        spritesheet = getAnimations(love.graphics.newImage("assets/richie-grey.png"),32,32),
+        sprite = love.graphics.newImage("assets/cars/sprites/richie-grey.png"),
+        spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/richie-grey.png"),32,32),
+        skid = "assets/cars/sprites/skid-richie.png",
         orientation = 0,
         topSpeed = 8,
         acceleration = 5,
@@ -57,7 +58,7 @@ player.spawnPlayer = function (self)
                          self.braking = false
                          self.checkPoints = { false,false,false}
                          --map:removeLayer("Spawn Point")
-                         
+                         self.skidPool = SkidPool(self.car.skid)
                     end
 player.draw = function (self)
                         self.skidPool:draw()

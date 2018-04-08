@@ -16,12 +16,12 @@ function SkidPool:draw()
     v:draw()
   end
 end
-function SkidPool:new()
+function SkidPool:new(skid)
   self.limit = 50
-  self.skidSprite = "assets/skid-fx.png"
+  self.skidSprite = skid or "assets/cars/sprites/skid-fx.png"
   self.skids = {}
 end
 function SkidPool:add()
-  skid = Skid(self.skidSprite,player.x,player.y,player.rotation)
+  skid = Skid(self.skidSprite,player.x,player.y,player.spriteRotation)
   table.insert(self.skids,skid)
 end

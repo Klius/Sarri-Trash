@@ -3,6 +3,7 @@ gameStates.carSelect = {
   bindings = {
       enterRace = function()
                     player.car = carlist.cars[carlist.selectedCar]
+                    maplist:loadMap()
                     race:reset()
                     state = gameStates.gameLoop
                   end,
@@ -36,7 +37,6 @@ gameStates.carSelect = {
 gameStates.mapSelect = {
       bindings = {
           selectCar = function()  
-                        maplist:loadMap() 
                         state = gameStates.carSelect 
                         end,
           changeMapMin = function() maplist:changeSelectedMap(-1) end,
