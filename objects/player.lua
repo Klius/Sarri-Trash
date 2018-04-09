@@ -163,7 +163,7 @@ player.update = function (self,dt)
                     end
                     
                     --ANIMATION
-                    if self.currentSpeed > 0.5 or self.currentSpeed < 0 then
+                    if self.currentSpeed > 0.5 or self.currentSpeed < -0.5 then
                       self.frameCount = self.frameCount + dt
                     else
                       self.currentFrame = 0  
@@ -181,7 +181,7 @@ player.update = function (self,dt)
                       self.frameCount = 0
                       self.currentFrame = 1 + self.currentFrame
                       if self.currentFrame > #self.car.spritesheet then
-                        self.currentFrame = 0
+                        self.currentFrame = 1
                       end
                     end
 
