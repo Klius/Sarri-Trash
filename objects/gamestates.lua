@@ -42,14 +42,14 @@ gameStates.mapSelect = {
           changeMapMin = function() maplist:changeSelectedMap(-1) end,
           changeMapPl = function() maplist:changeSelectedMap(1) end,
           select     = function()  end,
-          quit       = function() love.event.quit() end,
+          back       = function() state = gameStates.mainMenu end,
       },
       keys = {
           space     = "selectCar",
           left         = "changeMapMin",
           right       = "changeMapPl",
           ["return"] = "selectCar",
-          escape = "quit"
+          escape = "back"
       },
       keysReleased = {},
       buttons = {
@@ -57,7 +57,7 @@ gameStates.mapSelect = {
           dpleft   = "changeMapMin",
           dpright = "changeMapPl",
           a    = "selectCar",
-          y = "quit"
+          y = "back"
       },
       buttonsReleased = {},
       -- <...>
@@ -106,6 +106,8 @@ gameStates.mapSelect = {
           x       = "brake",
           y       = "debug",
           dpleft  = "rotateLeft",
+          jleft   = "rotateLeft",
+          jright   = "rotateRight",
           dpright = "rotateRight",
           back    = "reloadMap"
       },
@@ -114,6 +116,8 @@ gameStates.mapSelect = {
         x       = "releaseBrake",
         dpleft  = "releaseRotateLeft",
         dpright = "releaseRotateRight",
+        jleft  = "releaseRotateLeft",
+        jright = "releaseRotateRight",
       }
       -- <...>
   }
@@ -152,3 +156,29 @@ gameStates.mapSelect = {
       }
       -- <...>
   }
+gameStates.mainMenu = {
+  bindings = {
+    changeOptionUp = function() mainMenuScreen:changeOption(-1) end,
+    changeOptionDown = function() mainMenuScreen:changeOption(1) end,
+    selectOption = function() mainMenuScreen:selectOption() end,
+    quit       = function() love.event.quit() end,
+  },
+  keys = {
+    space     = "selectOption",
+    up         = "changeOptionUp",
+    down       = "changeOptionDown",
+    ["return"] = "selectOption",
+    escape = "quit"
+  },
+  keysReleased ={
+  },
+  buttons = {
+    dpup = "changeOptionUp",
+    dpdown ="changeOptionDown",
+    a = "selectOption",
+    y = "quit",
+    start = "selectOption",
+  },
+  buttonsReleased = {
+  }
+}

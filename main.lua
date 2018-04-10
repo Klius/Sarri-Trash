@@ -4,11 +4,14 @@ sti = require "libs/sti"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
+require "objects/gamestates"
+require "objects/config"
 require "objects/animations"
 require "objects/arrows"
+require "objects/mainMenuScreen"
 require "objects/mapManager"
 require "objects/music"
-require "objects/gamestates"
+
 require "objects/mapSelect"
 require "objects/carSelect"
 require "objects/resultScreen"
@@ -31,14 +34,13 @@ function love.load()
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10, id = 0}
    maplist:loadMaps()
    carlist:loadCars()
-   print(maplist.maps[maplist.selectedMap])
    audiomanager = MusicManager()
    map = sti(maplist.maps[maplist.selectedMap],{"bump"})
    world = bump.newWorld()
    map:bump_init(world)
   
   keydebug =""
-  state = gameStates.mapSelect
+  state = gameStates.mainMenu
   --Spawn player
    player:spawnPlayer()
    camera = {
@@ -78,14 +80,14 @@ function love.load()
               -- Translate world so that player is always centred
                 local goalX = (player.x-player.w/2) --math.cos(player.orientation)--*self.offset
                 local goalY = (player.y-player.h/2) --math.sin(player.orientation)--*self.offset
-          
-                self:getCurrentOffset(dt)
-                self.tx = self.tx - (self.tx - (math.floor(goalX - (self.screen_width -self.screen_width/self.currentox) )))--*dt*self.speed
-                self.ty = self.ty - (self.ty - (math.floor(goalY - (self.screen_height -self.screen_height/self.currentoy) )))--*dt * self.speed      
-              
-                --self.tx = math.floor(goalX - self.screen_width /4)
-                --self.ty = math.floor(goalY - self.screen_height /4)
-                
+                if config.dinamic_cam then
+                  self:getCurrentOffset(dt)
+                  self.tx = self.tx - (self.tx - (math.floor(goalX - (self.screen_width -self.screen_width/self.currentox) )))--*dt*self.speed
+                  self.ty = self.ty - (self.ty - (math.floor(goalY - (self.screen_height -self.screen_height/self.currentoy) )))--*dt * self.speed      
+                else
+                  self.tx = math.floor(goalX - self.screen_width /2)
+                  self.ty = math.floor(goalY - self.screen_height /2)
+                end
                 --Scene
                 love.graphics.setCanvas(self.scene)
                 love.graphics.scale(self.scale)
@@ -209,6 +211,8 @@ function love.draw()
     carSelect:draw()
   elseif state == gameStates.resultScreen then
     resultScreen:draw()
+  elseif state == gameStates.mainMenu then
+    mainMenuScreen:draw()
   end
   phoneUI:draw()
 --map:bump_draw(world)
@@ -266,8 +270,8 @@ function checkForCheats()
       cheat =""
     end
   end
-  if cheat:len() > 10 then
-    cheat = ""
+  if cheat:len() > 50  then
+    --cheat = ""
   end
 end
   --[[
@@ -312,4 +316,36 @@ function love.touchreleased( id, x, y, dx, dy, pressure )
   local binding = state.buttonsReleased[phoneUI:checkButtonTouched(x,y,10,10,id)]
   touchdebug = {x = dx,y = dy, dx = 10, dy = 10 ,id= id}
   return inputHandler( binding )
+end
+function love.gamepadaxis( gamepad, axis, value )
+  local direction = gamepad:getGamepadAxis("leftx")
+  cheat = "hat-direction: "..direction.." axis: "..axis.." val: "..value
+  local button = ""
+  local binding = ""
+  if direction > config.joy_sen[1] then
+    button = "jright"
+    binding = state.buttons[button]
+    inputHandler( binding )
+    --stop rotating left
+    button = "jleft"
+    binding = state.buttonsReleased[button]
+    inputHandler( binding )
+  elseif direction < -config.joy_sen[1] then
+    button = "jleft"
+    binding = state.buttons[button]
+    inputHandler( binding )
+    --stop rotating right
+    button = "jright"
+    binding = state.buttonsReleased[button]
+    inputHandler( binding )
+  else
+    button = "jright"
+    local button2="jleft"
+    binding = state.buttonsReleased[button]
+    inputHandler( binding )
+    binding = state.buttonsReleased[button2]
+    inputHandler( binding )
+  end
+
+  --[[se ha de pasar axis i value ]]
 end
