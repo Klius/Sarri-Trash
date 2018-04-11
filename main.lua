@@ -42,7 +42,8 @@ function love.load()
   keydebug =""
   state = gameStates.mainMenu
   --Spawn player
-   player:spawnPlayer()
+  player = Player() 
+  player:spawnPlayer()
    camera = {
       
      scale = 2,
@@ -201,6 +202,7 @@ function love.draw()
       love.graphics.print("DriftAngle:"..player.driftangle,0,220)
       love.graphics.print("driftX:"..player.x + math.cos(player.driftangle)*player.currentSpeed,0,240)
       love.graphics.print("DriftY:"..player.y + math.sin(player.driftangle)*player.currentSpeed,0,260)
+      love.graphics.print("DriftBoost:"..player.car.driftBoost,0,280)
       love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",200,0)
       love.graphics.print("ch:"..cheat,400,0)
     end
@@ -270,8 +272,8 @@ function checkForCheats()
       cheat =""
     end
   end
-  if cheat:len() > 50  then
-    --cheat = ""
+  if cheat:len() > 20  then
+    cheat = ""
   end
 end
   --[[
@@ -319,7 +321,6 @@ function love.touchreleased( id, x, y, dx, dy, pressure )
 end
 function love.gamepadaxis( gamepad, axis, value )
   local direction = gamepad:getGamepadAxis("leftx")
-  cheat = "hat-direction: "..direction.." axis: "..axis.." val: "..value
   local button = ""
   local binding = ""
   if direction > config.joy_sen[1] then

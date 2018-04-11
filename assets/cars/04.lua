@@ -10,6 +10,7 @@ car = {
         acceleration = 20,
         steering = 80,
         brakes = 8,
+        driftBoost = 2.6,
       }
 
 return car

@@ -1,7 +1,5 @@
-Player = Object:extend()
-
-function Player:new()
-  self.car ={
+player = {
+      car ={
         name = "Richie",
         description = "it's a cat!",
         sprite = love.graphics.newImage("assets/cars/sprites/richie-grey.png"),
@@ -13,63 +11,72 @@ function Player:new()
         steering = 150,
         brakes = 10,
         driftBoost = 2
-  }
-  self.frameCount = 0
-  self.currentFrame = 0
-  self.frameDuration = 0.1
-  self.animationSpeeds = { 
+      },
+      frameCount = 0,
+      currentFrame = 0,
+      frameDuration = 0.1,
+      animationSpeeds = { 
         [1] = 0.2,
         [2] = 0.1,
         [3] = 0.05,
         [4] = 0.01
-      }
-  self.x      = 0
-  self.y      = 0
-  self.w = 32
-  self.h = 32
-  self.ox = 16 
-  self.oy = 16
-  self.driftangle = 0
-  self.orientation = 0
-  self.spriterotation = 0
-  self.currentSpeed = 0
-  self.rotatingLeft = false
-  self.rotatingRight = false
-  self.accelerating = false
-  self.braking = false
-  self.checkPoints = { false,false,false}
-  self.skidPool = SkidPool()
-end
-function Player:spawnPlayer()
-  local spawn
-  for k, object in pairs(map.objects) do
-    if object.name == "Player" then
-      spawn = object
-      break
-    end
-  end
-  self.x = spawn.x
-  self.y = spawn.y
-  world:add(self,self.x,self.y,self.w,self.h)
-  self.currentSpeed = 0
-  self.orientation = spawn.rotation
-  self.spriteRotation = self.orientation
-  self.driftangle = self.orientation * 1
-  self.rotatingLeft = false
-  self.rotatingRight = false
-  self.accelerating = false
-  self.braking = false
-  self.checkPoints = { false,false,false}
+      },
+      x      = 0,
+      y      = 0,
+      w = 32,
+      h = 32,
+      ox     = 16 ,
+      oy     = 16,
+      driftangle = 0,
+      orientation = 0,
+      spriterotation = 0,
+      currentSpeed = 0,
+      rotatingLeft = false,
+      rotatingRight = false,
+      accelerating = false,
+      braking = false,
+      checkPoints = { false,false,false},
+      skidPool = SkidPool()
+   }
+player.spawnPlayer = function (self)
+                         local spawn
+                         for k, object in pairs(map.objects) do
+                            if object.name == "Player" then
+                             spawn = object
+                             break
+                            end
+                         end
+                         self.x = spawn.x
+                         self.y = spawn.y
+                         world:add(self,self.x,self.y,self.w,self.h)
+                         self.currentSpeed = 0
+                         self.orientation = spawn.rotation
+                         self.spriteRotation = self.orientation
+                         self.driftangle = self.orientation * 1
+                         self.rotatingLeft = false
+                         self.rotatingRight = false
+                         self.accelerating = false
+                         self.braking = false
+                         self.checkPoints = { false,false,false}
                          --map:removeLayer("Spawn Point")
-  self.skidPool = SkidPool(self.car.skid)
+                         self.skidPool = SkidPool(self.car.skid)
+                    end
+player.draw = function (self)
+                        self.skidPool:draw()
+                        love.graphics.draw(
+                             self.car.sprite,
+                             self.car.spritesheet[self.currentFrame],
+                             math.floor(self.x+self.ox),
+                             math.floor(self.y+self.oy),	 
+                             self.spriteRotation,
+                             1,
+                             1,
+                             self.ox,
+                             self.oy
+                        )
 end
-function Player:draw()
-  self.skidPool:draw()
-  love.graphics.draw(self.car.sprite, self.car.spritesheet[self.currentFrame],
-    math.floor(self.x+self.ox), math.floor(self.y+self.oy),	self.spriteRotation,1,1,self.ox,self.oy)
-end
-function Player:update(dt)
-  self.skidPool:update(dt)
+player.update = function (self,dt)
+                      self.skidPool:update(dt)
                       local speed = self.car.acceleration * dt
                       local brakes = self.car.brakes * dt
                       --Acceleration
@@ -156,37 +163,35 @@ function Player:update(dt)
                       end
                     end
                     
-  --ANIMATION
-  self:animate(dt)
-end
-function Player:animate (dt)
-  if self.currentSpeed > 0.5 or self.currentSpeed < -0.5 then
-    self.frameCount = self.frameCount + dt
-  else
-    self.currentFrame = 0  
-  end
-  if self.currentSpeed > self.car.topSpeed - self.car.topSpeed/3 then
-    self.frameDuration = self.animationSpeeds[4]
-  elseif self.currentSpeed > self.car.topSpeed / 2 then
-    self.frameDuration = self.animationSpeeds[3]
-  elseif self.currentSpeed > self.car.topSpeed / 3 then
-    self.frameDuration = self.animationSpeeds[2]
-  else
-    self.frameDuration = self.animationSpeeds[1]
-  end
-  if self.frameCount > self.frameDuration then
-    self.frameCount = 0
-    self.currentFrame = 1 + self.currentFrame
-    if self.currentFrame > #self.car.spritesheet then
-      self.currentFrame = 1
-    end
-  end
+                    --ANIMATION
+                    if self.currentSpeed > 0.5 or self.currentSpeed < -0.5 then
+                      self.frameCount = self.frameCount + dt
+                    else
+                      self.currentFrame = 0  
+                    end
+                    if self.currentSpeed > self.car.topSpeed - self.car.topSpeed/3 then
+                      self.frameDuration = self.animationSpeeds[4]
+                    elseif self.currentSpeed > self.car.topSpeed / 2 then
+                      self.frameDuration = self.animationSpeeds[3]
+                    elseif self.currentSpeed > self.car.topSpeed / 3 then
+                      self.frameDuration = self.animationSpeeds[2]
+                    else
+                      self.frameDuration = self.animationSpeeds[1]
+                    end
+                    if self.frameCount > self.frameDuration then
+                      self.frameCount = 0
+                      self.currentFrame = 1 + self.currentFrame
+                      if self.currentFrame > #self.car.spritesheet then
+                        self.currentFrame = 1
+                      end
+                    end
+
 end
 --this function is only called on input
-function Player:rotate (rotate)
-  if rotate then --rotate left
-    self.rotatingLeft = true
-  else --rotate right
-    self.rotatingRight = true
-  end
+player.rotate = function (self,rotate)
+                  if rotate then --rotate left
+                      self.rotatingLeft = true
+                  else --rotate right
+                     self.rotatingRight = true
+                  end
 end

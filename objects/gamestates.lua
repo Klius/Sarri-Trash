@@ -83,14 +83,16 @@ gameStates.mapSelect = {
                     else
                       debug = true
                     end 
-                  end
-          
+                  end,
+          upDriftBoost = function() player.car.driftBoost= player.car.driftBoost+0.1 end,
+          downDriftBoost = function() player.car.driftBoost= player.car.driftBoost-0.1 end,
       },
       keys = {
           escape = "openMenu",
           space = "gas",
           left   = "rotateLeft",
           right  = "rotateRight",
+		  r = "reloadMap",
           x = "brake",
           d = "debug"
       },
@@ -109,6 +111,8 @@ gameStates.mapSelect = {
           jleft   = "rotateLeft",
           jright   = "rotateRight",
           dpright = "rotateRight",
+          --dpup = "upDriftBoost",
+         -- dpdown ="downDriftBoost",
           back    = "reloadMap"
       },
       buttonsReleased = {
