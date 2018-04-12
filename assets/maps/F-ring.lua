@@ -8,7 +8,7 @@ return {
   height = 100,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 19,
+  nextobjectid = 20,
   properties = {
     ["circuitName"] = "Fonso Ring"
   },
@@ -1077,11 +1077,11 @@ return {
       objects = {
         {
           id = 1,
-          name = "Player",
+          name = "player",
           type = "",
           shape = "rectangle",
-          x = 846,
-          y = 2064,
+          x = 813.455,
+          y = 2063.27,
           width = 0,
           height = 0,
           rotation = 1.57,
@@ -1154,6 +1154,19 @@ return {
             ["collidable"] = true,
             ["isCheckpoint"] = true
           }
+        },
+        {
+          id = 19,
+          name = "player2",
+          type = "",
+          shape = "rectangle",
+          x = 878.545,
+          y = 2064.36,
+          width = 0,
+          height = 0,
+          rotation = 1.57,
+          visible = true,
+          properties = {}
         }
       }
     },

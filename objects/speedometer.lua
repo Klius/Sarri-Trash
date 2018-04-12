@@ -37,14 +37,13 @@ speedometer.draw = function (self)
                       local x = love.graphics.getWidth()/2-66
                       local y = 50
                       for i=0,self.squares do
-                        love.graphics.setColor(0,0,0,1)
-                        love.graphics.rectangle("line",x,y,8,16)
                         if self.fullSquares > 0 then 
                           love.graphics.setColor(self.colors[i].r,self.colors[i].g,self.colors[i].b,self.colors[i].o)
                           love.graphics.rectangle("fill",x,y,8,16)
                           self.fullSquares = self.fullSquares - 1 
                         end
-                        
+                        love.graphics.setColor(0,0,0,1)
+                        love.graphics.rectangle("line",x,y,8,16)
                         x = x+self.width
                       end
                       love.graphics.setColor(0,0,0,1)

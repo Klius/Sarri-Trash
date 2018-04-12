@@ -40,16 +40,17 @@ function Player:new()
   self.checkPoints = { false,false,false}
   self.skidPool = SkidPool()
 end
-function Player:spawnPlayer()
+function Player:spawnPlayer(spawnPoint)
   local spawn
+  spawnPoint = spawnPoint or "player"
   for k, object in pairs(map.objects) do
-    if object.name == "Player" then
+    if string.find(spawnPoint,string.lower(object.name)) then
       spawn = object
       break
     end
   end
-  self.x = spawn.x
-  self.y = spawn.y
+  self.x = spawn.x or 800
+  self.y = spawn.y or 800
   world:add(self,self.x,self.y,self.w,self.h)
   self.currentSpeed = 0
   self.orientation = spawn.rotation
