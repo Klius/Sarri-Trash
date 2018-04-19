@@ -24,6 +24,7 @@ function love.load()
   require "objects/skid"
   require "objects/skidpools"
   require "objects/player"
+  require "objects/camera"
   require "objects/speedometer"
   
   
@@ -41,124 +42,35 @@ function love.load()
   
   keydebug =""
   state = gameStates.mainMenu
+  gameModes = {
+    timeAttack = 1,
+    multiplayer = 2
+  }
+  mode = gameModes.timeAttack
   --Spawn player
+  scenes = { 
+              [1] = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight()),
+              [2] = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
+            }
   player = Player() 
   player:spawnPlayer()
-   camera = {
-      
-     scale = 2,
-     screen_width = love.graphics.getWidth() / 2,
-     screen_height = love.graphics.getHeight() / 2,
-     scene = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight()),
-
-   -- Translate world so that player is always centred
-     tx = math.floor(player.x - (love.graphics.getWidth() / 2)),
-     ty = math.floor(player.y - (love.graphics.getHeight() / 2)),
-     scaleIntervals = 0.5,
-     zoomIn = 2,
-     zoomOut = 1.5,
-     offsetX = 2,
-     offsetY = 2,
-     currentox = 2,
-     currentoy = 2,
-     intervalY = 1,
-     intervalX = 1,
-     speed = 1,
-     update = function(self,dt) 
-                if player.currentSpeed > player.car.topSpeed/4 then
-                  self.scale = self.scale - self.scaleIntervals*dt
-                  if self.scale < self.zoomOut then
-                    self.scale=self.zoomOut
-                  end
-                elseif player.currentSpeed < player.car.topSpeed/2 then
-                  self.scale = self.scale + self.scaleIntervals*dt
-                  if self.scale > self.zoomIn then
-                    self.scale=self.zoomIn
-                  end
-                end  
-                self.screen_width = love.graphics.getWidth() / self.scale
-                self.screen_height = love.graphics.getHeight() / self.scale
-              -- Translate world so that player is always centred
-                local goalX = (player.x-player.w/2) --math.cos(player.orientation)--*self.offset
-                local goalY = (player.y-player.h/2) --math.sin(player.orientation)--*self.offset
-                if config.dinamic_cam then
-                  self:getCurrentOffset(dt)
-                  self.tx = self.tx - (self.tx - (math.floor(goalX - (self.screen_width -self.screen_width/self.currentox) )))--*dt*self.speed
-                  self.ty = self.ty - (self.ty - (math.floor(goalY - (self.screen_height -self.screen_height/self.currentoy) )))--*dt * self.speed      
-                else
-                  self.tx = math.floor(goalX - self.screen_width /2)
-                  self.ty = math.floor(goalY - self.screen_height /2)
-                end
-                --Scene
-                love.graphics.setCanvas(self.scene)
-                love.graphics.scale(self.scale)
-                love.graphics.translate(-self.tx, -self.ty)
-                map:draw(-self.tx, -self.ty, self.scale,self.scale)
-                player:draw()
-                --love.graphics.setPointSize(5)
-                --love.graphics.points(player.x,player.y)
-                love.graphics.setCanvas()
-                
-              end,
-    getCurrentOffset = function(self,dt)
-      local ox = math.cos(player.orientation)*1
-                local oy = math.sin(player.orientation)*1
-                if player.currentSpeed >player.car.topSpeed/2 then
-                  if oy > 0.95 then
-                    self.offsetY = 3
-                  elseif oy < -0.95 then
-                    self.offsetY = 1.5
-                  else
-                    self.offsetY = 2
-                  end
-                  if ox > 0.95 then
-                    self.offsetX = 3
-                  elseif ox < -0.95 then
-                    self.offsetX = 1.5
-                  else
-                    self.offsetX = 2
-                  end
-                else
-                  self.offsetX = 2
-                  self.offsetY = 2
-                end
-                  if self.currentoy > self.offsetY then  
-                    self.intervalY = -(dt*self.speed)
-                  elseif self.currentoy < self.offsetY then
-                    self.intervalY = dt*self.speed
-                  end
-                  self.currentoy = self.currentoy + self.intervalY
-                  
-                  if self.currentox > self.offsetX then 
-                    self.intervalX = -(dt*self.speed)
-                  elseif self.currentox < self.offsetX then
-                    self.intervalX = dt*self.speed
-                  end
-                  self.currentox = self.currentox + self.intervalX
-                
-                if self.intervalY > 0 and self.offsetY / self.currentoy < 1 then
-                  self.currentoy = self.offsetY
-                elseif self.intervalY < 0 and self.currentoy /  self.offsetY < 1 then
-                  self.currentoy = self.offsetY
-                end
-                if self.intervalX < 0 and self.currentox / self.offsetX  < 1 then
-                  self.currentox = self.offsetX
-                elseif self.intervalX > 0 and  self.offsetX / self.currentox  < 1 then
-                  self.currentox = self.offsetX
-                end
-      end
-    }
-    
+  player2 = Player() 
+  if mode == gameModes.multiplayer then
+    player2:spawnPlayer("player2")
+  end
 end
 
 function love.update(dt)
    -- Update world
    if state == gameStates.gameLoop then
      player:update(dt)
+    if mode == gameModes.multiplayer then
+      player2:update(dt)
+    end
      map:update(dt)
-     camera:update(dt)
      race:update(dt)
      checkForCheats()
+     drawCanvas()
      if race.endRace then
       state = gameStates.resultScreen
      end
@@ -179,14 +91,20 @@ function love.draw()
   if state == gameStates.gameLoop then
     -- Draw world
     --effect(function()
-      love.graphics.draw(camera.scene)
+     if mode == gameModes.multiplayer then
+      --SPLIT SCREEEEEEEEEEEAM
+        love.graphics.setScissor(0,0,love.graphics.getWidth(),love.graphics.getHeight()/2)
+        --############
+        love.graphics.draw(scenes[1],0,-300)
+        love.graphics.setScissor(0,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2)
+        love.graphics.draw(scenes[2],0,200)
+        love.graphics.setScissor()
+        love.graphics.rectangle("fill",0,love.graphics.getHeight()/2,love.graphics.getWidth(),6)
+      else
+        love.graphics.draw(scenes[1],0,0)
+      end
       race:draw()
-      --love.graphics.scale(camera.scale)
-      --love.graphics.translate(-camera.tx, -camera.ty)
-      --map:draw(-camera.tx, -camera.ty, camera.scale,camera.scale)
-     
-     --drawPlayer()
-    --end)
+      
     if debug then
       love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
@@ -196,8 +114,8 @@ function love.draw()
       love.graphics.print("y:"..player.y,0,100)
       love.graphics.print("tx:"..math.cos(player.orientation)*1,0,120)
       love.graphics.print("ty"..math.sin(player.orientation)*1,0,140)
-      love.graphics.print("ox:"..camera.currentox,0,160)
-      love.graphics.print("oy:"..camera.currentoy,0,180)
+      love.graphics.print("ox:"..player2.x,0,160)
+      love.graphics.print("oy:"..player2.y,0,180)
       love.graphics.print("orientation:"..player.orientation,0,200)
       love.graphics.print("DriftAngle:"..player.driftangle,0,220)
       love.graphics.print("driftX:"..player.x + math.cos(player.driftangle)*player.currentSpeed,0,240)
@@ -222,35 +140,32 @@ function love.draw()
   -- map:draw(-tx, -ty, scale,scale)
 end
 
-
-
-function addCheckpoint (index)
-  if player.checkPoints[index] == false then
-    if index > 1 then
-      if player.checkPoints[index -1] then
-        player.checkPoints[index] = true
+function drawCanvas()
+      love.graphics.setCanvas(scenes[1])
+      love.graphics.push()
+      love.graphics.scale(player.camera.scale)
+      love.graphics.translate(-player.camera.tx, -player.camera.ty)
+      map:draw(-player.camera.tx, -player.camera.ty, player.camera.scale,player.camera.scale)
+      player:draw()
+      player2:draw()
+      love.graphics.pop()
+      if mode == gameModes.multiplayer then
+     -- love.graphics.setScissor(love.graphics.getWidth()/2,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2)
+        love.graphics.setCanvas(scenes[2])
+        love.graphics.push()
+        love.graphics.scale(player2.camera.scale)
+        love.graphics.translate(-player2.camera.tx, -player2.camera.ty)
+        map:draw(-player2.camera.tx, -player2.camera.ty, player2.camera.scale,player2.camera.scale)
+        player:draw()
+        player2:draw()
+        love.graphics.pop()
       end
-    elseif index == 1 then
-      player.checkPoints[index] = true
-    end
-  end
+      love.graphics.setCanvas()
+
 end
 
-function resetCheckpoint()
-  player.checkPoints[1] = false
-  player.checkPoints[2] = false
-  player.checkPoints[3] = false
-end
 
-function finishLineCrossed()
-  if player.checkPoints[1] and player.checkPoints[2] and player.checkPoints[3] then
-    race:nextLap()
-    resetCheckpoint()
-  end
-  if race.isTiming == false then
-    race:timerStart()
-  end
-end
+
 
 --[[
   CHEATS
@@ -281,9 +196,9 @@ end
   ]]
 
 
-function inputHandler( input )
+function inputHandler( input , id)
     local action = state.bindings[input]
-    if action then  return action()  end
+    if action then  return action( id )  end
 end
 
 function love.keypressed( k )
@@ -291,22 +206,21 @@ function love.keypressed( k )
     INPUTMETHOD = "keyboard"
     cheat = cheat .. k
     local binding = state.keys[k]
-    return inputHandler( binding )
+    return inputHandler( binding ,"keyboard")
 end
 function love.keyreleased( k )
     local binding = state.keysReleased[k]
-    return inputHandler( binding )
+    return inputHandler( binding , "keyboard" )
 end
 function love.gamepadpressed( gamepad, button )
     -- you might want to keep track of this to change display prompts
     INPUTMETHOD = "gamepad"
-    keydebug = button
     local binding = state.buttons[button]
-    return inputHandler( binding )
+    return inputHandler( binding , "gamepad")
 end
 function love.gamepadreleased( gamepad, button )
     local binding = state.buttonsReleased[button]
-    return inputHandler( binding )
+    return inputHandler( binding , "gamepad" )
 end
 
 function love.touchpressed( id, x, y, dx, dy, pressure )
@@ -320,6 +234,7 @@ function love.touchreleased( id, x, y, dx, dy, pressure )
   return inputHandler( binding )
 end
 function love.gamepadaxis( gamepad, axis, value )
+  INPUTMETHOD = "gamepad"
   local direction = gamepad:getGamepadAxis("leftx")
   local button = ""
   local binding = ""

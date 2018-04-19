@@ -38,6 +38,7 @@ maplist.loadMap = function (self)
                     world = bump.newWorld()
                     map:bump_init(world)
                     player:spawnPlayer()
+                    player2:spawnPlayer("player2")
                   end
 maplist.loadPreview = function (self)
                         self.mp = sti(self.maps[self.selectedMap])

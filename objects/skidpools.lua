@@ -1,8 +1,8 @@
 SkidPool = Object:extend()
 
-function SkidPool:update(dt)
+function SkidPool:update(dt,player)
   if player.braking and player.accelerating then
-    self:add()
+    self:add(player)
   end
   for i, v in ipairs(self.skids) do
     v:update(dt)
@@ -21,7 +21,7 @@ function SkidPool:new(skid)
   self.skidSprite = skid or "assets/cars/sprites/skid-fx.png"
   self.skids = {}
 end
-function SkidPool:add()
+function SkidPool:add(player)
   skid = Skid(self.skidSprite,player.x,player.y,player.spriteRotation)
   table.insert(self.skids,skid)
 end

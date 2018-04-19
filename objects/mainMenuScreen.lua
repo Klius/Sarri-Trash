@@ -9,22 +9,32 @@ mainMenuScreen = {
       accessible = true,
       x = love.graphics.getWidth()/2-60,
       y = love.graphics.getHeight()/2,
-      state = gameStates.mapSelect
+      changeState = function ()
+        state = gameStates.mapSelect
+        mode = gameModes.timeAttack
+      end
     },
     [2] = {
       text = "Multiplayer",
       description = "Race against a friend",
-      accessible = false,
+      accessible = true,
       x = love.graphics.getWidth()/2-60,
-      y = love.graphics.getHeight()/2+30
+      y = love.graphics.getHeight()/2+30,
+      changeState = function ()
+        state = gameStates.mapSelect
+        mode = gameModes.multiplayer
+      end
     },
     [3] = {
       text = "Settings",
       description = "Adjust the game to your liking",
-      accessible = false,
+      accessible = true,
       x = love.graphics.getWidth()/2-60,
       y = love.graphics.getHeight()/2+60,
-      state = gameStates.mainMenu
+      changeState = function ()
+        state = gameStates.mainMenu
+        mode = gameModes.multiplayer
+      end
     }
   }
 }
@@ -63,6 +73,6 @@ mainMenuScreen.changeOption = function(self, increment)
 end
 mainMenuScreen.selectOption = function(self)
   if self.options[self.currentOption].accessible then
-    state = self.options[self.currentOption].state
+    self.options[self.currentOption].changeState()
   end
 end

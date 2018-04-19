@@ -1,18 +1,19 @@
 Player = Object:extend()
 
 function Player:new()
-  self.car ={
-        name = "Richie",
+  self.car = {
+        name = "Richie The Cat",
         description = "it's a cat!",
         sprite = love.graphics.newImage("assets/cars/sprites/richie-grey.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/richie-grey.png"),32,32),
         skid = "assets/cars/sprites/skid-richie.png",
-        orientation = 0,
-        topSpeed = 8,
-        acceleration = 5,
-        steering = 150,
+        frameDuration = 0.1,
+        currentSpeed = 0,
+        topSpeed = 12,
+        acceleration = 10,
+        steering = 100,
         brakes = 10,
-        driftBoost = 2
+        driftBoost = 2,
   }
   self.frameCount = 0
   self.currentFrame = 0
@@ -29,6 +30,8 @@ function Player:new()
   self.h = 32
   self.ox = 16 
   self.oy = 16
+  self.tx = 0
+  self.ty = 0
   self.driftangle = 0
   self.orientation = 0
   self.spriterotation = 0
@@ -39,12 +42,14 @@ function Player:new()
   self.braking = false
   self.checkPoints = { false,false,false}
   self.skidPool = SkidPool()
+  self.properties = {}
+  self.camera = Camera(self) 
 end
 function Player:spawnPlayer(spawnPoint)
   local spawn
   spawnPoint = spawnPoint or "player"
   for k, object in pairs(map.objects) do
-    if string.find(spawnPoint,string.lower(object.name)) then
+    if spawnPoint == string.lower(object.name) then
       spawn = object
       break
     end
@@ -68,9 +73,10 @@ function Player:draw()
   self.skidPool:draw()
   love.graphics.draw(self.car.sprite, self.car.spritesheet[self.currentFrame],
     math.floor(self.x+self.ox), math.floor(self.y+self.oy),	self.spriteRotation,1,1,self.ox,self.oy)
+
 end
 function Player:update(dt)
-  self.skidPool:update(dt)
+  self.skidPool:update(dt,self)
                       local speed = self.car.acceleration * dt
                       local brakes = self.car.brakes * dt
                       --Acceleration
@@ -123,6 +129,8 @@ function Player:update(dt)
                     --Change position
                     local testx = self.x+self.w/2
                     local testy = self.y+self.h
+                    local goalX = self.x
+                    local goalY = self.y
                     if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
                       goalX = self.x - math.cos(self.driftangle) *self.currentSpeed
                       goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
@@ -147,16 +155,16 @@ function Player:update(dt)
                     for i=1,len do
                       local other = cols[i].other
                       if other.properties.isCheckpoint then
-                        addCheckpoint(other.properties.checkpointNum)
+                        self:addCheckpoint(other.properties.checkpointNum)
                       elseif other.properties.isFinishLine then
-                        finishLineCrossed()
+                        self:finishLineCrossed()
                       else
                         --Decelerate car
                         self.currentSpeed = self.currentSpeed - self.currentSpeed/16
 
                       end
                     end
-                    
+    self.camera:update(dt,self)
   --ANIMATION
   self:animate(dt)
 end
@@ -189,5 +197,32 @@ function Player:rotate (rotate)
     self.rotatingLeft = true
   else --rotate right
     self.rotatingRight = true
+  end
+end
+function Player:addCheckpoint (index)
+  if self.checkPoints[index] == false then
+    if index > 1 then
+      if self.checkPoints[index -1] then
+        self.checkPoints[index] = true
+      end
+    elseif index == 1 then
+      self.checkPoints[index] = true
+    end
+  end
+end
+
+function Player:resetCheckpoint()
+  self.checkPoints[1] = false
+  self.checkPoints[2] = false
+  self.checkPoints[3] = false
+end
+
+function Player:finishLineCrossed()
+  if self.checkPoints[1] and self.checkPoints[2] and self.checkPoints[3] then
+    race:nextLap()
+    self:resetCheckpoint()
+  end
+  if race.isTiming == false then
+    race:timerStart()
   end
 end

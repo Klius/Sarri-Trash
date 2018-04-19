@@ -65,14 +65,62 @@ gameStates.mapSelect = {
   gameStates.gameLoop = {
       bindings = {
           openMenu   = function()  state = gameStates.mapSelect  end,
-          gas       = function() player.accelerating = true end,
-          releaseGas       = function() player.accelerating = false end,
-          rotateLeft       = function() player:rotate(true) end,
-          rotateRight      = function() player:rotate(false) end,
-          releaseRotateRight     = function() player.rotatingRight = false end,
-          releaseRotateLeft     = function() player.rotatingLeft = false end,
-          brake      = function() player.braking = true end,
-          releaseBrake      = function() player.braking = false end,
+          gas       = function(id)
+                        if id == "keyboard" then
+                          player.accelerating = true
+                        else
+                          player2.accelerating = true
+                        end
+          end,
+          releaseGas       = function(id)
+            if id == "keyboard" then
+              player.accelerating = false 
+            else
+              player2.accelerating = false 
+            end
+          end,
+          rotateLeft       = function(id)
+            if id == "keyboard" then
+              player:rotate(true)
+            else
+              player2:rotate(true)
+            end
+          end,
+          rotateRight      = function(id) 
+            if id == "keyboard" then
+              player:rotate(false)
+            else
+              player2:rotate(false)
+            end 
+          end,
+          releaseRotateRight     = function(id)
+            if id == "keyboard" then
+              player.rotatingRight = false 
+            else
+              player2.rotatingRight = false
+            end 
+          end,
+          releaseRotateLeft     = function(id)
+            if id == "keyboard" then
+              player.rotatingLeft = false 
+            else
+              player2.rotatingLeft = false
+            end   
+          end,
+          brake = function(id)
+           if id == "keyboard" then  
+              player.braking = true
+            else
+              player2.braking = true
+            end
+          end,
+          releaseBrake      = function(id)
+             if id == "keyboard" then  
+              player.braking = false
+            else
+              player2.braking = false
+            end
+          end,
           reloadMap         = function() 
                                 maplist:loadMap()
                                 race:reset()
@@ -125,7 +173,7 @@ gameStates.mapSelect = {
       }
       -- <...>
   }
-    gameStates.resultScreen = {
+gameStates.resultScreen = {
       bindings = {
           returnToStartScreen   = function()  state = gameStates.mapSelect  end,
           incrementRecordSpace = function() resultScreen:nextSpace(1) end,
@@ -185,4 +233,11 @@ gameStates.mainMenu = {
   },
   buttonsReleased = {
   }
+}
+gameStates.multiplayerScreen = {
+  bindings = {},
+  keys = {},
+  keysReleased = {},
+  buttons = {},
+  buttonsReleased = {}
 }

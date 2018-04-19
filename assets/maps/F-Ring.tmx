@@ -355,7 +355,7 @@
     <property name="isCheckpoint" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="19" name="player2" x="878.545" y="2064.36" rotation="1.57"/>
+  <object id="19" name="player2" x="880.212" y="2064.36" rotation="1.57"/>
  </objectgroup>
  <objectgroup name="preview" visible="0">
   <object id="7" name="1" x="640" y="1984" width="32" height="32"/>
