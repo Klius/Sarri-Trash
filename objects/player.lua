@@ -42,8 +42,8 @@ function Player:new()
   self.braking = false
   self.checkPoints = { false,false,false}
   self.skidPool = SkidPool()
-  self.properties = {}
-  self.camera = Camera(self) 
+  self.properties = { isCar = true}
+  self.camera = Camera(self)
 end
 function Player:spawnPlayer(spawnPoint)
   local spawn
@@ -142,31 +142,37 @@ function Player:update(dt)
                     --goalX = self.x - math.cos(self.orientation)*self.currentSpeed
                     --goalY = self.y - math.sin(self.orientation)*self.currentSpeed
                     
-                    --COLISIONS
-                    local playerFilter = function(item, other)
-                      if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
-                        else return 'slide'
-                        end
-                    
-                    end
-                    
-                    local actualX, actualY, cols, len = world:move(self, goalX, goalY, playerFilter)
-                    self.x, self.y = actualX, actualY
-                    for i=1,len do
-                      local other = cols[i].other
-                      if other.properties.isCheckpoint then
-                        self:addCheckpoint(other.properties.checkpointNum)
-                      elseif other.properties.isFinishLine then
-                        self:finishLineCrossed()
-                      else
-                        --Decelerate car
-                        self.currentSpeed = self.currentSpeed - self.currentSpeed/16
-
-                      end
-                    end
+                  self:move(goalX,goalY)
     self.camera:update(dt,self)
   --ANIMATION
   self:animate(dt)
+end
+function Player:move(goalX,goalY)
+--COLISIONS
+    local playerFilter = function(item, other)
+      if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
+      elseif other.properties.isCar then return 'bounce'
+      else return 'slide'
+      end
+    end
+                    
+    local actualX, actualY, cols, len = world:move(self, goalX, goalY, playerFilter)
+    self.x, self.y = actualX, actualY
+    for i=1,len do
+      local other = cols[i].other
+      if other.properties.isCheckpoint then
+        self:addCheckpoint(other.properties.checkpointNum)
+      elseif other.properties.isFinishLine then
+        self:finishLineCrossed()
+      elseif other.properties.isCar then
+        self.currentSpeed = self.currentSpeed - self.currentSpeed/16
+        other.currentSpeed = other.currentSpeed + self.currentSpeed/16 
+      else
+        --Decelerate car
+        --self:addSparkles(cols[i].touch)
+        self.currentSpeed = self.currentSpeed - self.currentSpeed/16
+      end
+    end
 end
 function Player:animate (dt)
   if self.currentSpeed > 0.5 or self.currentSpeed < -0.5 then

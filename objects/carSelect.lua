@@ -2,7 +2,8 @@ carSelect = {
               bigFont = love.graphics.newFont(30),
               defaultFont = love.graphics.newFont(18),
               leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/7),
-              rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/3,love.graphics.getHeight()/7)
+              rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/3,love.graphics.getHeight()/7),
+              player = 1
             }
 carSelect.draw = function (self)
                     love.graphics.setColor(0.87,0.44,0.14,1)
@@ -16,10 +17,12 @@ carSelect.draw = function (self)
                     love.graphics.draw(carlist.preview,love.graphics.getWidth()/2-64,25,0,4)
                     love.graphics.setFont(self.bigFont)
                     love.graphics.print(carlist.cars[carlist.selectedCar].name,love.graphics.getWidth()/2-125,25+142)
+                    love.graphics.print("Player "..self.player,0,0)
                     love.graphics.setFont(self.defaultFont)
                     love.graphics.print(carlist.cars[carlist.selectedCar].description,10,love.graphics.getHeight()/2)
                     self.leftArrow:draw()
                     self.rightArrow:draw()
+                    
 end
 carSelect.update = function (self,dt)
   self.leftArrow:update(dt)

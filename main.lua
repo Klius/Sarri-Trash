@@ -99,7 +99,9 @@ function love.draw()
         love.graphics.setScissor(0,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2)
         love.graphics.draw(scenes[2],0,200)
         love.graphics.setScissor()
+        love.graphics.setColor(0,0,0,1)
         love.graphics.rectangle("fill",0,love.graphics.getHeight()/2,love.graphics.getWidth(),6)
+        love.graphics.setColor(1,1,1,1)
       else
         love.graphics.draw(scenes[1],0,0)
       end
