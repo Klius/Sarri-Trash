@@ -26,6 +26,9 @@ function Player:new()
       }
   self.x      = 0
   self.y      = 0
+  self.colX = 0
+  self.colY = 0
+  self.colTime = 0
   self.w = 32
   self.h = 32
   self.ox = 16 
@@ -127,22 +130,33 @@ function Player:update(dt)
                       end
                     end
                     --Change position
-                    local testx = self.x+self.w/2
-                    local testy = self.y+self.h
+                    
                     local goalX = self.x
                     local goalY = self.y
-                    if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
-                      goalX = self.x - math.cos(self.driftangle) *self.currentSpeed
-                      goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
+                    if self.colTime <= 0 then
+                      if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
+                        goalX = self.x - math.cos(self.driftangle) *self.currentSpeed
+                        goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
+                      else
+                        goalX = self.x - math.cos(self.orientation)*self.currentSpeed
+                        goalY = self.y - math.sin(self.orientation)*self.currentSpeed
+                        self.spriteRotation = self.orientation
+                      end
                     else
-                      goalX = self.x - math.cos(self.orientation)*self.currentSpeed
-                      goalY = self.y - math.sin(self.orientation)*self.currentSpeed
-                      self.spriteRotation = self.orientation
+                      self.colTime = self.colTime - dt
+                      if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
+                        goalX = self.x- math.cos(self.driftangle) *self.currentSpeed
+                        goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
+                      else
+                        goalX = self.x - math.cos(self.colO)*self.currentSpeed
+                        goalY = self.y - math.sin(self.colO)*self.currentSpeed
+                        self.spriteRotation = self.orientation
+                      end
                     end
                     --goalX = self.x - math.cos(self.orientation)*self.currentSpeed
                     --goalY = self.y - math.sin(self.orientation)*self.currentSpeed
-                    
                   self:move(goalX,goalY)
+                  
     self.camera:update(dt,self)
   --ANIMATION
   self:animate(dt)
@@ -151,13 +165,15 @@ function Player:move(goalX,goalY)
 --COLISIONS
     local playerFilter = function(item, other)
       if other.properties.isCheckpoint or other.properties.isFinishLine then return 'cross'
-      elseif other.properties.isCar then return 'bounce'
       else return 'slide'
       end
     end
                     
     local actualX, actualY, cols, len = world:move(self, goalX, goalY, playerFilter)
     self.x, self.y = actualX, actualY
+    if self.colTime > 0 then
+      self.colX,self.colY = actualX,actualY
+    end
     for i=1,len do
       local other = cols[i].other
       if other.properties.isCheckpoint then
@@ -167,6 +183,8 @@ function Player:move(goalX,goalY)
       elseif other.properties.isCar then
         self.currentSpeed = self.currentSpeed - self.currentSpeed/16
         other.currentSpeed = other.currentSpeed + self.currentSpeed/16 
+        other.colO = self.orientation
+        other.colTime = 0.1
       else
         --Decelerate car
         --self:addSparkles(cols[i].touch)
