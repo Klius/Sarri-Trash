@@ -47,6 +47,8 @@ function Player:new()
   self.skidPool = SkidPool()
   self.properties = { isCar = true}
   self.camera = Camera(self)
+  self.speedometer = Speedometer()
+  self.gamepad = "keyboard"
 end
 function Player:spawnPlayer(spawnPoint)
   local spawn

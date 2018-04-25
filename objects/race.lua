@@ -7,7 +7,7 @@ race = {
           currentTime = 0,
           timer = 0,
           isTiming = false,
-          times = {0,0,0},
+          lapTimes = {0,0,0},
           totalTime = 0
         }
 race.nextLap = function (self) 
@@ -15,10 +15,10 @@ race.nextLap = function (self)
                   if self.currentLap == self.lapsTotal then
                     self.endRace = true
                     self.currentLap = self.lapsTotal -1
-                    self.totalTime = self.times[1]+self.times[2]+self.times[3]
+                    self.totalTime = self.lapTimes[1]+self.lapTimes[2]+self.lapTimes[3]
                     resultScreen:Initialize()
                   else
-                    self.times[self.currentLap] = self.currentTime
+                    self.lapTimes[self.currentLap] = self.currentTime
                     self.timer = love.timer.getTime()
                   end
                 end
@@ -35,7 +35,10 @@ race.update = function (self,dt)
                   self.currentTime = love.timer.getTime() - self.timer
                   self.times[self.currentLap+1] = self.currentTime
                 end
-                speedometer:update(dt)
+                player.speedometer:update(dt,player)
+                if mode == gameModes.multiplayer then
+                  player2.speedometer:update(dt,player2)
+                end
               end
 race.draw = function (self)
               love.graphics.draw(self.sprite,self.spritesheet[self.currentLap],80,50,0,1,1)
@@ -46,7 +49,10 @@ race.draw = function (self)
               love.graphics.print("1:"..self:formatTime(self.times[1]),love.graphics.getWidth()-150,40)
               love.graphics.print("2:"..self:formatTime(self.times[2]),love.graphics.getWidth()-150,60)
               love.graphics.print("3:"..self:formatTime(self.times[3]),love.graphics.getWidth()-150,80)
-              speedometer:draw()
+              player.speedometer:draw()
+              if mode == gameModes.multiplayer then
+                player2.speedometer:draw(love.graphics.getHeight()/2+50)
+              end
             end
 race.timerStart = function (self)
                     self.isTiming = true

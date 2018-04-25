@@ -11,7 +11,7 @@ require "objects/arrows"
 require "objects/mainMenuScreen"
 require "objects/mapManager"
 require "objects/music"
-
+require "objects/controllerScreen"
 require "objects/mapSelect"
 require "objects/carSelect"
 require "objects/resultScreen"
@@ -84,6 +84,9 @@ function love.update(dt)
    if state == gameStates.resultScreen then
      resultScreen:update(dt)
    end
+  if state == gameStates.multiplayerScreen then
+    controllerScreen:update(dt)
+  end
 end
 
 function love.draw()
@@ -136,10 +139,10 @@ function love.draw()
   elseif state == gameStates.mainMenu then
     mainMenuScreen:draw()
   end
+  if state == gameStates.multiplayerScreen then
+    controllerScreen:draw(dt)
+  end
   phoneUI:draw()
---map:bump_draw(world)
---bump_debug.draw(world)
-  -- map:draw(-tx, -ty, scale,scale)
 end
 
 function drawCanvas()
@@ -218,11 +221,11 @@ function love.gamepadpressed( gamepad, button )
     -- you might want to keep track of this to change display prompts
     INPUTMETHOD = "gamepad"
     local binding = state.buttons[button]
-    return inputHandler( binding , "gamepad")
+    return inputHandler( binding , gamepad:getGUID())
 end
 function love.gamepadreleased( gamepad, button )
     local binding = state.buttonsReleased[button]
-    return inputHandler( binding , "gamepad" )
+    return inputHandler( binding , gamepad:getGUID() )
 end
 
 function love.touchpressed( id, x, y, dx, dy, pressure )
@@ -266,4 +269,17 @@ function love.gamepadaxis( gamepad, axis, value )
   end
 
   --[[se ha de pasar axis i value ]]
+end
+
+function love.joystickadded( joystick )
+  controllerScreen.gamepads[joystick:getGUID()] = 0
+  if mode ~= gameModes.multiplayer then
+    player.gamepad = joystick:getGUID()
+  end
+end
+function love.joystickremoved( joystick )
+  controllerScreen.gamepads[joystick:getGUID()] = nil
+  if mode ~= gameModes.multiplayer then
+    player.gamepad = "keyboard"
+  end
 end

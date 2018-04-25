@@ -21,7 +21,7 @@ mainMenuScreen = {
       x = love.graphics.getWidth()/2-60,
       y = love.graphics.getHeight()/2+30,
       changeState = function ()
-        state = gameStates.mapSelect
+        state = gameStates.multiplayerScreen
         mode = gameModes.multiplayer
       end
     },

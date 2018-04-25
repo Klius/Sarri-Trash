@@ -31,6 +31,7 @@ gameStates.carSelect = {
   },
   keys = {
       space     = "enterRace",
+      ["return"] = "enterRace",
       left         = "changeCarMin",
       right       = "changeCarPl",
       escape = "back"
@@ -78,58 +79,58 @@ gameStates.mapSelect = {
       bindings = {
           openMenu   = function()  state = gameStates.mapSelect  end,
           gas       = function(id)
-                        if id == "keyboard" then
+                        if id == player.gamepad  then
                           player.accelerating = true
-                        else
+                        elseif id ==player2.gamepad then
                           player2.accelerating = true
                         end
           end,
           releaseGas       = function(id)
-            if id == "keyboard" then
+            if id == player.gamepad  then
               player.accelerating = false 
-            else
+            elseif id ==player2.gamepad then
               player2.accelerating = false 
             end
           end,
           rotateLeft       = function(id)
-            if id == "keyboard" then
+            if id == player.gamepad  then
               player:rotate(true)
-            else
+            elseif id ==player2.gamepad then
               player2:rotate(true)
             end
           end,
           rotateRight      = function(id) 
-            if id == "keyboard" then
+            if id == player.gamepad  then
               player:rotate(false)
-            else
+            elseif id ==player2.gamepad then
               player2:rotate(false)
             end 
           end,
           releaseRotateRight     = function(id)
-            if id == "keyboard" then
+            if id == player.gamepad then
               player.rotatingRight = false 
-            else
+            elseif id ==player2.gamepad then
               player2.rotatingRight = false
             end 
           end,
           releaseRotateLeft     = function(id)
-            if id == "keyboard" then
+            if id == player.gamepad then
               player.rotatingLeft = false 
-            else
+            elseif id ==player2.gamepad then
               player2.rotatingLeft = false
             end   
           end,
           brake = function(id)
-           if id == "keyboard" then  
+           if id == player.gamepad then  
               player.braking = true
-            else
+            elseif id ==player2.gamepad then
               player2.braking = true
             end
           end,
           releaseBrake      = function(id)
-             if id == "keyboard" then  
+             if id == player.gamepad then  
               player.braking = false
-            else
+            elseif id ==player2.gamepad then
               player2.braking = false
             end
           end,
@@ -247,9 +248,25 @@ gameStates.mainMenu = {
   }
 }
 gameStates.multiplayerScreen = {
-  bindings = {},
-  keys = {},
+  bindings = {
+    goBack = function() state = gameStates.mainMenu end,
+    moveUp = function( inputId ) controllerScreen:moveController(inputId,true) end,
+    moveDown = function( inputId ) controllerScreen:moveController(inputId,false) end,
+    assignControllers = function() controllerScreen:assignControllers() end,
+  },
+  keys = {
+    space     = "assignControllers",
+    ["return"] = "assignControllers",
+    up = "moveUp",
+    down = "moveDown", 
+    escape = "goBack"
+  },
   keysReleased = {},
-  buttons = {},
+  buttons = {
+    dpup = "moveUp",
+    dpdown = "moveDown",
+    a = "assignControllers",
+    start = "assignControllers"
+  },
   buttonsReleased = {}
 }
