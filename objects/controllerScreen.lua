@@ -26,7 +26,7 @@ controllerScreen.draw = function(self,dt)
   love.graphics.setColor(1,1,1,1)
   local x = 50
   love.graphics.setFont(self.bigFont)
-  love.graphics.print("Select your controller",0,love.graphics.getHeight()/2)
+  love.graphics.print("Select your controller",love.graphics.getWidth()/2-150,0)
   for i ,label in pairs(self.labels) do
     love.graphics.print(label,x,self.positionY[i]+64)
   end

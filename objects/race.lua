@@ -1,39 +1,41 @@
 race = {
-          lapsTotal = 3,
-          currentLap = 0,
           endRace = false,
           sprite = love.graphics.newImage("assets/lap-counter.png"),
           spritesheet = getAnimations(love.graphics.newImage("assets/lap-counter.png"),32,32),
-          currentTime = 0,
-          timer = 0,
-          isTiming = false,
-          lapTimes = {0,0,0},
-          totalTime = 0
         }
-race.nextLap = function (self) 
-                  self.currentLap = self.currentLap+1
-                  if self.currentLap == self.lapsTotal then
+race.nextLap = function (self, player)
+                  local race = player.race
+                  race.currentLap = race.currentLap+1
+                  if race.currentLap >= race.lapsTotal then
                     self.endRace = true
-                    self.currentLap = self.lapsTotal -1
-                    self.totalTime = self.lapTimes[1]+self.lapTimes[2]+self.lapTimes[3]
+                    race.currentLap = race.lapsTotal -1
+                    race.totalTime = race.lapTimes[1]+race.lapTimes[2]+race.lapTimes[3]
+                    player.race = race
                     resultScreen:Initialize()
                   else
-                    self.lapTimes[self.currentLap] = self.currentTime
-                    self.timer = love.timer.getTime()
+                    race.lapTimes[race.currentLap] = race.currentTime
+                    race.timer = love.timer.getTime()
+                    player.race = race
                   end
                 end
 race.reset = function (self)
-                self.currentLap = 0
                 self.endRace = false
-                self.times = {0,0,0}
-                self.currentTime = 0
-                self.isTiming = false
-                self.timer = 0
+                local race = {
+                  lapsTotal = 3,
+                  currentLap = 0,
+                  lapTimes = {0,0,0},
+                  currentTime = 0,
+                  isTiming = false,
+                  timer = 0,
+                  totalTime = 0
+                }
+                player.race = race
+                player2.race = race
              end
 race.update = function (self,dt)
-                if self.isTiming then
-                  self.currentTime = love.timer.getTime() - self.timer
-                  self.times[self.currentLap+1] = self.currentTime
+                if player.race.isTiming then
+                  player.race.currentTime = love.timer.getTime() - player.race.timer
+                  player.race.lapTimes[player.race.currentLap+1] = player.race.currentTime
                 end
                 player.speedometer:update(dt,player)
                 if mode == gameModes.multiplayer then
@@ -41,22 +43,22 @@ race.update = function (self,dt)
                 end
               end
 race.draw = function (self)
-              love.graphics.draw(self.sprite,self.spritesheet[self.currentLap],80,50,0,1,1)
-              if (self.currentLap == 2) then
+              love.graphics.draw(self.sprite,self.spritesheet[player.race.currentLap],80,50,0,1,1)
+              if (player.race.currentLap == 2) then
                 love.graphics.draw(self.sprite,self.spritesheet[3],80-32,50,0,1,1)
               end
               love.graphics.print("TIME",love.graphics.getWidth()-100,25)
-              love.graphics.print("1:"..self:formatTime(self.times[1]),love.graphics.getWidth()-150,40)
-              love.graphics.print("2:"..self:formatTime(self.times[2]),love.graphics.getWidth()-150,60)
-              love.graphics.print("3:"..self:formatTime(self.times[3]),love.graphics.getWidth()-150,80)
+              love.graphics.print("1:"..self:formatTime(player.race.lapTimes[1]),love.graphics.getWidth()-150,40)
+              love.graphics.print("2:"..self:formatTime(player.race.lapTimes[2]),love.graphics.getWidth()-150,60)
+              love.graphics.print("3:"..self:formatTime(player.race.lapTimes[3]),love.graphics.getWidth()-150,80)
               player.speedometer:draw()
               if mode == gameModes.multiplayer then
                 player2.speedometer:draw(love.graphics.getHeight()/2+50)
               end
             end
-race.timerStart = function (self)
-                    self.isTiming = true
-                    self.timer = love.timer.getTime()
+race.timerStart = function (self,player)
+                    player.race.isTiming = true
+                    player.race.timer = love.timer.getTime()
                   end
                   
 race.formatTime = function (self,time)

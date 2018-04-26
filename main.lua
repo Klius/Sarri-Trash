@@ -113,7 +113,7 @@ function love.draw()
     if debug then
       love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
       love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
-      love.graphics.print(race.currentTime,0,40)
+      love.graphics.print("Time:"..player.race.currentTime,0,40)
       love.graphics.print (player.currentSpeed,0,60)
       love.graphics.print("x:"..player.x,0,80)
       love.graphics.print("y:"..player.y,0,100)
@@ -246,26 +246,26 @@ function love.gamepadaxis( gamepad, axis, value )
   if direction > config.joy_sen[1] then
     button = "jright"
     binding = state.buttons[button]
-    inputHandler( binding )
+    inputHandler( binding ,gamepad:getGUID())
     --stop rotating left
     button = "jleft"
     binding = state.buttonsReleased[button]
-    inputHandler( binding )
+    inputHandler( binding , gamepad:getGUID())
   elseif direction < -config.joy_sen[1] then
     button = "jleft"
     binding = state.buttons[button]
-    inputHandler( binding )
+    inputHandler( binding, gamepad:getGUID() )
     --stop rotating right
     button = "jright"
     binding = state.buttonsReleased[button]
-    inputHandler( binding )
+    inputHandler( binding, gamepad:getGUID() )
   else
     button = "jright"
     local button2="jleft"
     binding = state.buttonsReleased[button]
-    inputHandler( binding )
+    inputHandler( binding, gamepad:getGUID() )
     binding = state.buttonsReleased[button2]
-    inputHandler( binding )
+    inputHandler( binding, gamepad:getGUID() )
   end
 
   --[[se ha de pasar axis i value ]]

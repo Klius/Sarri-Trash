@@ -1,5 +1,5 @@
 car = {
-        name = "unnamed Scarab",
+        name = "Encorreur Mice",
         description = "it's a car!",
         sprite = love.graphics.newImage("assets/cars/sprites/scarab.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/scarab.png"),32,32),

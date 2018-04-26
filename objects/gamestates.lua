@@ -1,17 +1,17 @@
 gameStates = {}
 gameStates.carSelect = {
   bindings = {
-      enterRace = function()
-                    if mode == gameModes.multiplayer and carSelect.player == 1 then
+      enterRace = function( id )
+                    if mode == gameModes.multiplayer and carSelect.player == 1 and id ==player.gamepad then
                       player.car = carlist.cars[carlist.selectedCar]
                       carSelect.player = 2
-                    elseif mode == gameModes.multiplayer and carSelect.player == 2 then
+                    elseif mode == gameModes.multiplayer and carSelect.player == 2 and id == player2.gamepad then
                       player2.car = carlist.cars[carlist.selectedCar]
                       carSelect.player = 1
                       maplist:loadMap()
                       race:reset()
                       state = gameStates.gameLoop
-                    else
+                    elseif mode ~= gameModes.multiplayer then
                       carSelect.player = 1
                       player.car = carlist.cars[carlist.selectedCar]
                       maplist:loadMap()
@@ -19,14 +19,31 @@ gameStates.carSelect = {
                       state = gameStates.gameLoop
                     end
                   end,
-      changeCarMin = function()
-                        carlist:changeSelectedCar(-1)
+      changeCarMin = function(id)
+                        if carSelect.player == 1 and mode == gameModes.multiplayer 
+                        and id== player.gamepad then 
+                          carlist:changeSelectedCar(-1)
+                        elseif carSelect.player == 2 and mode == gameModes.multiplayer 
+                        and id== player2.gamepad then
+                          carlist:changeSelectedCar(-1)
+                        elseif mode ~= gameModes.multiplayer then
+                          carlist:changeSelectedCar(-1)
+                        end
                       end,
-      changeCarPl = function()
-                        carlist:changeSelectedCar(1)                    
+      changeCarPl = function(id)
+                      if carSelect.player == 1 and mode == gameModes.multiplayer 
+                      and id== player.gamepad then 
+                          carlist:changeSelectedCar(1)
+                      elseif carSelect.player == 2 and mode == gameModes.multiplayer 
+                        and id== player2.gamepad then
+                          carlist:changeSelectedCar(1)
+                      elseif mode ~= gameModes.multiplayer then
+                        carlist:changeSelectedCar(1)
+                      end
                     end,
       back = function()
                 state = gameStates.mapSelect
+                carSelect.player = 1
               end
   },
   keys = {
@@ -120,6 +137,34 @@ gameStates.mapSelect = {
               player2.rotatingLeft = false
             end   
           end,
+          rotateLeftJoy       = function(id)
+            if id == player.gamepad  then
+              player:rotateJoy(true)
+            elseif id ==player2.gamepad then
+              player2:rotateJoy(true)
+            end
+          end,
+          rotateRightJoy      = function(id) 
+            if id == player.gamepad  then
+              player:rotateJoy(false)
+            elseif id ==player2.gamepad then
+              player2:rotateJoy(false)
+            end 
+          end,
+          releaseRotateRightJoy     = function(id)
+            if id == player.gamepad then
+              player.joyrotatingRight = false 
+            elseif id ==player2.gamepad then
+              player2.joyrotatingRight = false
+            end 
+          end,
+          releaseRotateLeftJoy     = function(id)
+            if id == player.gamepad then
+              player.joyrotatingLeft = false 
+            elseif id ==player2.gamepad then
+              player2.joyrotatingLeft = false
+            end   
+          end,
           brake = function(id)
            if id == player.gamepad then  
               player.braking = true
@@ -169,8 +214,8 @@ gameStates.mapSelect = {
           x       = "brake",
           y       = "debug",
           dpleft  = "rotateLeft",
-          jleft   = "rotateLeft",
-          jright   = "rotateRight",
+          jleft   = "rotateLeftJoy",
+          jright   = "rotateRightJoy",
           dpright = "rotateRight",
           --dpup = "upDriftBoost",
          -- dpdown ="downDriftBoost",
@@ -181,8 +226,8 @@ gameStates.mapSelect = {
         x       = "releaseBrake",
         dpleft  = "releaseRotateLeft",
         dpright = "releaseRotateRight",
-        jleft  = "releaseRotateLeft",
-        jright = "releaseRotateRight",
+        jleft  = "releaseRotateLeftJoy",
+        jright = "releaseRotateRightJoy",
       }
       -- <...>
   }

@@ -41,6 +41,8 @@ function Player:new()
   self.currentSpeed = 0
   self.rotatingLeft = false
   self.rotatingRight = false
+  self.joyrotatingLeft = false
+  self.joyrotatingRight = false
   self.accelerating = false
   self.braking = false
   self.checkPoints = { false,false,false}
@@ -49,6 +51,15 @@ function Player:new()
   self.camera = Camera(self)
   self.speedometer = Speedometer()
   self.gamepad = "keyboard"
+  self.race = {
+    lapsTotal = 3,
+    currentLap = 0,
+    currentTime = 0,
+    timer = 0,
+    isTiming = false,
+    lapTimes = {0,0,0},
+    totalTime = 0
+  }
 end
 function Player:spawnPlayer(spawnPoint)
   local spawn
@@ -69,6 +80,7 @@ function Player:spawnPlayer(spawnPoint)
   self.rotatingLeft = false
   self.rotatingRight = false
   self.accelerating = false
+  self.colSpeed = 0
   self.braking = false
   self.checkPoints = { false,false,false}
                          --map:removeLayer("Spawn Point")
@@ -112,7 +124,7 @@ function Player:update(dt)
                       local drifting = self.braking and self.accelerating
                       
                     --ORIENTATION
-                    if self.rotatingLeft and self.accelerating or self.rotatingLeft and self.braking or self.rotatingLeft and math.floor(self.currentSpeed) > 0 then
+                    if self.rotatingLeft and self.accelerating or self.rotatingLeft and self.braking or self.rotatingLeft and math.floor(self.currentSpeed) > 0 or self.joyrotatingLeft and self.accelerating or self.joyrotatingLeft and self.braking or self.joyrotatingLeft and math.floor(self.currentSpeed) > 0 then
                       if drifting then
                         self.orientation = self.orientation - ((self.car.steering*self.car.driftBoost) * dt) * math.pi / 180
                         self.driftangle = self.orientation -0.5 * -1
@@ -121,7 +133,7 @@ function Player:update(dt)
                         self.orientation = self.orientation - (self.car.steering * dt) * math.pi / 180
                         self.driftangle = self.orientation -0.5 * -1
                       end
-                    elseif self.rotatingRight and self.accelerating or self.rotatingRight and self.braking or self.rotatingRight and math.floor(self.currentSpeed) > 0 then
+                    elseif self.rotatingRight and self.accelerating or self.rotatingRight and self.braking or self.rotatingRight and math.floor(self.currentSpeed) > 0 or self.joyrotatingRight and self.accelerating or self.joyrotatingRight and self.braking or self.joyrotatingRight and math.floor(self.currentSpeed) > 0 then
                       if drifting then
                         self.orientation = self.orientation + ((self.car.steering*self.car.driftBoost) * dt) * math.pi / 180
                         self.driftangle = self.orientation-0.5 * 1
@@ -136,7 +148,8 @@ function Player:update(dt)
                     local goalX = self.x
                     local goalY = self.y
                     if self.colTime <= 0 then
-                      if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
+                      if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0 or 
+                      drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self.joyrotatingRight and self.currentSpeed > 0 then
                         goalX = self.x - math.cos(self.driftangle) *self.currentSpeed
                         goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
                       else
@@ -144,14 +157,15 @@ function Player:update(dt)
                         goalY = self.y - math.sin(self.orientation)*self.currentSpeed
                         self.spriteRotation = self.orientation
                       end
-                    else
+                    else --if there's a collision going on
                       self.colTime = self.colTime - dt
-                      if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0  then
+                      if drifting and self.rotatingLeft and self.currentSpeed > 0 or drifting and self.rotatingRight and self.currentSpeed > 0 or 
+drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self.joyrotatingRight and self.currentSpeed > 0   then
                         goalX = self.x- math.cos(self.driftangle) *self.currentSpeed
                         goalY = self.y - math.sin(self.driftangle)*self.currentSpeed
                       else
-                        goalX = self.x - math.cos(self.colO)*self.currentSpeed
-                        goalY = self.y - math.sin(self.colO)*self.currentSpeed
+                        goalX = self.x - math.cos(self.colO)*self.colSpeed
+                        goalY = self.y - math.sin(self.colO)*self.colSpeed
                         self.spriteRotation = self.orientation
                       end
                     end
@@ -183,10 +197,19 @@ function Player:move(goalX,goalY)
       elseif other.properties.isFinishLine then
         self:finishLineCrossed()
       elseif other.properties.isCar then
-        self.currentSpeed = self.currentSpeed - self.currentSpeed/16
-        other.currentSpeed = other.currentSpeed + self.currentSpeed/16 
-        other.colO = self.orientation
-        other.colTime = 0.1
+        if math.abs(self.currentSpeed) > math.abs(other.currentSpeed) then
+          other.colSpeed = self.currentSpeed
+          self.currentSpeed = self.currentSpeed - self.currentSpeed/16
+          other.currentSpeed = other.currentSpeed + self.currentSpeed/2 
+          other.colO = self.orientation
+          other.colTime = 0.1
+        else
+          self.colSpeed = other.currentSpeed
+          other.currentSpeed = other.currentSpeed - other.currentSpeed/16
+          self.currentSpeed = self.currentSpeed + other.currentSpeed/4 
+          self.colO = other.orientation
+          self.colTime = 0.1
+        end
       else
         --Decelerate car
         --self:addSparkles(cols[i].touch)
@@ -225,6 +248,14 @@ function Player:rotate (rotate)
     self.rotatingRight = true
   end
 end
+--duplicate for joystick
+function Player:rotateJoy (rotate)
+  if rotate then --rotate left
+    self.joyrotatingLeft = true
+  else --rotate right
+    self.joyrotatingRight = true
+  end
+end
 function Player:addCheckpoint (index)
   if self.checkPoints[index] == false then
     if index > 1 then
@@ -245,10 +276,10 @@ end
 
 function Player:finishLineCrossed()
   if self.checkPoints[1] and self.checkPoints[2] and self.checkPoints[3] then
-    race:nextLap()
+    race:nextLap(self)
     self:resetCheckpoint()
   end
-  if race.isTiming == false then
-    race:timerStart()
+  if self.race.isTiming == false then
+    race:timerStart(self)
   end
 end
