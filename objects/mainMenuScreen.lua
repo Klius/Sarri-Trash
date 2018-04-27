@@ -39,7 +39,14 @@ mainMenuScreen = {
   }
 }
 mainMenuScreen.update = function (self,dt)
-  
+  if controllerScreen:gamepadCount() > 1 then
+    self.options[2].accessible = true
+  else
+    if self.options[2].accessible then
+      self.options[2].accessible = false
+      self.currentOption = 1
+    end
+  end
 end
 mainMenuScreen.draw = function (self)
   love.graphics.setColor(223/255,113/255,38/255,1)

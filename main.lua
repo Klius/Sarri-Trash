@@ -87,6 +87,9 @@ function love.update(dt)
   if state == gameStates.multiplayerScreen then
     controllerScreen:update(dt)
   end
+  if state == gameStates.mainMenu then
+    mainMenuScreen:update(dt)
+  end
 end
 
 function love.draw()

@@ -73,3 +73,11 @@ controllerScreen.assignControllers = function (self)
     state = gameStates.mapSelect
   end
 end
+--Returns the gamepad
+controllerScreen.gamepadCount = function (self)
+  local count = 0
+  for _ in pairs(self.gamepads) do
+    count = count +1
+  end
+  return count
+end

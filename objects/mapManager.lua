@@ -16,8 +16,6 @@ maplist.loadMaps = function (self)
                         print("Loading map list")
                         for k, file in ipairs(files) do
                           if string.find(file, ".lua") then
-                          --outputs something like "1. main.lua"
-                            --print(k .. ". " .. file)
                             table.insert(self.maps,dir.."/"..file)
                           end
                         end
