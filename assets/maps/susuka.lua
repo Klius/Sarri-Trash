@@ -8,7 +8,7 @@ return {
   height = 100,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 10,
+  nextobjectid = 11,
   properties = {},
   tilesets = {
     {
@@ -1079,7 +1079,7 @@ return {
           type = "",
           shape = "rectangle",
           x = 1408,
-          y = 2336,
+          y = 2304,
           width = 32,
           height = 32,
           rotation = 0,
@@ -1169,6 +1169,19 @@ return {
             ["collidable"] = true,
             ["isCheckpoint"] = true
           }
+        },
+        {
+          id = 10,
+          name = "Player2",
+          type = "",
+          shape = "rectangle",
+          x = 1408,
+          y = 2400,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="6">
+<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="7">
  <tileset firstgid="1" source="../testroad.tsx"/>
  <layer name="Track" width="100" height="100">
   <data encoding="csv">
@@ -324,7 +324,7 @@
    <property name="third" type="float" value="35.556"/>
    <property name="thirdName" value="CCC"/>
   </properties>
-  <object id="1" name="Player" x="1888" y="2752" width="32" height="32"/>
+  <object id="1" name="Player" x="1888" y="2720" width="32" height="32"/>
   <object id="2" x="672" y="1696" width="160" height="32">
    <properties>
     <property name="checkpointNum" type="int" value="1"/>
@@ -352,5 +352,6 @@
     <property name="isFinishLine" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="6" name="Player2" x="1888" y="2816" width="32" height="32"/>
  </objectgroup>
 </map>

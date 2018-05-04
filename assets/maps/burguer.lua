@@ -1,14 +1,14 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.1.0",
+  tiledversion = "1.1.1",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 100,
   height = 100,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 7,
+  nextobjectid = 8,
   properties = {},
   tilesets = {
     {
@@ -1078,9 +1078,9 @@ return {
           name = "Player",
           type = "",
           shape = "rectangle",
-          x = 1621.33,
-          y = 2398.67,
-          width = 28,
+          x = 1632,
+          y = 2368,
+          width = 32,
           height = 32,
           rotation = 0,
           visible = true,
@@ -1169,6 +1169,19 @@ return {
             ["collidable"] = true,
             ["isCheckpoint"] = true
           }
+        },
+        {
+          id = 7,
+          name = "Player2",
+          type = "",
+          shape = "rectangle",
+          x = 1632,
+          y = 2432,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     }
