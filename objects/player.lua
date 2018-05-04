@@ -108,9 +108,17 @@ function Player:update(dt)
                         --if you let go of accelerator when speeding or reversing it slows down
                         local frictionbrake = self.currentSpeed/32
                         if self.currentSpeed > 0  and self.accelerating == false then
-                          self.currentSpeed = self.currentSpeed - frictionbrake
+                          if self.currentSpeed < 0.02 then
+                            self.currentSpeed = 0
+                          else
+                            self.currentSpeed = self.currentSpeed - frictionbrake
+                          end
                         elseif self.currentSpeed < 0 and self.braking == false then
-                          self.currentSpeed = self.currentSpeed - frictionbrake
+                          if self.currentSpeed > -0.02 then
+                            self.currentSpeed = 0
+                          else
+                            self.currentSpeed = self.currentSpeed - frictionbrake
+                          end
                         end
                       end
                       
