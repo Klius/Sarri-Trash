@@ -11,6 +11,7 @@ car = {
         steering = 150,
         brakes = 7,
         driftBoost = 1.3,
+        weight = 32
       }
 
 return car

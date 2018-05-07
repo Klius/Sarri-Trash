@@ -11,6 +11,7 @@
         steering = 100,
         brakes = 10,
         driftBoost = 2,
+        weight = 32
       }
 
 return car

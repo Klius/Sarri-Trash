@@ -14,6 +14,7 @@ function Player:new()
         steering = 100,
         brakes = 10,
         driftBoost = 2,
+        weight = 32
   }
   self.frameCount = 0
   self.currentFrame = 0
@@ -106,7 +107,7 @@ function Player:update(dt)
                         end
                       else
                         --if you let go of accelerator when speeding or reversing it slows down
-                        local frictionbrake = self.currentSpeed/32
+                        local frictionbrake = self.currentSpeed/self.car.weight
                         if self.currentSpeed > 0  and self.accelerating == false then
                           if self.currentSpeed < 0.02 then
                             self.currentSpeed = 0
@@ -231,11 +232,11 @@ function Player:animate (dt)
   else
     self.currentFrame = 0  
   end
-  if self.currentSpeed > self.car.topSpeed - self.car.topSpeed/3 then
+  if math.abs(self.currentSpeed) > self.car.topSpeed - self.car.topSpeed/3 then
     self.frameDuration = self.animationSpeeds[4]
-  elseif self.currentSpeed > self.car.topSpeed / 2 then
+  elseif math.abs(self.currentSpeed) > self.car.topSpeed / 2 then
     self.frameDuration = self.animationSpeeds[3]
-  elseif self.currentSpeed > self.car.topSpeed / 3 then
+  elseif math.abs(self.currentSpeed) > self.car.topSpeed / 3 then
     self.frameDuration = self.animationSpeeds[2]
   else
     self.frameDuration = self.animationSpeeds[1]

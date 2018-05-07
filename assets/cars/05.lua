@@ -9,8 +9,9 @@ car = {
         topSpeed = 12,
         acceleration = 8,
         steering = 150,
-        brakes = 0,
+        brakes = 0.5,
         driftBoost = 1.5,
+        weight = 128
       }
 
 return car
