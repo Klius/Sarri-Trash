@@ -209,13 +209,11 @@ function Player:move(goalX,goalY)
         if math.abs(self.currentSpeed) > math.abs(other.currentSpeed) then
           other.colSpeed = self.currentSpeed
           self.currentSpeed = self.currentSpeed - self.currentSpeed/16
-          other.currentSpeed = other.currentSpeed + self.currentSpeed/2 
           other.colO = self.orientation
-          other.colTime = 0.1
+          other.colTime = self.currentSpeed / self.car.topSpeed
         else
           self.colSpeed = other.currentSpeed
           other.currentSpeed = other.currentSpeed - other.currentSpeed/16
-          self.currentSpeed = self.currentSpeed + other.currentSpeed/4 
           self.colO = other.orientation
           self.colTime = 0.1
         end
