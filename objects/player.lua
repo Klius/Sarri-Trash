@@ -62,6 +62,18 @@ function Player:new()
     totalTime = 0
   }
 end
+function Player:raceReset()
+  local race = {
+                  lapsTotal = 3,
+                  currentLap = 0,
+                  lapTimes = {0,0,0},
+                  currentTime = 0,
+                  isTiming = false,
+                  timer = 0,
+                  totalTime = 0
+                }
+  self.race = race
+end
 function Player:spawnPlayer(spawnPoint)
   local spawn
   spawnPoint = spawnPoint or "player"
