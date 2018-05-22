@@ -107,7 +107,10 @@ resultScreen.nextLetter = function(self,increment)
 end
 --Confirm
 resultScreen.confirm = function(self)
-  if self.currentSpace == 4 and self.enteringName then
-  
+  if self.currentSpace == 4 then
+    state = gameStates.mapSelect
+  elseif self.currentSpace < 4 then
+    --nextSpace
+    self:nextSpace(1)
   end
 end

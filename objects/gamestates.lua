@@ -241,8 +241,8 @@ gameStates.resultScreen = {
           confirm = function() resultScreen:confirm() end
       },
       keys = {
-          escape = "returnToStartScreen",
-          space = "returnToStartScreen",
+          enter = "confirm",
+          space = "confirm",
           left   = "decrementRecordSpace",
           right  = "incrementRecordSpace",
           up = "incrementRecordLetter",
@@ -253,9 +253,9 @@ gameStates.resultScreen = {
       keysReleased = {
       },
       buttons = {
-          start    = "returnToStartScreen",
+          start    = "confirm",
           a       = "confirm",
-          x       = "returnToStartScreen",
+          x       = "confirm",
           dpleft  = "decrementRecordSpace",
           dpright = "incrementRecordSpace",
           dpup = "incrementRecordLetter",

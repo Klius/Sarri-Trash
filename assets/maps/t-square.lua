@@ -1,7 +1,7 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.1.4",
+  tiledversion = "1.1.1",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 100,
@@ -9,6 +9,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextobjectid = 11,
+  backgroundcolor = { 255, 113, 16 },
   properties = {},
   tilesets = {
     {
@@ -1063,7 +1064,7 @@ return {
       offsety = 0,
       draworder = "topdown",
       properties = {
-        ["circuitName"] = "Weird Eight",
+        ["circuitName"] = "The Square",
         ["first"] = 26.556,
         ["firstName"] = "556",
         ["lapName"] = "AAA",

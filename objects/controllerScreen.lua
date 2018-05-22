@@ -26,7 +26,7 @@ controllerScreen.draw = function(self,dt)
   love.graphics.setColor(1,1,1,1)
   local x = 50
   love.graphics.setFont(self.bigFont)
-  love.graphics.print("Select your controller",love.graphics.getWidth()/2-150,0)
+  love.graphics.print("Select your controller",love.graphics.getWidth()/2-150,20)
   for i ,label in pairs(self.labels) do
     love.graphics.print(label,x,self.positionY[i]+64)
   end
@@ -35,8 +35,10 @@ controllerScreen.draw = function(self,dt)
   for i, pad in pairs(self.gamepads) do
     if i =="keyboard" then
       love.graphics.draw(self.keyImage,x,self.positionY[pad])
+      --love.graphics.print("Keyboard",x,self.positionY[pad]+20)
     else
       love.graphics.draw(self.contImage,x,self.positionY[pad])
+      --love.graphics.print(i,x,self.positionY[pad]+20)
     end
     x = x+356
   end

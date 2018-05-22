@@ -100,7 +100,7 @@ function Player:spawnPlayer(spawnPoint)
   self.skidPool = SkidPool(self.car.skid)
 end
 function Player:draw()
-  self.skidPool:draw()
+  --self.skidPool:draw()
   love.graphics.draw(self.car.sprite, self.car.spritesheet[self.currentFrame],
     math.floor(self.x+self.ox), math.floor(self.y+self.oy),	self.spriteRotation,1,1,self.ox,self.oy)
 

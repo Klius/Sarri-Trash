@@ -93,7 +93,6 @@ function love.update(dt)
 end
 
 function love.draw()
-  
   if state == gameStates.gameLoop then
     -- Draw world
     --effect(function()
@@ -154,8 +153,12 @@ function drawCanvas()
       love.graphics.scale(player.camera.scale)
       love.graphics.translate(-player.camera.tx, -player.camera.ty)
       map:draw(-player.camera.tx, -player.camera.ty, player.camera.scale,player.camera.scale)
+      player.skidPool:draw()
+      if mode==gameModes.multiplayer then
+        player2.skidPool:draw()
+        player2:draw()
+      end
       player:draw()
-      player2:draw()
       love.graphics.pop()
       if mode == gameModes.multiplayer then
      -- love.graphics.setScissor(love.graphics.getWidth()/2,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2)
@@ -164,6 +167,8 @@ function drawCanvas()
         love.graphics.scale(player2.camera.scale)
         love.graphics.translate(-player2.camera.tx, -player2.camera.ty)
         map:draw(-player2.camera.tx, -player2.camera.ty, player2.camera.scale,player2.camera.scale)
+        player.skidPool:draw()
+        player2.skidPool:draw()
         player:draw()
         player2:draw()
         love.graphics.pop()
@@ -182,7 +187,7 @@ function checkForCheats()
   local cheats = {
     weiner = function() 
               for i=1,3 do
-                race:nextLap()
+                race:nextLap(player)
               end
              end,
     cls = function()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextobjectid="11">
+<map version="1.0" tiledversion="1.1.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" backgroundcolor="#ff7110" nextobjectid="11">
  <tileset firstgid="1" source="../testroad.tsx"/>
  <layer name="track" width="100" height="100">
   <data encoding="csv">
@@ -315,7 +315,7 @@
  </layer>
  <objectgroup name="Capa de Objetos 1" visible="0">
   <properties>
-   <property name="circuitName" value="Weird Eight"/>
+   <property name="circuitName" value="The Square"/>
    <property name="first" type="float" value="26.556"/>
    <property name="firstName" value="556"/>
    <property name="lapName" value="AAA"/>

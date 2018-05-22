@@ -1,14 +1,14 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "1.1.4",
+  tiledversion = "1.1.1",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 100,
   height = 100,
   tilewidth = 32,
   tileheight = 32,
-  nextobjectid = 1,
+  nextobjectid = 10,
   properties = {},
   tilesets = {
     {
@@ -1173,7 +1173,7 @@ return {
     {
       type = "objectgroup",
       name = "Capa de Objetos 1",
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -1188,7 +1188,101 @@ return {
         ["third"] = 30.45,
         ["thirdName"] = "CCC"
       },
-      objects = {}
+      objects = {
+        {
+          id = 4,
+          name = "player",
+          type = "",
+          shape = "rectangle",
+          x = 2048,
+          y = 2592,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 5,
+          name = "player2",
+          type = "",
+          shape = "rectangle",
+          x = 2048,
+          y = 2688,
+          width = 32,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 6,
+          name = "finishline",
+          type = "",
+          shape = "rectangle",
+          x = 1984,
+          y = 2528,
+          width = 32,
+          height = 256,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["collidable"] = true,
+            ["isFinishLine"] = true
+          }
+        },
+        {
+          id = 7,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 832,
+          y = 2144,
+          width = 192,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["checkpointNum"] = 1,
+            ["collidable"] = true,
+            ["isCheckpoint"] = true
+          }
+        },
+        {
+          id = 8,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 1920,
+          y = 1408,
+          width = 32,
+          height = 256,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["checkpointNum"] = 2,
+            ["collidable"] = true,
+            ["isCheckpoint"] = true
+          }
+        },
+        {
+          id = 9,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 2816,
+          y = 2432,
+          width = 96,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["checkpointNum"] = 3,
+            ["collidable"] = true,
+            ["isCheckpoint"] = true
+          }
+        }
+      }
     }
   }
 }
