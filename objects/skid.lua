@@ -1,8 +1,8 @@
 Skid = Object:extend()
 
-function Skid:new(sprite,x,y,rotation)
+function Skid:new(sprite,x,y,rotation,offset)
   self.timetolive = 2
-  self.offset = 16
+  self.offset = offset
   self.sprite = love.graphics.newImage(sprite)
   self.x = x
   self.y = y

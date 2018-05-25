@@ -11,7 +11,16 @@
         steering = 100,
         brakes = 10,
         driftBoost = 2,
-        weight = 32
+        weight = 32,
+        previewScale =1,
+        width = 32,
+        height = 32,
+        colBox = {
+          ox = 0,
+          oy = 0,
+          w = 32,
+          h = 32,
+        }
       }
 
 return car

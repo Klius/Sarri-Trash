@@ -14,7 +14,16 @@ function Player:new()
         steering = 100,
         brakes = 10,
         driftBoost = 2,
-        weight = 32
+        weight = 32,
+        width = 32,
+        height = 32,
+        colBox = {
+          ox = 5,
+          oy = 15,
+          h = 34,
+          w = 51,
+          
+        }
   }
   self.frameCount = 0
   self.currentFrame = 0
@@ -30,10 +39,9 @@ function Player:new()
   self.colX = 0
   self.colY = 0
   self.colTime = 0
-  self.w = 32
-  self.h = 32
-  self.ox = 16 
-  self.oy = 16
+
+  self.ox = self.car.width/2
+  self.oy = self.car.height/2
   self.tx = 0
   self.ty = 0
   self.driftangle = 0
@@ -85,7 +93,7 @@ function Player:spawnPlayer(spawnPoint)
   end
   self.x = spawn.x or 800
   self.y = spawn.y or 800
-  world:add(self,self.x,self.y,self.w,self.h)
+  world:add(self,self.x+self.car.colBox.ox,self.y+self.car.colBox.oy,self.car.colBox.w,self.car.colBox.w)
   self.currentSpeed = 0
   self.orientation = spawn.rotation
   self.spriteRotation = self.orientation
@@ -102,8 +110,19 @@ end
 function Player:draw()
   --self.skidPool:draw()
   love.graphics.draw(self.car.sprite, self.car.spritesheet[self.currentFrame],
-    math.floor(self.x+self.ox), math.floor(self.y+self.oy),	self.spriteRotation,1,1,self.ox,self.oy)
-
+    math.floor(self.x+self.car.width/2), math.floor(self.y+self.car.height/2),	self.spriteRotation,1,1,self.car.width/2,self.car.height/2)
+  --debug
+  if debug then
+    love.graphics.push()
+    love.graphics.setPointSize(10)
+    love.graphics.points(math.floor(self.x+self.car.colBox.ox+self.car.colBox.w/2),math.floor(self.y+self.car.colBox.oy+self.car.colBox.h/2))
+    love.graphics.setColor(0,0,0,1)
+    love.graphics.translate(math.floor(self.x+self.car.colBox.ox+self.car.colBox.w/2),math.floor(self.y+self.car.colBox.oy+self.car.colBox.h/2))
+    love.graphics.rotate(self.spriteRotation)
+    love.graphics.rectangle("fill",-self.car.colBox.w/2,-self.car.colBox.h/2,self.car.colBox.w,self.car.colBox.h)
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.pop()
+  end
 end
 function Player:update(dt)
   self.skidPool:update(dt,self)

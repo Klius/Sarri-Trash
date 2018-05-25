@@ -11,7 +11,17 @@ car = {
         steering = 150,
         brakes = 0.5,
         driftBoost = 1.5,
-        weight = 128
+        previewScale = 1,
+        weight = 128,
+        width = 32,
+        height = 32,
+        colBox = {
+          ox = 1,
+          oy = 1,
+          h = 29,
+          w = 29,
+          
+        }
       }
 
 return car

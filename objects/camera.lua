@@ -34,8 +34,8 @@ function Camera:update(dt,player)
                 self.screen_width = love.graphics.getWidth() / self.scale
                 self.screen_height = love.graphics.getHeight() / self.scale
               -- Translate world so that player is always centred
-                local goalX = (player.x-player.w/2) --math.cos(player.orientation)--*self.offset
-                local goalY = (player.y-player.h/2) --math.sin(player.orientation)--*self.offset
+                local goalX = (player.x-player.car.width/2) --math.cos(player.orientation)--*self.offset
+                local goalY = (player.y-player.car.height/2) --math.sin(player.orientation)--*self.offset
                 if config.dinamic_cam then
                   self:getCurrentOffset(dt,player)
                   self.tx = self.tx - (self.tx - (math.floor(goalX - (self.screen_width -self.screen_width/self.currentox) )))--*dt*self.speed

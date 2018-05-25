@@ -23,7 +23,7 @@ carlist.loadPreview = function (self)
                         local car = self.cars[self.selectedCar]
                         love.graphics.setCanvas(self.preview)
                         love.graphics.clear( )
-                        love.graphics.draw(car.sprite,car.spritesheet[0],0,0)
+                        love.graphics.draw(car.sprite,car.spritesheet[0],0,0,0,car.previewScale)
                         love.graphics.setCanvas()
                        end
 carlist.changeSelectedCar = function (self,increment)

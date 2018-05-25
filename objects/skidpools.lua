@@ -22,6 +22,6 @@ function SkidPool:new(skid)
   self.skids = {}
 end
 function SkidPool:add(player)
-  skid = Skid(self.skidSprite,player.x,player.y,player.spriteRotation)
+  skid = Skid(self.skidSprite,player.x,player.y,player.spriteRotation,player.car.width/2)
   table.insert(self.skids,skid)
 end
