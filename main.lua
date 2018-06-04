@@ -14,7 +14,6 @@ require "objects/music"
 require "objects/controllerScreen"
 require "objects/mapSelect"
 require "objects/carSelect"
-require "objects/resultScreen"
 require "objects/save"
 function love.load()
 
@@ -47,6 +46,7 @@ function love.load()
     multiplayer = 2
   }
   mode = gameModes.timeAttack
+  require "objects/resultScreen"
   --Spawn player
   scenes = { 
               [1] = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight()),
@@ -177,11 +177,20 @@ function drawCanvas()
 
 end
 
-
-
-
 --[[
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    Drawing functions
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+]]
+function drawMenuBackground()
+  love.graphics.setColor(223/255,113/255,38/255,1)
+  love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
+  love.graphics.setColor(1,1,1,1)
+end
+--[[
+@@@@@@@@@@@@@@@@@@@@@@@@@@
   CHEATS
+@@@@@@@@@@@@@@@@@@@@@@@@@@
 ]]
 function checkForCheats()
   local cheats = {
@@ -204,10 +213,13 @@ function checkForCheats()
     cheat = ""
   end
 end
-  --[[
-   HANDLING
-  ]]
 
+--[[
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  
+  HANDLING
+  
+@@@@@@@@@@@@@@@@@@@@@@@@@@]]
 
 function inputHandler( input , id)
     local action = state.bindings[input]
