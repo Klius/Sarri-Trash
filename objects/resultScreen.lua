@@ -3,7 +3,8 @@ resultScreen = {
     defaultFont = love.graphics.newFont(18),
     currentPosition = 0,
     screenDesc = "-Results-",
-    position = { [1] = "1ST",
+    position = { 
+              [1] = "1ST",
               [2] = "2ND",
               [3] = "3RD",
               [0] = "Keep on trying you are getting there!"
@@ -12,22 +13,26 @@ resultScreen = {
       [gameModes.timeAttack] = "Time Attack on ",
       [gameModes.multiplayer] = "Versus Race on "
     },
+    descriptions = {
+      [gameModes.timeAttack] = "Please enter a Name",
+      [gameModes.multiplayer] = ""
+    },
     alphabet = {
                 "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P",
                 "Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5",
                 "6","7","8","9","$","@","#","!","?","=","&","*","-","<",">","¬"," "
               },
     arrowPositions = {
-      [1] = {x = 208,y = 292},
-      [2] = {x = 228,y = 292},
-      [3] = {x = 248,y = 292},
-      [4] = {x = 268,y = 292},
+      [1] = {x = love.graphics.getWidth()/2-love.graphics.getWidth()/42},
+      [2] = {x = love.graphics.getWidth()/2},
+      [3] = {x = love.graphics.getWidth()/2+love.graphics.getWidth()/42},
+      [4] = {x = love.graphics.getWidth()/2+love.graphics.getWidth()/20},
     },
     currentLetter = 1,
     currentSpace = 1,
     recordName = {1,1,1},
-    letterArrowUp = Arrow(3,208,292),
-    letterArrowDown = Arrow(4,208,328),
+    letterArrowUp = Arrow(3,love.graphics.getWidth()/2-love.graphics.getWidth()/42,love.graphics.getHeight()/2+love.graphics.getHeight()/16),
+    letterArrowDown = Arrow(4,love.graphics.getWidth()/2-love.graphics.getWidth()/42,love.graphics.getHeight()/2+love.graphics.getHeight()/8),
 }
 resultScreen.draw = function (self)
   
@@ -73,18 +78,29 @@ resultScreen.drawTimeAttackScreen = function(self)
   --print race times
   local p1race = player.race
   local y = love.graphics.getHeight()/3
-  local x = love.graphics.getWidth()/2-love.graphics.getWidth()/16
+  local x = love.graphics.getWidth()/2-love.graphics.getWidth()/12
+  --print times with names
   for k,time in pairs(maplist.selectedMapRecords) do
     love.graphics.print(race:formatTime(time),x,y)
+    if k ~= self.currentPosition then
+      love.graphics.print(maplist.selectedMapRecordsName[k],x+150,y)
+    else
+      
+      local playerName = self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]]
+      love.graphics.print(playerName,x+150,y)
+    end
     y = y+30
   end
-  
-  
+  --Draw name selector
+  y = y+50
+  love.graphics.print(self.descriptions[mode],x-love.graphics.getWidth()/32,y)
+  y = y+50
+  x = love.graphics.getWidth()/2-love.graphics.getWidth()/32
   for k,letter in pairs(self.recordName) do
-    love.graphics.print(self.alphabet[letter],x,300)
-    x= x+20
+    love.graphics.print(self.alphabet[letter],x,y)
+    x= x+30
   end
-    love.graphics.draw(love.graphics.newImage("assets/arrow-enter.png"),x-5,300)
+    love.graphics.draw(love.graphics.newImage("assets/arrow-enter.png"),x-5,y+5)
     --love.graphics.print(self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]],200,300)
     self.letterArrowUp:draw()
     self.letterArrowDown:draw()
@@ -123,9 +139,11 @@ resultScreen.nextLetter = function(self,increment)
     self.letterArrowDown:pressed()
   end
 end
---Confirm
+--TODO save permanently the record
 resultScreen.confirm = function(self)
   if self.currentSpace == 4 then
+    local playerName = self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]]
+    maplist.selectedMapRecordsName[self.currentPosition] =  playerName
     state = gameStates.mapSelect
   elseif self.currentSpace < 4 then
     --nextSpace
