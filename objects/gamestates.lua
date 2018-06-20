@@ -238,7 +238,9 @@ gameStates.resultScreen = {
           decrementRecordSpace = function() resultScreen:nextSpace(-1) end,
           incrementRecordLetter = function() resultScreen:nextLetter(1) end,
           decrementRecordLetter = function() resultScreen:nextLetter(-1) end,
-          confirm = function() resultScreen:confirm() end
+          confirm = function() resultScreen:confirm() end,
+          adjustplus = function() resultScreen.adjustor = resultScreen.adjustor+1 end,
+          adjustminus = function() resultScreen.adjustor = resultScreen.adjustor-1 end,
       },
       keys = {
           ["return"] = "confirm",
@@ -248,7 +250,9 @@ gameStates.resultScreen = {
           up = "decrementRecordLetter",
           down = "incrementRecordLetter",
           x = "returnToStartScreen",
-          d = "returnToStartScreen"
+          d = "returnToStartScreen",
+          q = "adjustplus",
+          a = "adjustminus"
       },
       keysReleased = {
       },
@@ -260,7 +264,7 @@ gameStates.resultScreen = {
           dpright = "incrementRecordSpace",
           dpup = "decrementRecordLetter",
           dpdown = "incrementRecordLetter",
-          back    = "returnToStartScreen"
+          back    = "returnToStartScreen",
       },
       buttonsReleased = {
       }

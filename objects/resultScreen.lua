@@ -1,7 +1,12 @@
 resultScreen = {
     bigFont = love.graphics.newFont(30),
+    counterFont = love.graphics.newFont(90),
     defaultFont = love.graphics.newFont(18),
     currentPosition = 0,
+    winCount = {
+      [1] = 0,
+      [2] = 0
+    },
     screenDesc = "-Results-",
     position = { 
               [1] = "1ST",
@@ -33,6 +38,7 @@ resultScreen = {
     recordName = {1,1,1},
     letterArrowUp = Arrow(3,love.graphics.getWidth()/2-love.graphics.getWidth()/40,love.graphics.getHeight()/3+180),
     letterArrowDown = Arrow(4,love.graphics.getWidth()/2-love.graphics.getWidth()/40,love.graphics.getHeight()/3+190+50),
+    adjustor = 4
 }
 resultScreen.draw = function (self)
   
@@ -40,26 +46,36 @@ resultScreen.draw = function (self)
   love.graphics.print(self.screenDesc,10,10)
   if mode == gameModes.timeAttack then
     self:drawTimeAttackScreen()
-  else mode == gameModes.multiplayer then
-    --
+  else
+    self:drawMultiplayerScreen()
   end
 end
 resultScreen.Initialize = function(self)
-  local race = player.race
-  if race.totalTime < maplist.selectedMapRecords[1] then
-    self.currentPosition = 1
-    maplist.selectedMapRecords[3] = maplist.selectedMapRecords[2]
-    maplist.selectedMapRecords[2] = maplist.selectedMapRecords[1]
-    maplist.selectedMapRecords[1] = race.totalTime
-  elseif race.totalTime < maplist.selectedMapRecords[2] then
-    self.currentPosition = 2
-    maplist.selectedMapRecords[3] = maplist.selectedMapRecords[2]
-    maplist.selectedMapRecords[2] = race.totalTime
-  elseif race.totalTime < maplist.selectedMapRecords[3] then
-    self.currentPosition = 3
-    maplist.selectedMapRecords[3] = race.totalTime
+  if mode == gameModes.timeAttack then
+    local race = player.race
+    if race.totalTime < maplist.selectedMapRecords[1] then
+      self.currentPosition = 1
+      maplist.selectedMapRecords[3] = maplist.selectedMapRecords[2]
+      maplist.selectedMapRecords[2] = maplist.selectedMapRecords[1]
+      maplist.selectedMapRecords[1] = race.totalTime
+    elseif race.totalTime < maplist.selectedMapRecords[2] then
+      self.currentPosition = 2
+      maplist.selectedMapRecords[3] = maplist.selectedMapRecords[2]
+      maplist.selectedMapRecords[2] = race.totalTime
+    elseif race.totalTime < maplist.selectedMapRecords[3] then
+      self.currentPosition = 3
+      maplist.selectedMapRecords[3] = race.totalTime
+    else
+      self.currentPosition = 0 
+    end
   else
-    self.currentPosition = 0 
+    if player.cameFirst == true then
+      self.winCount[1] = self.winCount[1] + 1
+      player.cameFirst = false
+    else
+      self.winCount[2] = self.winCount[2] + 1
+      player2.cameFirst = false
+    end
   end
 end
 resultScreen.update = function (self,dt)
@@ -71,6 +87,21 @@ end
 Drawing functions
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ]]
+--[[  MULTIPLAYER ]]
+resultScreen.drawMultiplayerScreen = function(self)
+  love.graphics.setFont(self.bigFont)
+  love.graphics.print(self.title[mode]..maplist.selectedMapName,love.graphics.getWidth()/2-love.graphics.getWidth()/6,love.graphics.getHeight()/6)
+--Winner Counter
+  love.graphics.setFont(self.counterFont)
+  local x,y = love.graphics.getWidth()/2-love.graphics.getWidth()/11,love.graphics.getHeight()/2
+  love.graphics.print(self.winCount[1],x,y)
+  love.graphics.print('-',x+100,y)
+  love.graphics.print(self.winCount[2],x+180,y)
+  --return font to normal
+  love.graphics.setFont(self.defaultFont)
+  love.graphics.print("adjustor: "..self.adjustor,100,0)
+end
+--[[  TIME ATTACK ]]
 resultScreen.drawTimeAttackScreen = function(self)
   
   --Print Title
@@ -134,7 +165,7 @@ resultScreen.nextLetter = function(self,increment)
     self.currentLetter = newLetter
     self.recordName[self.currentSpace] = newLetter
   --Notify that the user has pressed something
-end
+  end
   --Update arrows to show as pressed
   if increment > 0 then
     self.letterArrowDown:pressed()
@@ -144,12 +175,16 @@ end
 end
 --TODO save permanently the record
 resultScreen.confirm = function(self)
-  if self.currentSpace == 4 then
-    local playerName = self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]]
-    maplist.selectedMapRecordsName[self.currentPosition] =  playerName
+  if mode == gameModes.timeAttack then
+    if self.currentSpace == 4 then
+      local playerName = self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]]
+      maplist.selectedMapRecordsName[self.currentPosition] =  playerName
+      state = gameStates.mapSelect
+    elseif self.currentSpace < 4 then
+      --nextSpace
+      self:nextSpace(1)
+    end
+  else
     state = gameStates.mapSelect
-  elseif self.currentSpace < 4 then
-    --nextSpace
-    self:nextSpace(1)
   end
 end

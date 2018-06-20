@@ -69,6 +69,7 @@ function Player:new()
     lapTimes = {0,0,0},
     totalTime = 0
   }
+  self.cameFirst = false
 end
 function Player:raceReset()
   local race = {

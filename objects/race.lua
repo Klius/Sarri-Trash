@@ -11,6 +11,7 @@ race.nextLap = function ( self,player)
                     race.currentLap = race.lapsTotal -1
                     race.totalTime = race.lapTimes[1]+race.lapTimes[2]+race.lapTimes[3]
                     player.race = race
+                    player.cameFirst = true
                     resultScreen:Initialize()
                   else
                     race.lapTimes[race.currentLap] = race.currentTime
