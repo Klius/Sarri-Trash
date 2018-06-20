@@ -23,16 +23,16 @@ resultScreen = {
                 "6","7","8","9","$","@","#","!","?","=","&","*","-","<",">","¬"," "
               },
     arrowPositions = {
-      [1] = {x = love.graphics.getWidth()/2-love.graphics.getWidth()/42},
-      [2] = {x = love.graphics.getWidth()/2},
-      [3] = {x = love.graphics.getWidth()/2+love.graphics.getWidth()/42},
-      [4] = {x = love.graphics.getWidth()/2+love.graphics.getWidth()/20},
+      [1] = {x = love.graphics.getWidth()/2-love.graphics.getWidth()/40},
+      [2] = {x = love.graphics.getWidth()/2-love.graphics.getWidth()/40+30},
+      [3] = {x = love.graphics.getWidth()/2-love.graphics.getWidth()/40+60},
+      [4] = {x = love.graphics.getWidth()/2-love.graphics.getWidth()/40+90},
     },
     currentLetter = 1,
     currentSpace = 1,
     recordName = {1,1,1},
-    letterArrowUp = Arrow(3,love.graphics.getWidth()/2-love.graphics.getWidth()/42,love.graphics.getHeight()/2+love.graphics.getHeight()/16),
-    letterArrowDown = Arrow(4,love.graphics.getWidth()/2-love.graphics.getWidth()/42,love.graphics.getHeight()/2+love.graphics.getHeight()/8),
+    letterArrowUp = Arrow(3,love.graphics.getWidth()/2-love.graphics.getWidth()/40,love.graphics.getHeight()/3+180),
+    letterArrowDown = Arrow(4,love.graphics.getWidth()/2-love.graphics.getWidth()/40,love.graphics.getHeight()/3+190+50),
 }
 resultScreen.draw = function (self)
   
@@ -40,6 +40,8 @@ resultScreen.draw = function (self)
   love.graphics.print(self.screenDesc,10,10)
   if mode == gameModes.timeAttack then
     self:drawTimeAttackScreen()
+  else mode == gameModes.multiplayer then
+    --
   end
 end
 resultScreen.Initialize = function(self)
@@ -132,11 +134,12 @@ resultScreen.nextLetter = function(self,increment)
     self.currentLetter = newLetter
     self.recordName[self.currentSpace] = newLetter
   --Notify that the user has pressed something
-  end
+end
+  --Update arrows to show as pressed
   if increment > 0 then
-    self.letterArrowUp:pressed()
-  else
     self.letterArrowDown:pressed()
+  else
+    self.letterArrowUp:pressed()
   end
 end
 --TODO save permanently the record
