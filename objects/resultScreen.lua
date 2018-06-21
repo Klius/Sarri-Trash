@@ -71,10 +71,12 @@ resultScreen.Initialize = function(self)
   else
     if player.cameFirst == true then
       self.winCount[1] = self.winCount[1] + 1
+      self.descriptions[gameModes.multiplayer] = "Player 1 Won !!"
       player.cameFirst = false
     else
       self.winCount[2] = self.winCount[2] + 1
       player2.cameFirst = false
+      self.descriptions[gameModes.multiplayer] = "Player 2 Won !!"
     end
   end
 end
@@ -93,13 +95,28 @@ resultScreen.drawMultiplayerScreen = function(self)
   love.graphics.print(self.title[mode]..maplist.selectedMapName,love.graphics.getWidth()/2-love.graphics.getWidth()/6,love.graphics.getHeight()/6)
 --Winner Counter
   love.graphics.setFont(self.counterFont)
-  local x,y = love.graphics.getWidth()/2-love.graphics.getWidth()/11,love.graphics.getHeight()/2
-  love.graphics.print(self.winCount[1],x,y)
-  love.graphics.print('-',x+100,y)
-  love.graphics.print(self.winCount[2],x+180,y)
+  love.graphics.print(self.descriptions[gameModes.multiplayer],love.graphics.getWidth()/2-love.graphics.getWidth()/4,love.graphics.getHeight()/3)
+  local x,y = love.graphics.getWidth()/2-love.graphics.getWidth()/5,love.graphics.getHeight()/2
+  local string = ""
+  if self.winCount[1] <= 9 then
+    string = "0"..self.winCount[1]
+  else
+    string = self.winCount[1]
+  end
+  string = string.."\t-\t"
+  if self.winCount[2] <= 9 then
+    string = string.."0"..self.winCount[2]
+  else
+    string = string..self.winCount[2]
+  end
+  love.graphics.setColor(0,0,0,1)
+  love.graphics.print(string,x,y)
+  love.graphics.setColor(1,1,1,1)
+  love.graphics.print('P1\t \tP2',x,y+100)
+  love.graphics.setFont(self.bigFont)
+  love.graphics.print('Press any button to continue',x+25,y+love.graphics.getHeight()/3)
   --return font to normal
   love.graphics.setFont(self.defaultFont)
-  love.graphics.print("adjustor: "..self.adjustor,100,0)
 end
 --[[  TIME ATTACK ]]
 resultScreen.drawTimeAttackScreen = function(self)

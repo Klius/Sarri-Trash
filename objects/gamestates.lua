@@ -11,7 +11,8 @@ gameStates.carSelect = {
                       maplist:loadMap()
                       race:reset()
                       state = gameStates.gameLoop
-                    elseif mode ~= gameModes.multiplayer then
+                --SINGLEPLAYER
+                    elseif mode ~= gameModes.multiplayer  then
                       carSelect.player = 1
                       player.car = carlist.cars[carlist.selectedCar]
                       maplist:loadMap()
