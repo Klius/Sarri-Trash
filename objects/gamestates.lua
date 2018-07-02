@@ -2,23 +2,7 @@ gameStates = {}
 gameStates.carSelect = {
   bindings = {
       enterRace = function( id )
-                    if mode == gameModes.multiplayer and carSelect.player == 1 and id ==player.gamepad then
-                      player.car = carlist.cars[carlist.selectedCar]
-                      carSelect.player = 2
-                    elseif mode == gameModes.multiplayer and carSelect.player == 2 and id == player2.gamepad then
-                      player2.car = carlist.cars[carlist.selectedCar]
-                      carSelect.player = 1
-                      maplist:loadMap()
-                      race:reset()
-                      state = gameStates.gameLoop
-                --SINGLEPLAYER
-                    elseif mode ~= gameModes.multiplayer  then
-                      carSelect.player = 1
-                      player.car = carlist.cars[carlist.selectedCar]
-                      maplist:loadMap()
-                      race:reset()
-                      state = gameStates.gameLoop
-                    end
+                    carSelect:confirm(id)
                   end,
       changeCarMin = function(id)
                         if carSelect.player == 1 and mode == gameModes.multiplayer 
@@ -68,6 +52,7 @@ gameStates.carSelect = {
 gameStates.mapSelect = {
       bindings = {
           selectCar = function()  
+                        defTransition:start()
                         state = gameStates.carSelect 
                         end,
           changeMapMin = function() maplist:changeSelectedMap(-1) end,

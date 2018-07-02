@@ -73,6 +73,7 @@ controllerScreen.assignControllers = function (self)
     player.gamepad = gpad1
     player2.gamepad = gpad2
     state = gameStates.mapSelect
+    defTransition:start()
   end
 end
 --Returns the gamepad

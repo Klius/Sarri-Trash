@@ -12,7 +12,7 @@ resultScreen = {
               [1] = "1ST",
               [2] = "2ND",
               [3] = "3RD",
-              [0] = "Keep on trying you are getting there!"
+              [0] = "LAST"
             },
     title = {
       [gameModes.timeAttack] = "Time Attack on ",
@@ -204,4 +204,13 @@ resultScreen.confirm = function(self)
   else
     state = gameStates.mapSelect
   end
+end
+--[[ 
+  RESETS MULTIPLAYER COUNTER
+]]
+resultScreen.resetWinnerCount = function(self)
+  self.winCount = {
+      [1] = 0,
+      [2] = 0
+    }
 end

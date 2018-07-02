@@ -10,6 +10,7 @@ mainMenuScreen = {
       x = love.graphics.getWidth()/2-60,
       y = love.graphics.getHeight()/2,
       changeState = function ()
+        defTransition:start()
         state = gameStates.mapSelect
         mode = gameModes.timeAttack
       end
@@ -21,8 +22,10 @@ mainMenuScreen = {
       x = love.graphics.getWidth()/2-60,
       y = love.graphics.getHeight()/2+30,
       changeState = function ()
+        defTransition:start()
         state = gameStates.multiplayerScreen
         mode = gameModes.multiplayer
+        resultScreen:resetWinnerCount()
       end
     },
     [3] = {
@@ -32,6 +35,7 @@ mainMenuScreen = {
       x = love.graphics.getWidth()/2-60,
       y = love.graphics.getHeight()/2+60,
       changeState = function ()
+        defTransition:start()
         state = gameStates.mainMenu
         mode = gameModes.multiplayer
       end

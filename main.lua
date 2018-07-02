@@ -26,8 +26,10 @@ function love.load()
   require "objects/player"
   require "objects/camera"
   require "objects/speedometer"
+  require "objects/transition"
   
-  
+  --transition
+  defTransition = Transition()
   love.mouse.setVisible( false )
    -- Load map file
    debug = false
@@ -63,89 +65,93 @@ end
 
 function love.update(dt)
    -- Update world
-   if state == gameStates.gameLoop then
-     player:update(dt)
-    if mode == gameModes.multiplayer then
-      player2:update(dt)
-    end
-     map:update(dt)
-     race:update(dt)
-     checkForCheats()
-     drawCanvas()
-     if race.endRace then
-      state = gameStates.resultScreen
+     if state == gameStates.gameLoop then
+       player:update(dt)
+      if mode == gameModes.multiplayer then
+        player2:update(dt)
+      end
+       map:update(dt)
+       race:update(dt)
+       checkForCheats()
+       drawCanvas()
+       if race.endRace then
+        state = gameStates.resultScreen
+       end
      end
-   end
-   if state == gameStates.mapSelect then
-    mapSelect:update(dt)
-   end
-   if state == gameStates.carSelect then
-     carSelect:update(dt)
-   end
-   if state == gameStates.resultScreen then
-     resultScreen:update(dt)
-   end
-  if state == gameStates.multiplayerScreen then
-    controllerScreen:update(dt)
-  end
-  if state == gameStates.mainMenu then
-    mainMenuScreen:update(dt)
-  end
+     if state == gameStates.mapSelect then
+      mapSelect:update(dt)
+     end
+     if state == gameStates.carSelect then
+       carSelect:update(dt)
+     end
+     if state == gameStates.resultScreen then
+       resultScreen:update(dt)
+     end
+    if state == gameStates.multiplayerScreen then
+      controllerScreen:update(dt)
+    end
+    if state == gameStates.mainMenu then
+      mainMenuScreen:update(dt)
+    end
+    defTransition:update(dt)
 end
 
 function love.draw()
-  if state == gameStates.gameLoop then
-    -- Draw world
-    --effect(function()
-     if mode == gameModes.multiplayer then
-      --SPLIT SCREEEEEEEEEEEAM
-        love.graphics.setScissor(0,0,love.graphics.getWidth(),love.graphics.getHeight()/2)
-        --############
-        love.graphics.draw(scenes[1],0,-300)
-        love.graphics.setScissor(0,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2)
-        love.graphics.draw(scenes[2],0,200)
-        love.graphics.setScissor()
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.rectangle("fill",0,love.graphics.getHeight()/2,love.graphics.getWidth(),6)
-        love.graphics.setColor(1,1,1,1)
-      else
-        love.graphics.draw(scenes[1],0,0)
+  --if defTransition.started == false then
+    if state == gameStates.gameLoop then
+      -- Draw world
+      --effect(function()
+       if mode == gameModes.multiplayer then
+        --SPLIT SCREEEEEEEEEEEAM
+          love.graphics.setScissor(0,0,love.graphics.getWidth(),love.graphics.getHeight()/2)
+          --############
+          love.graphics.draw(scenes[1],0,-300)
+          love.graphics.setScissor(0,love.graphics.getHeight()/2,love.graphics.getWidth(),love.graphics.getHeight()/2)
+          love.graphics.draw(scenes[2],0,200)
+          love.graphics.setScissor()
+          love.graphics.setColor(0,0,0,1)
+          love.graphics.rectangle("fill",0,love.graphics.getHeight()/2,love.graphics.getWidth(),6)
+          love.graphics.setColor(1,1,1,1)
+        else
+          love.graphics.draw(scenes[1],0,0)
+        end
+        race:draw()
+        
+      if debug then
+        love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
+        love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
+        love.graphics.print("Time:"..player.race.currentTime,0,40)
+        love.graphics.print (player.currentSpeed,0,60)
+        love.graphics.print("x:"..player.x,0,80)
+        love.graphics.print("y:"..player.y,0,100)
+        love.graphics.print("tx:"..math.cos(player.orientation)*1,0,120)
+        love.graphics.print("ty"..math.sin(player.orientation)*1,0,140)
+        love.graphics.print("ox:"..player2.x,0,160)
+        love.graphics.print("oy:"..player2.y,0,180)
+        love.graphics.print("orientation:"..player.orientation,0,200)
+        love.graphics.print("DriftAngle:"..player.driftangle,0,220)
+        love.graphics.print("driftX:"..player.x + math.cos(player.driftangle)*player.currentSpeed,0,240)
+        love.graphics.print("DriftY:"..player.y + math.sin(player.driftangle)*player.currentSpeed,0,260)
+        love.graphics.print("DriftBoost:"..player.car.driftBoost,0,280)
+        love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",200,0)
+        love.graphics.print("ch:"..cheat,400,0)
       end
-      race:draw()
       
-    if debug then
-      love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
-      love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
-      love.graphics.print("Time:"..player.race.currentTime,0,40)
-      love.graphics.print (player.currentSpeed,0,60)
-      love.graphics.print("x:"..player.x,0,80)
-      love.graphics.print("y:"..player.y,0,100)
-      love.graphics.print("tx:"..math.cos(player.orientation)*1,0,120)
-      love.graphics.print("ty"..math.sin(player.orientation)*1,0,140)
-      love.graphics.print("ox:"..player2.x,0,160)
-      love.graphics.print("oy:"..player2.y,0,180)
-      love.graphics.print("orientation:"..player.orientation,0,200)
-      love.graphics.print("DriftAngle:"..player.driftangle,0,220)
-      love.graphics.print("driftX:"..player.x + math.cos(player.driftangle)*player.currentSpeed,0,240)
-      love.graphics.print("DriftY:"..player.y + math.sin(player.driftangle)*player.currentSpeed,0,260)
-      love.graphics.print("DriftBoost:"..player.car.driftBoost,0,280)
-      love.graphics.print("MEM:"..math.floor(collectgarbage('count')).."KB",200,0)
-      love.graphics.print("ch:"..cheat,400,0)
+    elseif state == gameStates.mapSelect then
+      mapSelect:draw()
+    elseif state == gameStates.carSelect then
+      carSelect:draw()
+    elseif state == gameStates.resultScreen then
+      resultScreen:draw()
+    elseif state == gameStates.mainMenu then
+      mainMenuScreen:draw()
     end
-    
-  elseif state == gameStates.mapSelect then
-    mapSelect:draw()
-  elseif state == gameStates.carSelect then
-    carSelect:draw()
-  elseif state == gameStates.resultScreen then
-    resultScreen:draw()
-  elseif state == gameStates.mainMenu then
-    mainMenuScreen:draw()
-  end
-  if state == gameStates.multiplayerScreen then
-    controllerScreen:draw(dt)
-  end
+    if state == gameStates.multiplayerScreen then
+      controllerScreen:draw(dt)
+    end
+  --end
   phoneUI:draw()
+  defTransition:draw()
 end
 
 function drawCanvas()
@@ -175,7 +181,7 @@ function drawCanvas()
         love.graphics.pop()
       end
       love.graphics.setCanvas()
-
+      
 end
 
 --[[

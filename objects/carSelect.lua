@@ -28,3 +28,27 @@ carSelect.update = function (self,dt)
   self.leftArrow:update(dt)
   self.rightArrow:update(dt)
 end
+carSelect.confirm = function(self,id)
+  if defTransition.endTransition == true then
+    if mode == gameModes.multiplayer and carSelect.player == 1 and id ==player.gamepad then
+        player.car = carlist.cars[carlist.selectedCar]
+        self.player = 2
+        defTransition:start()
+    elseif mode == gameModes.multiplayer and carSelect.player == 2 and id == player2.gamepad then
+      player2.car = carlist.cars[carlist.selectedCar]
+      self.player = 1
+      defTransition:start()
+      maplist:loadMap()
+      race:reset()
+      state = gameStates.gameLoop
+  --SINGLEPLAYER
+    elseif mode ~= gameModes.multiplayer  then
+      self.player = 1
+      player.car = carlist.cars[carlist.selectedCar]
+      maplist:loadMap()
+      defTransition:start()
+      race:reset()
+      state = gameStates.gameLoop
+    end
+  end
+end
