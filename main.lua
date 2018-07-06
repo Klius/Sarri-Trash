@@ -17,7 +17,7 @@ require "objects/mapSelect"
 require "objects/carSelect"
 require "objects/save"
 function love.load()
-
+  require "objects/minimap"
   require "objects/race"
   require "objects/phoneui"
   require "objects/carManager"
@@ -27,6 +27,7 @@ function love.load()
   require "objects/camera"
   require "objects/speedometer"
   require "objects/transition"
+  
   
   --transition
   defTransition = Transition()

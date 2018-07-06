@@ -2,6 +2,7 @@ race = {
           endRace = false,
           sprite = love.graphics.newImage("assets/lap-counter.png"),
           spritesheet = getAnimations(love.graphics.newImage("assets/lap-counter.png"),32,32),
+          minimap = Minimap()
         }
 race.nextLap = function ( self,player)
                   local race = player.race
@@ -38,6 +39,7 @@ race.update = function (self,dt)
                   end
                   player2.speedometer:update(dt,player2)
                 end
+                self.minimap:update(dt)
               end
 race.draw = function (self)
               love.graphics.draw(self.sprite,self.spritesheet[player.race.currentLap],80,50,0,1,1)
@@ -54,6 +56,7 @@ race.draw = function (self)
                   love.graphics.draw(self.sprite,self.spritesheet[3],80-32,love.graphics.getHeight()/2+50,0,1,1)
                 end
               end
+              self.minimap:draw()
             end
 race.drawTime = function (self,player,x,y)
   love.graphics.print("TIME",x-100,y)
@@ -64,6 +67,9 @@ race.drawTime = function (self,player,x,y)
       x-150,y)
     numbo = numbo +1
   end
+end
+race.initMinimap = function (mapName)
+  
 end
 race.timerStart = function (self,player)
                     player.race.isTiming = true
