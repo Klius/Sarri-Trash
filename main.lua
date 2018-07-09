@@ -4,6 +4,7 @@ sti = require "libs/sti"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
+require "objects/audio-engine"
 require "objects/gamestates"
 require "objects/transition"
 require "objects/config"
@@ -38,7 +39,6 @@ function love.load()
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10, id = 0}
    maplist:loadMaps()
    carlist:loadCars()
-   audiomanager = MusicManager()
    map = sti(maplist.maps[maplist.selectedMap],{"bump"})
    world = bump.newWorld()
    map:bump_init(world)
@@ -62,6 +62,8 @@ function love.load()
   if mode == gameModes.multiplayer then
     player2:spawnPlayer("player2")
   end
+  --play music
+  audiomanager = Audio()
 end
 
 function love.update(dt)
@@ -209,7 +211,10 @@ function checkForCheats()
              end,
     cls = function()
             cheat = ""
-          end
+          end,
+    changetrack = function()
+      audiomanager:changeTrack(self.audios.race[1])
+    end
   }
   for i,v in pairs(cheats) do
     if string.find(cheat,i) then

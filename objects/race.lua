@@ -24,7 +24,14 @@ race.reset = function (self)
                 self.endRace = false
                 player:raceReset()
                 player2:raceReset()
+                self:changeBackgroundAudio()
              end
+race.changeBackgroundAudio = function(self)
+  math.randomseed(os.time())
+  local numberoftracks = table.getn(audiomanager.audios.race)
+  local randomTrack = math.random(1,numberoftracks)
+  audiomanager:changeTrack(audiomanager.audios.race[randomTrack])
+end
 race.update = function (self,dt)
                 if player.race.isTiming then
                   player.race.currentTime = love.timer.getTime() - player.race.timer
