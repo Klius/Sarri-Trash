@@ -28,6 +28,8 @@ function love.load()
   require "objects/camera"
   require "objects/speedometer"
   require "objects/transition"
+  require "objects/audioControl"
+  require "objects/settingsScreen"
   
   
   --transition
@@ -96,6 +98,9 @@ function love.update(dt)
     if state == gameStates.mainMenu then
       mainMenuScreen:update(dt)
     end
+    if state == gameStates.settingsScreen then
+      settingsScreen:update(dt)
+    end
     defTransition:update(dt)
 end
 
@@ -148,6 +153,8 @@ function love.draw()
       resultScreen:draw()
     elseif state == gameStates.mainMenu then
       mainMenuScreen:draw()
+    elseif state == gameStates.settingsScreen  then
+      settingsScreen:draw()
     end
     if state == gameStates.multiplayerScreen then
       controllerScreen:draw(dt)

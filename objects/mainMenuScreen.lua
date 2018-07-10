@@ -36,8 +36,7 @@ mainMenuScreen = {
       y = love.graphics.getHeight()/2+60,
       changeState = function ()
         defTransition:start()
-        state = gameStates.mainMenu
-        mode = gameModes.multiplayer
+        state = gameStates.settingsScreen
       end
     }
   }

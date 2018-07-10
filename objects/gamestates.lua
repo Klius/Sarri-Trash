@@ -80,7 +80,11 @@ gameStates.mapSelect = {
   }
   gameStates.gameLoop = {
       bindings = {
-          openMenu   = function()  state = gameStates.mapSelect  end,
+          openMenu   = function()
+            --this will become pause
+            state = gameStates.mapSelect
+            audiomanager:changeTrack(audiomanager.audios.menu)
+          end,
           gas       = function(id)
                         if id == player.gamepad  then
                           player.accelerating = true
@@ -304,4 +308,57 @@ gameStates.multiplayerScreen = {
     start = "assignControllers"
   },
   buttonsReleased = {}
+}
+gameStates.dummy = {
+  bindings = {
+    goBack = function() state = gameStates.mainMenu end,
+    moveUp = function() audiomanager:changeOption(-1) end,
+    moveDown = function() audiomanager:changeOption(1) end,
+    assignControllers = function() controllerScreen:assignControllers() end,
+  },
+  keys = {
+    space     = "assignControllers",
+    ["return"] = "assignControllers",
+    up = "moveUp",
+    down = "moveDown", 
+    escape = "goBack"
+  },
+  keysReleased = {},
+  buttons = {
+    dpup = "moveUp",
+    dpdown = "moveDown",
+    a = "assignControllers",
+    start = "assignControllers"
+  },
+  buttonsReleased = {}
+}
+gameStates.settingsScreen = {
+  bindings = {
+    changeOptionUp = function() settingsScreen:changeOption(-1) end,
+    changeOptionDown = function() settingsScreen:changeOption(1) end,
+    changeControlRight = function() settingsScreen:changeControl(1) end,
+    changeControlLeft = function() settingsScreen:changeControl(-1) end,
+    selectOption = function() settingsScreen:selectOption() end,
+    back       = function() settingsScreen:back() end,
+  },
+  keys = {
+    space     = "selectOption",
+    up         = "changeOptionUp",
+    down       = "changeOptionDown",
+    left = "changeControlLeft",
+    right =  "changeControlRight",
+    ["return"] = "selectOption",
+    escape = "back"
+  },
+  keysReleased ={
+  },
+  buttons = {
+    dpup = "changeOptionUp",
+    dpdown ="changeOptionDown",
+    a = "selectOption",
+    y = "back",
+    start = "selectOption",
+  },
+  buttonsReleased = {
+  }
 }
