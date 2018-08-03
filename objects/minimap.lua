@@ -1,7 +1,7 @@
 Minimap = Object:extend()
 
 function Minimap:new()
-  self.minimap = love.graphics.newImage("assets/maps/minimap/F-Ring_256.png")
+  self.minimap = love.graphics.newImage("assets/maps/minimap/F-ring_256.png")
   self.canvas = love.graphics.newCanvas(256,256)
   self.blipSprite = love.graphics.newImage("assets/maps/minimap/radar-blip.png")
   self.blipSheet = getAnimations(self.blipSprite,8,16)
@@ -23,4 +23,13 @@ end
 function Minimap:coordinatesToScale(coord)
   local scaleCoord = coord/self.scale
   return scaleCoord
+end
+function Minimap:changeMap(newMap)
+  local defaultMap = "assets/maps/minimap/F-ring_256.png"
+  local info = love.filesystem.getInfo( newMap)
+  if info == nil then
+    self.minimap = love.graphics.newImage(defaultMap)
+  else
+    self.minimap = love.graphics.newImage(newMap)
+  end
 end

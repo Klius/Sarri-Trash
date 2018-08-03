@@ -21,7 +21,7 @@ function Transition:draw()
     love.graphics.setColor(0,0,0,self.opacity)
     love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
     love.graphics.setColor(1,1,1,1)
-    love.graphics.print("opacity:"..self.opacity.."# increment= "..self.increment)
+    --love.graphics.print("opacity:"..self.opacity.."# increment= "..self.increment)
   end
 end
 function Transition:start()

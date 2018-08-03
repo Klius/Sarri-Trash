@@ -25,6 +25,7 @@ race.reset = function (self)
                 player:raceReset()
                 player2:raceReset()
                 self:changeBackgroundAudio()
+                self:initMinimap()
              end
 race.changeBackgroundAudio = function(self)
   math.randomseed(os.time())
@@ -75,8 +76,18 @@ race.drawTime = function (self,player,x,y)
     numbo = numbo +1
   end
 end
-race.initMinimap = function (mapName)
-  
+race.initMinimap = function (self)
+  local mapPath = maplist.maps[maplist.selectedMap]
+  local split = {}
+  local k = 0
+  for i in string.gmatch(mapPath, "([^/]+)") do
+    table.insert(split,i)
+    k= k+1
+  end
+  local minimapPath = "assets/maps/minimap/"
+  minimapPath = minimapPath..string.gsub(split[k],".lua","_256.png")
+  print(minimapPath)
+  self.minimap:changeMap(minimapPath)
 end
 race.timerStart = function (self,player)
                     player.race.isTiming = true
