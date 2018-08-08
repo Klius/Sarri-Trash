@@ -11,7 +11,7 @@ function Audio:new()
     },
     gamaovar = "assets/audio/okeydokeysmokey.mp3"
   }
-  self.musicVolume = 0.5
+  self.musicVolume = 0--0.5
   self.sfxVolume = 0.5
   self.currentsrc = love.audio.newSource(self.audios.menu,"stream")
   self.currentsrc:setLooping(true)
