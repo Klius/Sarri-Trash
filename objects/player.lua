@@ -23,6 +23,9 @@ function Player:new()
           h = 34,
           w = 51,
           
+        },
+        sfx = {
+          [1] = love.audio.newSource("assets/cars/sfx/t-01.ogg","static")
         }
   }
   self.frameCount = 0
@@ -70,6 +73,7 @@ function Player:new()
     totalTime = 0
   }
   self.cameFirst = false
+  self.currentFX = self.car.sfx[1]
 end
 function Player:raceReset()
   local race = {
@@ -127,9 +131,9 @@ function Player:draw()
 end
 function Player:update(dt)
   self.skidPool:update(dt,self)
-                      local speed = self.car.acceleration * dt
-                      local brakes = self.car.brakes * dt
-                      --Acceleration
+  local speed = self.car.acceleration * dt
+  local brakes = self.car.brakes * dt
+  --Acceleration
                       if self.braking or self.accelerating and self.braking then
                         self.currentSpeed = self.currentSpeed - brakes
                       elseif self.accelerating then
@@ -217,6 +221,27 @@ drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self
     self.camera:update(dt,self)
   --ANIMATION
   self:animate(dt)
+  self:playSounds()
+end
+function Player:playSounds()
+  local speedPercent = self.currentSpeed / self.car.topSpeed
+  speedPercent = math.floor(speedPercent*10)
+  local selectedFX = 1
+  if speedPercent > 1  and speedPercent < 4 then
+    selectedFX = 2
+  elseif speedPercent > 4 and speedPercent < 7 then
+    selectedFx = 3
+  elseif speedPercent > 7 then
+    selectedFx = 4
+  else
+    selectedFx = 1
+  end
+  if self.currentFX ~= self.car.sfx[selectedFx] then
+    love.audio.stop(self.currentFX)
+    self.currentFX = self.car.sfx[selectedFx]
+    self.currentFX:setLooping(true)
+    love.audio.play(self.currentFX)
+  end
 end
 function Player:move(goalX,goalY)
 --COLISIONS

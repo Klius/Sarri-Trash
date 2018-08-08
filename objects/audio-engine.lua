@@ -13,7 +13,7 @@ function Audio:new()
   }
   self.musicVolume = 0.5
   self.sfxVolume = 0.5
-  self.currentsrc = love.audio.newSource(self.audios.menu,"static")
+  self.currentsrc = love.audio.newSource(self.audios.menu,"stream")
   self.currentsrc:setLooping(true)
   self.currentsrc:setVolume(self.musicVolume)
   self.volControl = audioControl()
@@ -22,7 +22,7 @@ end
 
 function Audio:changeTrack(src)
   love.audio.stop(self.currentsrc)
-  self.currentsrc = love.audio.newSource(src,"static")
+  self.currentsrc = love.audio.newSource(src,"stream")
   self.currentsrc:setLooping(true)
   self.currentsrc:setVolume(self.musicVolume)
   love.audio.play(self.currentsrc)

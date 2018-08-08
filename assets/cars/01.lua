@@ -20,6 +20,12 @@
           oy = 0,
           w = 32,
           h = 32,
+        },
+        sfx ={
+          [1] = love.audio.newSource("assets/cars/sfx/t-01.ogg","static"),
+          [2] = love.audio.newSource("assets/cars/sfx/t-03.ogg","static"),
+          [3] = love.audio.newSource("assets/cars/sfx/t-05.ogg","static"),
+          [4] = love.audio.newSource("assets/cars/sfx/t-08.ogg","static"),
         }
       }
 
