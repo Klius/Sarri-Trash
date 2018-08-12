@@ -20,6 +20,9 @@ car = {
           oy = 2,
           w = 27,
           h = 27,
+        },
+        sfx ={
+          engine = love.audio.newSource("assets/audio/sfx/idle.ogg","static")
         }
       }
 

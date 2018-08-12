@@ -22,9 +22,7 @@
           h = 32,
         },
         sfx ={
-          enload = love.audio.newSource("assets/audio/sfx/load.ogg","static"),
-          unload = love.audio.newSource("assets/audio/sfx/unload.ogg","static"),
-          sample = love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+          engine = love.audio.newSource("assets/audio/sfx/richie.ogg","static")
         }
       }
 

@@ -25,9 +25,7 @@ function Player:new()
           
         },
         sfx = {
-          load = love.audio.newSource("assets/audio/sfx/load.ogg","static"),
-          unload = love.audio.newSource("assets/audio/sfx/unload.ogg","static"),
-          sample = love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+          engine = love.audio.newSource("assets/audio/sfx/idle.ogg","static")
         }
   }
   self.frameCount = 0
@@ -75,7 +73,11 @@ function Player:new()
     totalTime = 0
   }
   self.cameFirst = false
-  self.currentFX = self.car.sfx.sample
+  self.currentFX = self.car.sfx.engine
+  self.bonkFX = love.audio.newSource("assets/audio/sfx/bonk.wav","static")
+  self.scratchFX = love.audio.newSource("assets/audio/sfx/scratch.wav","static")
+  self.driftFX = love.audio.newSource("assets/audio/sfx/skid.ogg","static")
+  self.collided = false
 end
 function Player:raceReset()
   local race = {
@@ -110,10 +112,15 @@ function Player:spawnPlayer(spawnPoint)
   self.accelerating = false
   self.colSpeed = 0
   self.braking = false
+  self.collided = false
   self.checkPoints = { false,false,false}
                          --map:removeLayer("Spawn Point")
   self.skidPool = SkidPool(self.car.skid)
-  self.currentFX = self.car.sfx.sample
+  if self.car.sfx == nil then
+    love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+  else
+    self.currentFX = self.car.sfx.engine or love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+  end
 end
 function Player:draw()
   --self.skidPool:draw()
@@ -133,6 +140,7 @@ function Player:draw()
   end
 end
 function Player:update(dt)
+  self.collided = false
   self.skidPool:update(dt,self)
   local speed = self.car.acceleration * dt
   local brakes = self.car.brakes * dt
@@ -227,6 +235,7 @@ drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self
   self:playSounds()
 end
 function Player:playSounds()
+  --Engine
   if  not self.currentFX:isPlaying() then
     self.currentFX:setLooping(true)
     self.currentFX:setVolume(audiomanager.sfxVolume)
@@ -234,6 +243,23 @@ function Player:playSounds()
   end
   local enginePitch = 1+math.abs(self.currentSpeed) / self.car.topSpeed
   self.currentFX:setPitch(enginePitch)
+  --collision
+  if self.collided then
+    self.bonkFX:setVolume(audiomanager.sfxVolume)
+    if math.abs(self.currentSpeed)/self.car.topSpeed > 0.55 then
+      love.audio.play(self.bonkFX)
+    else
+      love.audio.play(self.scratchFX)
+    end
+  end
+  if self.braking and self.accelerating then
+    love.audio.play(self.driftFX)
+  else
+    love.audio.stop(self.driftFX)
+  end
+end
+function Player:stopSounds()
+  love.audio.stop(self.currentFX)
 end
 function Player:move(goalX,goalY)
 --COLISIONS
@@ -249,11 +275,14 @@ function Player:move(goalX,goalY)
       self.colX,self.colY = actualX,actualY
     end
     for i=1,len do
+      self.collided = true
       local other = cols[i].other
       if other.properties.isCheckpoint then
         self:addCheckpoint(other.properties.checkpointNum)
+        self.collided = false
       elseif other.properties.isFinishLine then
         self:finishLineCrossed()
+        self.collided = false
       elseif other.properties.isCar then
         if math.abs(self.currentSpeed) > math.abs(other.currentSpeed) then
           other.colSpeed = self.currentSpeed

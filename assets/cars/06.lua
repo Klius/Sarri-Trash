@@ -21,6 +21,9 @@ car = {
           h = 34,
           w = 51,
           
+        },
+        sfx ={
+          engine = love.audio.newSource("assets/audio/sfx/meteor.ogg","static")
         }
       }
 

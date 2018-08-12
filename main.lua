@@ -81,6 +81,8 @@ function love.update(dt)
        drawCanvas()
        if race.endRace then
         state = gameStates.resultScreen
+        player:stopSounds()
+        player2:stopSounds()
        end
      end
      if state == gameStates.mapSelect then
