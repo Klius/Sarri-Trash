@@ -80,6 +80,7 @@ mainMenuScreen.changeOption = function(self, increment)
   if self.options[self.currentOption].accessible == false then
     self:changeOption(increment)
   end
+  audiomanager:playSFX(audiomanager.audios.selectFX)
 end
 mainMenuScreen.selectOption = function(self)
   if self.options[self.currentOption].accessible then

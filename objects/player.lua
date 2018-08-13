@@ -76,7 +76,7 @@ function Player:new()
   self.currentFX = self.car.sfx.engine
   self.bonkFX = love.audio.newSource("assets/audio/sfx/bonk.wav","static")
   self.scratchFX = love.audio.newSource("assets/audio/sfx/scratch.wav","static")
-  self.driftFX = love.audio.newSource("assets/audio/sfx/skid.ogg","static")
+  self.driftFX = love.audio.newSource("assets/audio/sfx/skid.wav","static")
   self.collided = false
 end
 function Player:raceReset()
@@ -109,6 +109,8 @@ function Player:spawnPlayer(spawnPoint)
   self.driftangle = self.orientation * 1
   self.rotatingLeft = false
   self.rotatingRight = false
+  self.joyrotatingLeft = false
+  self.joyrotatingRight = false
   self.accelerating = false
   self.colSpeed = 0
   self.braking = false
@@ -235,17 +237,19 @@ drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self
   self:playSounds()
 end
 function Player:playSounds()
+  --Adjust Volume on all sounds
+  if(self.currentFX:getVolume() ~= audiomanager.sfxVolume ) then
+    self:adjustVolume()
+  end
   --Engine
   if  not self.currentFX:isPlaying() then
     self.currentFX:setLooping(true)
-    self.currentFX:setVolume(audiomanager.sfxVolume)
     love.audio.play(self.currentFX)
   end
   local enginePitch = 1+math.abs(self.currentSpeed) / self.car.topSpeed
   self.currentFX:setPitch(enginePitch)
   --collision
   if self.collided then
-    self.bonkFX:setVolume(audiomanager.sfxVolume)
     if math.abs(self.currentSpeed)/self.car.topSpeed > 0.55 then
       love.audio.play(self.bonkFX)
     else
@@ -260,6 +264,13 @@ function Player:playSounds()
 end
 function Player:stopSounds()
   love.audio.stop(self.currentFX)
+end
+--Adjust the SFX volumes 
+function Player:adjustVolume()
+  self.currentFX:setVolume(audiomanager.sfxVolume)
+  self.bonkFX:setVolume(audiomanager.sfxVolume)
+  self.scratchFX:setVolume(audiomanager.sfxVolume)
+  self.driftFX:setVolume(audiomanager.sfxVolume)
 end
 function Player:move(goalX,goalY)
 --COLISIONS

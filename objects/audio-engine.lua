@@ -9,7 +9,8 @@ function Audio:new()
       [3] = "assets/audio/smoothjazznight.mp3",
       [4] = "assets/audio/sunsetstrip.mp3",
     },
-    gamaovar = "assets/audio/okeydokeysmokey.mp3"
+    gamaovar = "assets/audio/okeydokeysmokey.mp3",
+    selectFX = love.audio.newSource("assets/audio/sfx/select.wav","static")
   }
   self.musicVolume = 0.5
   self.sfxVolume = 0.4
@@ -45,15 +46,12 @@ function Audio:changeSFXVolume(increment)
   
   --self.currentsrc:setVolume(self.musicVolume)
 end
+function Audio:playSFX(sfx)
+  sfx:setVolume(self.sfxVolume)
+  love.audio.play(sfx)
+end
 --[[
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 Functions for the settings screen
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ]]
-function Audio:draw()
-  love.graphics.print("Volume")
-  self.volControl:draw(self.musicVolume,200,300)
-  self.volControl:draw(self.sfxVolume,200,400)
-end
-function Audio:changeOption()
-end
