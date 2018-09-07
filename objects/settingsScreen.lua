@@ -105,4 +105,5 @@ settingsScreen.changeControl = function(self,increment)
   if self.options[self.currentOption].isAudioControl then
     self.options[self.currentOption].changeVolume(increment)
   end
+   audiomanager:playSFX(audiomanager.audios.selectFX)
 end

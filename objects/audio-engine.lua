@@ -17,7 +17,6 @@ function Audio:new()
   self.currentsrc = love.audio.newSource(self.audios.menu,"stream")
   self.currentsrc:setLooping(true)
   self.currentsrc:setVolume(self.musicVolume)
-  self.volControl = audioControl()
   love.audio.play(self.currentsrc)
 end
 

@@ -15,6 +15,7 @@ require "objects/mapManager"
 require "objects/music"
 require "objects/controllerScreen"
 require "objects/mapSelect"
+require "objects/statbar"
 require "objects/carSelect"
 require "objects/save"
 function love.load()
@@ -30,8 +31,7 @@ function love.load()
   require "objects/transition"
   require "objects/audioControl"
   require "objects/settingsScreen"
-  
-  
+
   --transition
   defTransition = Transition()
   love.mouse.setVisible( false )

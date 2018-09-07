@@ -3,7 +3,9 @@ carSelect = {
               defaultFont = love.graphics.newFont(18),
               leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/7),
               rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/3,love.graphics.getHeight()/7),
-              player = 1
+              player = 1,
+              speed = StatBar(300,300,12,15,"Top Speed",{r=172,g=50,b=50}),
+              acceleration = StatBar(300,332,10,30,"Acceleration",{r=34,g=32,b=52})
             }
 carSelect.draw = function (self)
                     love.graphics.setColor(0.87,0.44,0.14,1)
@@ -22,11 +24,15 @@ carSelect.draw = function (self)
                     love.graphics.print(carlist.cars[carlist.selectedCar].description,10,love.graphics.getHeight()/2)
                     self.leftArrow:draw()
                     self.rightArrow:draw()
-                    
+                    self.speed:draw()
+                    self.acceleration:draw()
 end
 carSelect.update = function (self,dt)
   self.leftArrow:update(dt)
   self.rightArrow:update(dt)
+  --statusbars!
+  self.speed.stat = carlist.cars[carlist.selectedCar].topSpeed
+  self.acceleration.stat = carlist.cars[carlist.selectedCar].acceleration
 end
 carSelect.confirm = function(self,id)
   if defTransition.endTransition == true then
