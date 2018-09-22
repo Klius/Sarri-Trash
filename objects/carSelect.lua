@@ -4,8 +4,10 @@ carSelect = {
               leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/7),
               rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/3,love.graphics.getHeight()/7),
               player = 1,
-              speed = StatBar(300,300,12,15,"Top Speed",{r=172,g=50,b=50}),
-              acceleration = StatBar(300,332,10,30,"Acceleration",{r=34,g=32,b=52})
+              speed = StatBar(300,200,12,15,"Top Speed",{r=91,g=110,b=225}),
+              acceleration = StatBar(300,232,10,15,"Acceleration",{r=34,g=32,b=52}),
+              braking = StatBar(300,264,10,15,"Brakes",{r=255,g=0,b=0}),
+              handling = StatBar(300,296,10,200,"Handling",{r=106,g=190,b=48})
             }
 carSelect.draw = function (self)
                     love.graphics.setColor(0.87,0.44,0.14,1)
@@ -26,13 +28,17 @@ carSelect.draw = function (self)
                     self.rightArrow:draw()
                     self.speed:draw()
                     self.acceleration:draw()
+                    self.braking:draw()
+                    self.handling:draw()
 end
 carSelect.update = function (self,dt)
   self.leftArrow:update(dt)
   self.rightArrow:update(dt)
   --statusbars!
-  self.speed.stat = carlist.cars[carlist.selectedCar].topSpeed
-  self.acceleration.stat = carlist.cars[carlist.selectedCar].acceleration
+  self.speed:changeStat(carlist.cars[carlist.selectedCar].topSpeed)
+  self.acceleration:changeStat(carlist.cars[carlist.selectedCar].acceleration)
+  self.braking:changeStat(carlist.cars[carlist.selectedCar].brakes)
+  self.handling:changeStat(carlist.cars[carlist.selectedCar].steering)
 end
 carSelect.confirm = function(self,id)
   if defTransition.endTransition == true then
