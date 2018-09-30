@@ -31,6 +31,7 @@ function love.load()
   require "objects/transition"
   require "objects/audioControl"
   require "objects/settingsScreen"
+  require "objects/pauseMenu"
 
   --transition
   defTransition = Transition()
@@ -104,11 +105,12 @@ function love.update(dt)
       settingsScreen:update(dt)
     end
     defTransition:update(dt)
+    
 end
 
 function love.draw()
   --if defTransition.started == false then
-    if state == gameStates.gameLoop then
+    if state == gameStates.gameLoop or state == gameStates.pause then
       -- Draw world
       --effect(function()
        if mode == gameModes.multiplayer then
@@ -126,7 +128,9 @@ function love.draw()
           love.graphics.draw(scenes[1],0,0)
         end
         race:draw()
-        
+      if state == gameStates.pause then
+        pauseMenu:draw()
+      end
       if debug then
         love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
         love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
@@ -162,6 +166,9 @@ function love.draw()
       controllerScreen:draw(dt)
     end
   --end
+  if debug then
+        love.graphics.print ("FPS:"..love.timer.getFPS(),200,0)
+  end
   phoneUI:draw()
   defTransition:draw()
 end

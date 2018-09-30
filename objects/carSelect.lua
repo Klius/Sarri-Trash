@@ -4,10 +4,10 @@ carSelect = {
               leftArrow = Arrow (2,love.graphics.getWidth()/3,love.graphics.getHeight()/7),
               rightArrow= Arrow (1,love.graphics.getWidth()-love.graphics.getWidth()/3,love.graphics.getHeight()/7),
               player = 1,
-              speed = StatBar(300,200,12,15,"Top Speed",{r=91,g=110,b=225}),
-              acceleration = StatBar(300,232,10,15,"Acceleration",{r=34,g=32,b=52}),
-              braking = StatBar(300,264,10,15,"Brakes",{r=255,g=0,b=0}),
-              handling = StatBar(300,296,10,200,"Handling",{r=106,g=190,b=48})
+              speed = StatBar(love.graphics.getWidth()/2-love.graphics.getWidth()/8,232,12,15,"Top Speed",{r=91,g=110,b=225}),
+              acceleration = StatBar(love.graphics.getWidth()/2-love.graphics.getWidth()/8,264,10,15,"Acceleration",{r=34,g=32,b=52}),
+              braking = StatBar(love.graphics.getWidth()/2-love.graphics.getWidth()/8,296,10,15,"Brakes",{r=255,g=0,b=0}),
+              handling = StatBar(love.graphics.getWidth()/2-love.graphics.getWidth()/8,328,10,200,"Handling",{r=106,g=190,b=48})
             }
 carSelect.draw = function (self)
                     love.graphics.setColor(0.87,0.44,0.14,1)
@@ -23,7 +23,7 @@ carSelect.draw = function (self)
                     love.graphics.print(carlist.cars[carlist.selectedCar].name,love.graphics.getWidth()/2-125,25+142)
                     love.graphics.print("Player "..self.player,0,0)
                     love.graphics.setFont(self.defaultFont)
-                    love.graphics.print(carlist.cars[carlist.selectedCar].description,10,love.graphics.getHeight()/2)
+                    love.graphics.printf(carlist.cars[carlist.selectedCar].description,love.graphics.getWidth()/4,love.graphics.getHeight()/2,love.graphics.getWidth()-love.graphics.getWidth()/4*2,"left")
                     self.leftArrow:draw()
                     self.rightArrow:draw()
                     self.speed:draw()

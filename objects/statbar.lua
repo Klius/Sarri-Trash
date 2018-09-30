@@ -22,7 +22,7 @@ end
 function StatBar:draw()
   percent = self.stat/self.maxStat
   love.graphics.print(self.label,self.x,self.y)
-  x = self.x+200
+  x = self.x+125
   love.graphics.setColor(self.color.r/256,self.color.g/256,self.color.b/256,1)
   love.graphics.rectangle("fill",x,self.y,self.barWidth*percent,16)
   love.graphics.setColor(1,1,1,1)--Reset color

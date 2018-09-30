@@ -1,6 +1,6 @@
 car = {
         name = "GreenValley Type-H",
-        description = "it's a car!",
+        description = "What do you get if you lock a room full of engineers obsessed with mechanical cogs?\nThe Type-H is the answer to that question, boosting a motor powering an omnidirectional cog-wheel, the traction is superb but steering it is another thing...",
         sprite = love.graphics.newImage("assets/cars/sprites/type-h.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/type-h.png"),32,32),
         skid = "assets/cars/sprites/skid-type-h.png",

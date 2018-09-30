@@ -81,9 +81,8 @@ gameStates.mapSelect = {
   gameStates.gameLoop = {
       bindings = {
           openMenu   = function()
-            --this will become pause
-            state = gameStates.mapSelect
-            audiomanager:changeTrack(audiomanager.audios.menu)
+            --this IS becoming pause
+            state = gameStates.pause
           end,
           gas       = function(id)
                         if id == player.gamepad  then
@@ -361,4 +360,31 @@ gameStates.settingsScreen = {
   },
   buttonsReleased = {
   }
+}
+gameStates.pause = {
+  bindings = {
+    goBack = function() state = gameStates.gameLoop end,
+    moveUp = function()  pauseMenu:changeOption(-1) end,
+    moveDown = function() pauseMenu:changeOption(1) end,
+    changeControlRight = function() pauseMenu:changeControl(1) end,
+    changeControlLeft = function() pauseMenu:changeControl(-1) end,
+    confirm = function() pauseMenu:selectOption() end,
+  },
+  keys = {
+    space     = "confirm",
+    ["return"] = "confirm",
+    up = "moveUp",
+    down = "moveDown",
+    left = "changeControlLeft",
+    right = "changeControlRight",
+    escape = "goBack"
+  },
+  keysReleased = {},
+  buttons = {
+    dpup = "moveUp",
+    dpdown = "moveDown",
+    a = "confirm",
+    start = "confirm"
+  },
+  buttonsReleased = {}
 }
