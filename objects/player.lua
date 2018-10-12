@@ -73,7 +73,7 @@ function Player:new()
     totalTime = 0
   }
   self.cameFirst = false
-  self.currentFX = self.car.sfx.engine
+  self.engineFX = self.car.sfx.engine
   self.bonkFX = love.audio.newSource("assets/audio/sfx/bonk.wav","static")
   self.scratchFX = love.audio.newSource("assets/audio/sfx/scratch.wav","static")
   self.driftFX = love.audio.newSource("assets/audio/sfx/skid.wav","static")
@@ -121,7 +121,7 @@ function Player:spawnPlayer(spawnPoint)
   if self.car.sfx == nil then
     love.audio.newSource("assets/audio/sfx/idle.ogg","static")
   else
-    self.currentFX = self.car.sfx.engine or love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+    self.engineFX = self.car.sfx.engine or love.audio.newSource("assets/audio/sfx/idle.ogg","static")
   end
 end
 function Player:draw()
@@ -238,16 +238,16 @@ drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self
 end
 function Player:playSounds()
   --Adjust Volume on all sounds
-  if(self.currentFX:getVolume() ~= audiomanager.sfxVolume ) then
+  if(self.engineFX:getVolume() ~= audiomanager.sfxVolume ) then
     self:adjustVolume()
   end
   --Engine
-  if  not self.currentFX:isPlaying() then
-    self.currentFX:setLooping(true)
-    love.audio.play(self.currentFX)
+  if  not self.engineFX:isPlaying() then
+    self.engineFX:setLooping(true)
+    love.audio.play(self.engineFX)
   end
   local enginePitch = 1+math.abs(self.currentSpeed) / self.car.topSpeed
-  self.currentFX:setPitch(enginePitch)
+  self.engineFX:setPitch(enginePitch)
   --collision
   if self.collided then
     if math.abs(self.currentSpeed)/self.car.topSpeed > 0.55 then
@@ -263,11 +263,11 @@ function Player:playSounds()
   end
 end
 function Player:stopSounds()
-  love.audio.stop(self.currentFX)
+  love.audio.stop(self.engineFX)
 end
 --Adjust the SFX volumes 
 function Player:adjustVolume()
-  self.currentFX:setVolume(audiomanager.sfxVolume)
+  self.engineFX:setVolume(audiomanager.sfxVolume)
   self.bonkFX:setVolume(audiomanager.sfxVolume)
   self.scratchFX:setVolume(audiomanager.sfxVolume)
   self.driftFX:setVolume(audiomanager.sfxVolume)

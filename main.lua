@@ -167,7 +167,7 @@ function love.draw()
     end
   --end
   if debug then
-        love.graphics.print ("FPS:"..love.timer.getFPS(),200,0)
+        love.graphics.print ("FPS:"..love.timer.getFPS(),800,0)
   end
   phoneUI:draw()
   defTransition:draw()

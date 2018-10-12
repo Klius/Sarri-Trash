@@ -18,6 +18,7 @@ pauseMenu = {
       changeState = function()
         maplist:loadMap()
         race:reset()
+        state = gameStates.gameLoop --add yes or no
       end,
     },
     [3] = {
@@ -47,6 +48,8 @@ pauseMenu = {
       volControl = audioControl(),
       changeVolume = function (increment)
         audiomanager:changeSFXVolume(increment/10)
+        player:adjustVolume()
+        player2:adjustVolume()
       end,
       draw = function(self,x,y)
         love.graphics.print(self.text,x,y)
@@ -61,7 +64,7 @@ pauseMenu = {
       description = "",
       accessible = true,
       changeState = function ()
-        state = gameStates.mapSelect
+        race:exit() --add yes or no before
       end
     }
   }

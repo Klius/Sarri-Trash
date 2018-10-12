@@ -27,6 +27,12 @@ race.reset = function (self)
                 self:changeBackgroundAudio()
                 self:initMinimap()
              end
+race.exit = function (self)
+  player:stopSounds()
+  player2:stopSounds()
+  audiomanager:changeTrack(audiomanager.audios.menu)
+  state = gameStates.mapSelect
+end
 race.changeBackgroundAudio = function(self)
   math.randomseed(os.time())
   local numberoftracks = table.getn(audiomanager.audios.race)
