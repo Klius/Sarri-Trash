@@ -340,16 +340,20 @@ end
 function Player:rotate (rotate)
   if rotate then --rotate left
     self.rotatingLeft = true
+    self.rotatingRight = false
   else --rotate right
     self.rotatingRight = true
+    self.rotatingLeft = false
   end
 end
 --duplicate for joystick
 function Player:rotateJoy (rotate)
   if rotate then --rotate left
     self.joyrotatingLeft = true
+    self.joyrotatingRight = false
   else --rotate right
     self.joyrotatingRight = true
+    self.joyrotatingLeft = false
   end
 end
 function Player:addCheckpoint (index)

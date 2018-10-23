@@ -187,7 +187,7 @@ gameStates.mapSelect = {
           space = "gas",
           left   = "rotateLeft",
           right  = "rotateRight",
-		  r = "reloadMap",
+          r = "reloadMap",
           x = "brake",
           d = "debug"
       },

@@ -8,7 +8,8 @@ pauseMenu = {
       description = "",
       accessible = true,
       changeState = function()
-        state = gameStates.gameLoop
+        --Reset the player direction
+        state = gameStates.gameLoop --return to race
       end,
     },
     [2] = {
@@ -51,7 +52,7 @@ pauseMenu = {
         player:adjustVolume()
         player2:adjustVolume()
       end,
-      draw = function(self,x,y)
+        draw = function(self,x,y)
         love.graphics.print(self.text,x,y)
         self.volControl = audioControl()
         self.volControl:draw(audiomanager.sfxVolume,x+300,y)
@@ -73,7 +74,7 @@ pauseMenu.update = function (self,dt)
   
 end
 pauseMenu.draw = function (self)
-  love.graphics.setColor(0,0,0,0.5)
+  love.graphics.setColor(0,0,0,0.8)
   local x = love.graphics.getWidth()/4
   local y = love.graphics.getHeight()/4
   love.graphics.rectangle("fill",x,y,love.graphics.getWidth()/2,love.graphics.getHeight()/2)
