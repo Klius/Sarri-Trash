@@ -44,5 +44,6 @@ carlist.changeSelectedCar = function (self,increment)
                                   elseif self.selectedCar <= 0 then
                                     self.selectedCar = #self.cars
                                   end
+                                  self.currentFrame = 0
                                   self:updatePreview()
                                 end

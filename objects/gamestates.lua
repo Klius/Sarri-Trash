@@ -363,7 +363,10 @@ gameStates.settingsScreen = {
 }
 gameStates.pause = {
   bindings = {
-    goBack = function() state = gameStates.gameLoop end,
+    goBack = function() 
+      pauseMenu.currentOption = 1
+      pauseMenu:selectOption()
+    end,
     moveUp = function()  pauseMenu:changeOption(-1) end,
     moveDown = function() pauseMenu:changeOption(1) end,
     changeControlRight = function() pauseMenu:changeControl(1) end,
@@ -388,3 +391,41 @@ gameStates.pause = {
   },
   buttonsReleased = {}
 }
+--Stops the player from getting buttons stuck after pause
+gameStates.checkInputs = function (player)
+  if player.gamepad == "keyboard" then
+    for k,v in pairs(state.keys) do
+      if k ~= "escape" then
+        local status = love.keyboard.isDown( k )
+        if status then
+          local binding = state.keys[k]
+          inputHandler( binding ,"keyboard")
+        else
+          local binding = state.keysReleased[k]
+          inputHandler( binding ,"keyboard")
+        end
+      end
+    end
+  else --gamepad
+      local joysticks = love.joystick.getJoysticks()
+      local joy = nil
+      for i, joystick in ipairs(joysticks) do
+        if joystick:getGUID() == player.gamepad then
+          joy = joystick
+        end
+      end
+    for k,v in pairs(state.buttons) do
+      if string.find(k, "j") then
+      else
+        local status = joy:isGamepadDown( k )
+        if status then
+          local binding = state.buttons[k]
+          inputHandler( binding ,player.gamepad)
+        else
+          local binding = state.buttonsReleased[k]
+          inputHandler( binding ,player.gamepad)
+        end
+      end
+    end
+  end
+end

@@ -10,6 +10,8 @@ pauseMenu = {
       changeState = function()
         --Reset the player direction
         state = gameStates.gameLoop --return to race
+        gameStates.checkInputs(player)
+        gameStates.checkInputs(player2)
       end,
     },
     [2] = {
