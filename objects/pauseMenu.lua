@@ -33,7 +33,7 @@ pauseMenu = {
       accessible = true,
       isCustomControl= true,
       volControl = audioControl(),
-      changeControl = function (increment)
+      changeControl = function (self,increment)
         audiomanager:changeMusicVolume(increment/10)
       end,
       draw = function(self,x,y)
@@ -50,7 +50,7 @@ pauseMenu = {
       accessible = true,
       isCustomControl = true,
       volControl = audioControl(),
-      changeControl = function (increment)
+      changeControl = function (self,increment)
         audiomanager:changeSFXVolume(increment/10)
         player:adjustVolume()
         player2:adjustVolume()
@@ -68,14 +68,32 @@ pauseMenu = {
       description = "",
       accessible = true,
       isCustomControl = true,
+      isUpdatable = true,
+      rArrow = Arrow(5,0,0),
+      lArrow = Arrow(6,0,0),
       info = {name="?",author="¿?"},
-      changeControl = function(increment)
+      changeControl = function(self,increment)
         audiomanager:nextTrack(increment)
+        if increment > 0 then
+          self.rArrow:pressed()
+        else
+          self.lArrow:pressed()
+        end
       end,
       draw = function(self,x,y)
         love.graphics.print(self.text,x,y)
         self.info = audiomanager:getCurrentTrackInfo()
-        love.graphics.print(info.name.." - "..info.author,x+100,y)
+        self.rArrow.x = x+660
+        self.rArrow.y = y+15
+        self.rArrow:draw()
+        self.lArrow.x = x+100
+        self.lArrow.y = y+15
+        self.lArrow:draw()
+        love.graphics.print(info.name.." by "..info.author,x+120,y)
+      end,
+      update = function(self,dt)
+        self.rArrow:update(dt)
+        self.lArrow:update(dt)
       end
     },
     [6] = {
@@ -94,8 +112,13 @@ pauseMenu.update = function (self,dt)
   if player.race.isTiming then
     player.race.pauseTime = player.race.pauseTime +dt
   end
-  if player.race.isTiming then
+  if player2.race.isTiming then
     player2.race.pauseTime = player2.race.pauseTime +dt
+  end
+  for k,v in ipairs(self.options) do
+    if v.isUpdatable then
+      v:update(dt)
+    end
   end
 end
 pauseMenu.draw = function (self)
@@ -153,7 +176,7 @@ pauseMenu.back = function(self)
 end
 pauseMenu.changeControl = function(self,increment)
   if self.options[self.currentOption].isCustomControl then
-    self.options[self.currentOption].changeControl(increment)
+    self.options[self.currentOption]:changeControl(increment)
   end
    audiomanager:playSFX(audiomanager.audios.selectFX)
 end

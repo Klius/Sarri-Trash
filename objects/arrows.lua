@@ -22,19 +22,25 @@ function Arrow:new(type,x,y,scale)
                       [1] = love.graphics.newImage("assets/arrow-right.png"),
                       [2] = love.graphics.newImage("assets/arrow-left.png"),
                       [3] = love.graphics.newImage("assets/arrow-name.png"),
-                      [4] = love.graphics.newImage("assets/arrow-name.png")
+                      [4] = love.graphics.newImage("assets/arrow-name.png"),
+                      [5] = love.graphics.newImage("assets/arrow-name.png"),
+                      [6] = love.graphics.newImage("assets/arrow-name.png"),
                   } 
   self.orientations = {
     [1] = false,
     [2] = false,
     [3] = false,
-    [4] = 3.14159
+    [4] = 3.14159,
+    [5] = 1.5708,
+    [6] = 4.71239,
   }
   self.widths = {
     [1] = 64,
     [2] = 64,
     [3] = 16,
     [4] = 16,
+    [5] = 16,
+    [6] = 16,
   }
   self.type = type or 1
   self.spritesheet = getAnimations(self.sprites[self.type],self.widths[type],self.widths[type])
