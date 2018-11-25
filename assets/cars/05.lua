@@ -1,6 +1,6 @@
 car = {
         name = "Encorreur Mice",
-        description = "it's a car!",
+        description = "",
         sprite = love.graphics.newImage("assets/cars/sprites/scarab.png"),
         spritesheet = getAnimations(love.graphics.newImage("assets/cars/sprites/scarab.png"),32,32),
         skid = "assets/cars/sprites/skid-scarab.png",
@@ -21,6 +21,9 @@ car = {
           h = 29,
           w = 29,
           
+        },
+        sfx ={
+          engine = love.audio.newSource("assets/audio/sfx/idle.ogg","static")
         }
       }
 

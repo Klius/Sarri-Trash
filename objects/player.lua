@@ -23,6 +23,9 @@ function Player:new()
           h = 34,
           w = 51,
           
+        },
+        sfx = {
+          engine = love.audio.newSource("assets/audio/sfx/idle.ogg","static")
         }
   }
   self.frameCount = 0
@@ -70,6 +73,11 @@ function Player:new()
     totalTime = 0
   }
   self.cameFirst = false
+  self.engineFX = self.car.sfx.engine
+  self.bonkFX = love.audio.newSource("assets/audio/sfx/bonk.wav","static")
+  self.scratchFX = love.audio.newSource("assets/audio/sfx/scratch.wav","static")
+  self.driftFX = love.audio.newSource("assets/audio/sfx/skid.wav","static")
+  self.collided = false
 end
 function Player:raceReset()
   local race = {
@@ -77,6 +85,7 @@ function Player:raceReset()
                   currentLap = 0,
                   lapTimes = {0,0,0},
                   currentTime = 0,
+                  pauseTime = 0,
                   isTiming = false,
                   timer = 0,
                   totalTime = 0
@@ -101,12 +110,20 @@ function Player:spawnPlayer(spawnPoint)
   self.driftangle = self.orientation * 1
   self.rotatingLeft = false
   self.rotatingRight = false
+  self.joyrotatingLeft = false
+  self.joyrotatingRight = false
   self.accelerating = false
   self.colSpeed = 0
   self.braking = false
+  self.collided = false
   self.checkPoints = { false,false,false}
                          --map:removeLayer("Spawn Point")
   self.skidPool = SkidPool(self.car.skid)
+  if self.car.sfx == nil then
+    love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+  else
+    self.engineFX = self.car.sfx.engine or love.audio.newSource("assets/audio/sfx/idle.ogg","static")
+  end
 end
 function Player:draw()
   --self.skidPool:draw()
@@ -126,10 +143,11 @@ function Player:draw()
   end
 end
 function Player:update(dt)
+  self.collided = false
   self.skidPool:update(dt,self)
-                      local speed = self.car.acceleration * dt
-                      local brakes = self.car.brakes * dt
-                      --Acceleration
+  local speed = self.car.acceleration * dt
+  local brakes = self.car.brakes * dt
+  --Acceleration
                       if self.braking or self.accelerating and self.braking then
                         self.currentSpeed = self.currentSpeed - brakes
                       elseif self.accelerating then
@@ -217,6 +235,43 @@ drifting and self.joyrotatingLeft and self.currentSpeed > 0 or drifting and self
     self.camera:update(dt,self)
   --ANIMATION
   self:animate(dt)
+  self:playSounds()
+end
+function Player:playSounds()
+  --Adjust Volume on all sounds
+  if(self.engineFX:getVolume() ~= audiomanager.sfxVolume ) then
+    self:adjustVolume()
+  end
+  --Engine
+  if  not self.engineFX:isPlaying() then
+    self.engineFX:setLooping(true)
+    love.audio.play(self.engineFX)
+  end
+  local enginePitch = 1+math.abs(self.currentSpeed) / self.car.topSpeed
+  self.engineFX:setPitch(enginePitch)
+  --collision
+  if self.collided then
+    if math.abs(self.currentSpeed)/self.car.topSpeed > 0.55 then
+      love.audio.play(self.bonkFX)
+    else
+      love.audio.play(self.scratchFX)
+    end
+  end
+  if self.braking and self.accelerating then
+    love.audio.play(self.driftFX)
+  else
+    love.audio.stop(self.driftFX)
+  end
+end
+function Player:stopSounds()
+  love.audio.stop(self.engineFX)
+end
+--Adjust the SFX volumes 
+function Player:adjustVolume()
+  self.engineFX:setVolume(audiomanager.sfxVolume)
+  self.bonkFX:setVolume(audiomanager.sfxVolume)
+  self.scratchFX:setVolume(audiomanager.sfxVolume)
+  self.driftFX:setVolume(audiomanager.sfxVolume)
 end
 function Player:move(goalX,goalY)
 --COLISIONS
@@ -232,11 +287,14 @@ function Player:move(goalX,goalY)
       self.colX,self.colY = actualX,actualY
     end
     for i=1,len do
+      self.collided = true
       local other = cols[i].other
       if other.properties.isCheckpoint then
         self:addCheckpoint(other.properties.checkpointNum)
+        self.collided = false
       elseif other.properties.isFinishLine then
         self:finishLineCrossed()
+        self.collided = false
       elseif other.properties.isCar then
         if math.abs(self.currentSpeed) > math.abs(other.currentSpeed) then
           other.colSpeed = self.currentSpeed
@@ -283,16 +341,20 @@ end
 function Player:rotate (rotate)
   if rotate then --rotate left
     self.rotatingLeft = true
+    self.rotatingRight = false
   else --rotate right
     self.rotatingRight = true
+    self.rotatingLeft = false
   end
 end
 --duplicate for joystick
 function Player:rotateJoy (rotate)
   if rotate then --rotate left
     self.joyrotatingLeft = true
+    self.joyrotatingRight = false
   else --rotate right
     self.joyrotatingRight = true
+    self.joyrotatingLeft = false
   end
 end
 function Player:addCheckpoint (index)
@@ -317,6 +379,7 @@ function Player:finishLineCrossed()
   if self.checkPoints[1] and self.checkPoints[2] and self.checkPoints[3] then
     race:nextLap(self)
     self:resetCheckpoint()
+    self.race.pauseTime = 0
   end
   if self.race.isTiming == false then
     race:timerStart(self)

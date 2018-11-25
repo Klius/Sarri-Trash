@@ -20,6 +20,9 @@
           oy = 0,
           w = 32,
           h = 32,
+        },
+        sfx ={
+          engine = love.audio.newSource("assets/audio/sfx/richie.ogg","static")
         }
       }
 

@@ -2,7 +2,8 @@ race = {
           endRace = false,
           sprite = love.graphics.newImage("assets/lap-counter.png"),
           spritesheet = getAnimations(love.graphics.newImage("assets/lap-counter.png"),32,32),
-          minimap = Minimap()
+          minimap = Minimap(),
+          pauseTime = 0,
         }
 race.nextLap = function ( self,player)
                   local race = player.race
@@ -22,25 +23,45 @@ race.nextLap = function ( self,player)
                 end
 race.reset = function (self)
                 self.endRace = false
+                self.pauseTime = 0
                 player:raceReset()
                 player2:raceReset()
+                self:changeBackgroundAudio()
+                self:initMinimap()
              end
+race.exit = function (self)
+  player:stopSounds()
+  player2:stopSounds()
+  audiomanager:changeTrack(audiomanager.audios.menu)
+  state = gameStates.mapSelect
+end
+race.changeBackgroundAudio = function(self)
+  math.randomseed(os.time())
+  local numberoftracks = table.getn(audiomanager.audios.race)
+  local randomTrack = math.random(1,numberoftracks)
+  audiomanager:changeTrack(audiomanager.audios.race[randomTrack])
+end
 race.update = function (self,dt)
-                if player.race.isTiming then
-                  player.race.currentTime = love.timer.getTime() - player.race.timer
-                  player.race.lapTimes[player.race.currentLap+1] = player.race.currentTime
-                end
-                
+                self:timing(dt)
                 player.speedometer:update(dt,player)
                 if mode == gameModes.multiplayer then
-                  if player2.race.isTiming then
-                    player2.race.currentTime = love.timer.getTime() - player2.race.timer
-                    player2.race.lapTimes[player2.race.currentLap+1] = player2.race.currentTime
-                  end
                   player2.speedometer:update(dt,player2)
                 end
                 self.minimap:update(dt)
               end
+race.timing = function (self,dt)
+  timex = love.timer.getTime()
+  if player.race.isTiming then
+    player.race.currentTime = timex - player.race.timer - player.race.pauseTime 
+    player.race.lapTimes[player.race.currentLap+1] = player.race.currentTime
+  end
+  if mode == gameModes.multiplayer then
+    if player2.race.isTiming then
+      player2.race.currentTime = timex - player2.race.timer - player2.race.pauseTime
+      player2.race.lapTimes[player2.race.currentLap+1] = player2.race.currentTime
+    end
+  end
+end
 race.draw = function (self)
               love.graphics.draw(self.sprite,self.spritesheet[player.race.currentLap],80,50,0,1,1)
               if (player.race.currentLap == 2) then
@@ -68,8 +89,18 @@ race.drawTime = function (self,player,x,y)
     numbo = numbo +1
   end
 end
-race.initMinimap = function (mapName)
-  
+race.initMinimap = function (self)
+  local mapPath = maplist.maps[maplist.selectedMap]
+  local split = {}
+  local k = 0
+  for i in string.gmatch(mapPath, "([^/]+)") do
+    table.insert(split,i)
+    k= k+1
+  end
+  local minimapPath = "assets/maps/minimap/"
+  minimapPath = minimapPath..string.gsub(split[k],".lua","_256.png")
+  print(minimapPath)
+  self.minimap:changeMap(minimapPath)
 end
 race.timerStart = function (self,player)
                     player.race.isTiming = true

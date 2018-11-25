@@ -79,6 +79,7 @@ resultScreen.Initialize = function(self)
       self.descriptions[gameModes.multiplayer] = "Player 2 Won !!"
     end
   end
+  audiomanager:changeTrack(audiomanager.audios.gamaovar)
 end
 resultScreen.update = function (self,dt)
   self.letterArrowUp:update(dt)
@@ -197,12 +198,14 @@ resultScreen.confirm = function(self)
       local playerName = self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]]
       maplist.selectedMapRecordsName[self.currentPosition] =  playerName
       state = gameStates.mapSelect
+      audiomanager:changeTrack(audiomanager.audios.menu)
     elseif self.currentSpace < 4 then
       --nextSpace
       self:nextSpace(1)
     end
   else
     state = gameStates.mapSelect
+    audiomanager:changeTrack(audiomanager.audios.menu)
   end
 end
 --[[ 

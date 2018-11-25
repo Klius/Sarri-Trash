@@ -36,8 +36,7 @@ mainMenuScreen = {
       y = love.graphics.getHeight()/2+60,
       changeState = function ()
         defTransition:start()
-        state = gameStates.mainMenu
-        mode = gameModes.multiplayer
+        state = gameStates.settingsScreen
       end
     }
   }
@@ -81,6 +80,7 @@ mainMenuScreen.changeOption = function(self, increment)
   if self.options[self.currentOption].accessible == false then
     self:changeOption(increment)
   end
+  audiomanager:playSFX(audiomanager.audios.selectFX)
 end
 mainMenuScreen.selectOption = function(self)
   if self.options[self.currentOption].accessible then

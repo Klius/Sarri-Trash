@@ -4,6 +4,7 @@ sti = require "libs/sti"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
+require "objects/audio-engine"
 require "objects/gamestates"
 require "objects/transition"
 require "objects/config"
@@ -11,9 +12,9 @@ require "objects/animations"
 require "objects/arrows"
 require "objects/mainMenuScreen"
 require "objects/mapManager"
-require "objects/music"
 require "objects/controllerScreen"
 require "objects/mapSelect"
+require "objects/statbar"
 require "objects/carSelect"
 require "objects/save"
 function love.load()
@@ -27,8 +28,10 @@ function love.load()
   require "objects/camera"
   require "objects/speedometer"
   require "objects/transition"
-  
-  
+  require "objects/audioControl"
+  require "objects/settingsScreen"
+  require "objects/pauseMenu"
+
   --transition
   defTransition = Transition()
   love.mouse.setVisible( false )
@@ -38,7 +41,6 @@ function love.load()
    touchdebug = {x = 0,y = 0,dx = 10, dy = 10, id = 0}
    maplist:loadMaps()
    carlist:loadCars()
-   audiomanager = MusicManager()
    map = sti(maplist.maps[maplist.selectedMap],{"bump"})
    world = bump.newWorld()
    map:bump_init(world)
@@ -62,6 +64,8 @@ function love.load()
   if mode == gameModes.multiplayer then
     player2:spawnPlayer("player2")
   end
+  --play music
+  audiomanager = Audio()
 end
 
 function love.update(dt)
@@ -77,6 +81,8 @@ function love.update(dt)
        drawCanvas()
        if race.endRace then
         state = gameStates.resultScreen
+        player:stopSounds()
+        player2:stopSounds()
        end
      end
      if state == gameStates.mapSelect then
@@ -94,12 +100,19 @@ function love.update(dt)
     if state == gameStates.mainMenu then
       mainMenuScreen:update(dt)
     end
+    if state == gameStates.settingsScreen then
+      settingsScreen:update(dt)
+    end
+    if state == gameStates.pause then
+      pauseMenu:update(dt)
+    end
     defTransition:update(dt)
+    
 end
 
 function love.draw()
   --if defTransition.started == false then
-    if state == gameStates.gameLoop then
+    if state == gameStates.gameLoop or state == gameStates.pause then
       -- Draw world
       --effect(function()
        if mode == gameModes.multiplayer then
@@ -117,7 +130,9 @@ function love.draw()
           love.graphics.draw(scenes[1],0,0)
         end
         race:draw()
-        
+      if state == gameStates.pause then
+        pauseMenu:draw()
+      end
       if debug then
         love.graphics.print ("FPS:"..love.timer.getFPS(),0,0)
         love.graphics.print ("Checkpoint 1: "..tostring(player.checkPoints[1]).." Checkpoint 2:"..tostring(player.checkPoints[2]).." Checkpoint 3:"..tostring(player.checkPoints[3]),0,20)
@@ -146,11 +161,16 @@ function love.draw()
       resultScreen:draw()
     elseif state == gameStates.mainMenu then
       mainMenuScreen:draw()
+    elseif state == gameStates.settingsScreen  then
+      settingsScreen:draw()
     end
     if state == gameStates.multiplayerScreen then
       controllerScreen:draw(dt)
     end
   --end
+  if debug then
+        love.graphics.print ("FPS:"..love.timer.getFPS(),800,0)
+  end
   phoneUI:draw()
   defTransition:draw()
 end
@@ -209,7 +229,10 @@ function checkForCheats()
              end,
     cls = function()
             cheat = ""
-          end
+          end,
+    changetrack = function()
+      audiomanager:changeTrack(self.audios.race[1])
+    end
   }
   for i,v in pairs(cheats) do
     if string.find(cheat,i) then
