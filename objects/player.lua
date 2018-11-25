@@ -379,6 +379,7 @@ function Player:finishLineCrossed()
   if self.checkPoints[1] and self.checkPoints[2] and self.checkPoints[3] then
     race:nextLap(self)
     self:resetCheckpoint()
+    self.race.pauseTime = 0
   end
   if self.race.isTiming == false then
     race:timerStart(self)
