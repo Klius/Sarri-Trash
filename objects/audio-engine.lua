@@ -9,15 +9,48 @@ function Audio:new()
       [3] = "assets/audio/smoothjazznight.mp3",
       [4] = "assets/audio/sunsetstrip.mp3",
     },
+    songInfo = {
+      [1] = {name = "Cop a Feel",author = "Audionautix"},
+      [2] = {name = "Feel Good Rock",author = "Audionautix"},
+      [3] = {name = "Smoth Jazz Night",author = "Audionautix"},
+      [4] = {name = "Sunset Strip",author = "Audionautix"},
+    },
     gamaovar = "assets/audio/okeydokeysmokey.mp3",
     selectFX = love.audio.newSource("assets/audio/sfx/select.wav","static")
   }
   self.musicVolume = 0.5
   self.sfxVolume = 0.4
   self.currentsrc = love.audio.newSource(self.audios.menu,"stream")
+  self.currentsrcfilename = self.audios.menu
   self.currentsrc:setLooping(true)
   self.currentsrc:setVolume(self.musicVolume)
   love.audio.play(self.currentsrc)
+end
+
+function Audio:getCurrentTrackInfo()
+  info = {name="?",author="¿?"}
+  for i,src in ipairs(self.audios.race) do
+    if self.currentsrcfilename == src then
+      info = self.audios.songInfo[i]
+    end
+  end
+return info
+end
+
+function Audio:nextTrack(increment)
+  index = 1
+  for i,src in ipairs(self.audios.race) do
+    if self.currentsrcfilename == src then
+      index = i
+    end
+  end
+  index = index+increment
+  if index < 1 then
+    index = #self.audios.race
+  elseif index > #self.audios.race then
+    index = 1
+  end
+  self:changeTrack(self.audios.race[index])
 end
 
 function Audio:changeTrack(src)
@@ -25,6 +58,7 @@ function Audio:changeTrack(src)
   self.currentsrc = love.audio.newSource(src,"stream")
   self.currentsrc:setLooping(true)
   self.currentsrc:setVolume(self.musicVolume)
+  self.currentsrcfilename = src
   love.audio.play(self.currentsrc)
 end
 function Audio:changeVolume(volume,increment)

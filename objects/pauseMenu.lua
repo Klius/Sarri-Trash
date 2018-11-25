@@ -29,11 +29,11 @@ pauseMenu = {
       text = "Music Volume",
       x=100,
       y=300,
-      description = "Beat the record on various tracks to unlock new cars",
+      description = "",
       accessible = true,
-      isAudioControl= true,
+      isCustomControl= true,
       volControl = audioControl(),
-      changeVolume = function (increment)
+      changeControl = function (increment)
         audiomanager:changeMusicVolume(increment/10)
       end,
       draw = function(self,x,y)
@@ -46,11 +46,11 @@ pauseMenu = {
       text = "SFX Volume",
       x=100,
       y=400,
-      description = "Beat the record on various tracks to unlock new cars",
+      description = "",
       accessible = true,
-      isAudioControl = true,
+      isCustomControl = true,
       volControl = audioControl(),
-      changeVolume = function (increment)
+      changeControl = function (increment)
         audiomanager:changeSFXVolume(increment/10)
         player:adjustVolume()
         player2:adjustVolume()
@@ -62,9 +62,26 @@ pauseMenu = {
       end
     },
     [5] = {
+      text = "Song: ",
+      x = 100,
+      y = 500,
+      description = "",
+      accessible = true,
+      isCustomControl = true,
+      info = {name="?",author="¿?"},
+      changeControl = function(increment)
+        audiomanager:nextTrack(increment)
+      end,
+      draw = function(self,x,y)
+        love.graphics.print(self.text,x,y)
+        self.info = audiomanager:getCurrentTrackInfo()
+        love.graphics.print(info.name.." - "..info.author,x+100,y)
+      end
+    },
+    [6] = {
       text = "Exit",
       x=100,
-      y=500,
+      y=600,
       description = "",
       accessible = true,
       changeState = function ()
@@ -74,8 +91,12 @@ pauseMenu = {
   }
 }
 pauseMenu.update = function (self,dt)
-  race.pauseTime = race.pauseTime +dt
-  print(race.pauseTime)
+  if player.race.isTiming then
+    player.race.pauseTime = player.race.pauseTime +dt
+  end
+  if player.race.isTiming then
+    player2.race.pauseTime = player2.race.pauseTime +dt
+  end
 end
 pauseMenu.draw = function (self)
   love.graphics.setColor(0,0,0,0.8)
@@ -96,7 +117,7 @@ pauseMenu.draw = function (self)
       end
       love.graphics.print(v.description,(love.graphics.getWidth()/8)*3,(love.graphics.getHeight()/8)*7)
     end
-    if v.isAudioControl then
+    if v.isCustomControl then
       v:draw(x,y)
     else
       love.graphics.print(v.text,x,y)
@@ -120,8 +141,8 @@ pauseMenu.changeOption = function(self, increment)
 end
 pauseMenu.selectOption = function(self)
   if self.options[self.currentOption].accessible then
-    if self.options[self.currentOption].isAudioControl then
-      self.options[self.currentOption].changeVolume(1)
+    if self.options[self.currentOption].isCustomControl then
+      self.options[self.currentOption].changeControl(1)
     else
       self.options[self.currentOption].changeState()
     end
@@ -131,8 +152,8 @@ pauseMenu.back = function(self)
   state = gameStates.gameLoop
 end
 pauseMenu.changeControl = function(self,increment)
-  if self.options[self.currentOption].isAudioControl then
-    self.options[self.currentOption].changeVolume(increment)
+  if self.options[self.currentOption].isCustomControl then
+    self.options[self.currentOption].changeControl(increment)
   end
    audiomanager:playSFX(audiomanager.audios.selectFX)
 end

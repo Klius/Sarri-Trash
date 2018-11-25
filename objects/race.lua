@@ -51,16 +51,13 @@ race.update = function (self,dt)
               end
 race.timing = function (self,dt)
   timex = love.timer.getTime()
-  if self.pauseTime > 0 then
-    timex = timex - self.pauseTime --this little line compensates time wasted on pause screen
-  end
   if player.race.isTiming then
-    player.race.currentTime = timex - player.race.timer 
+    player.race.currentTime = timex - player.race.timer - player.race.pauseTime 
     player.race.lapTimes[player.race.currentLap+1] = player.race.currentTime
   end
   if mode == gameModes.multiplayer then
     if player2.race.isTiming then
-      player2.race.currentTime = timex - player2.race.timer
+      player2.race.currentTime = timex - player2.race.timer - player2.race.pauseTime
       player2.race.lapTimes[player2.race.currentLap+1] = player2.race.currentTime
     end
   end

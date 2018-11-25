@@ -85,6 +85,7 @@ function Player:raceReset()
                   currentLap = 0,
                   lapTimes = {0,0,0},
                   currentTime = 0,
+                  pauseTime = 0,
                   isTiming = false,
                   timer = 0,
                   totalTime = 0
