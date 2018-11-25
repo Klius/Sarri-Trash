@@ -2,7 +2,8 @@ race = {
           endRace = false,
           sprite = love.graphics.newImage("assets/lap-counter.png"),
           spritesheet = getAnimations(love.graphics.newImage("assets/lap-counter.png"),32,32),
-          minimap = Minimap()
+          minimap = Minimap(),
+          pauseTime = 0,
         }
 race.nextLap = function ( self,player)
                   local race = player.race
@@ -22,6 +23,7 @@ race.nextLap = function ( self,player)
                 end
 race.reset = function (self)
                 self.endRace = false
+                self.pauseTime = 0
                 player:raceReset()
                 player2:raceReset()
                 self:changeBackgroundAudio()
@@ -40,21 +42,29 @@ race.changeBackgroundAudio = function(self)
   audiomanager:changeTrack(audiomanager.audios.race[randomTrack])
 end
 race.update = function (self,dt)
-                if player.race.isTiming then
-                  player.race.currentTime = love.timer.getTime() - player.race.timer
-                  player.race.lapTimes[player.race.currentLap+1] = player.race.currentTime
-                end
-                
+                self:timing(dt)
                 player.speedometer:update(dt,player)
                 if mode == gameModes.multiplayer then
-                  if player2.race.isTiming then
-                    player2.race.currentTime = love.timer.getTime() - player2.race.timer
-                    player2.race.lapTimes[player2.race.currentLap+1] = player2.race.currentTime
-                  end
                   player2.speedometer:update(dt,player2)
                 end
                 self.minimap:update(dt)
               end
+race.timing = function (self,dt)
+  timex = love.timer.getTime()
+  if self.pauseTime > 0 then
+    timex = timex - self.pauseTime --this little line compensates time wasted on pause screen
+  end
+  if player.race.isTiming then
+    player.race.currentTime = timex - player.race.timer 
+    player.race.lapTimes[player.race.currentLap+1] = player.race.currentTime
+  end
+  if mode == gameModes.multiplayer then
+    if player2.race.isTiming then
+      player2.race.currentTime = timex - player2.race.timer
+      player2.race.lapTimes[player2.race.currentLap+1] = player2.race.currentTime
+    end
+  end
+end
 race.draw = function (self)
               love.graphics.draw(self.sprite,self.spritesheet[player.race.currentLap],80,50,0,1,1)
               if (player.race.currentLap == 2) then

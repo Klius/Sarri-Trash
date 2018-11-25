@@ -103,6 +103,9 @@ function love.update(dt)
     if state == gameStates.settingsScreen then
       settingsScreen:update(dt)
     end
+    if state == gameStates.pause then
+      pauseMenu:update(dt)
+    end
     defTransition:update(dt)
     
 end

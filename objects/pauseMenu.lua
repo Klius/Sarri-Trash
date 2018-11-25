@@ -2,6 +2,7 @@ pauseMenu = {
   bigFont = love.graphics.newFont(30),
   defaultFont = love.graphics.newFont(18),
   currentOption = 1,
+  pauseTime = 0,
   options = {
     [1] = {
       text = "Continue",
@@ -73,7 +74,8 @@ pauseMenu = {
   }
 }
 pauseMenu.update = function (self,dt)
-  
+  race.pauseTime = race.pauseTime +dt
+  print(race.pauseTime)
 end
 pauseMenu.draw = function (self)
   love.graphics.setColor(0,0,0,0.8)
