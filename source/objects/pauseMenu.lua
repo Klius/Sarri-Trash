@@ -72,8 +72,11 @@ pauseMenu = {
       rArrow = Arrow(5,0,0),
       lArrow = Arrow(6,0,0),
       info = {name="?",author="¿?"},
+      str = ScrollingString ("? by ?",220,500),
       changeControl = function(self,increment)
         audiomanager:nextTrack(increment)
+        self.info = audiomanager:getCurrentTrackInfo()
+        self.str:setString(self.info.name.." by "..self.info.author,true)
         if increment > 0 then
           self.rArrow:pressed()
         else
@@ -82,18 +85,22 @@ pauseMenu = {
       end,
       draw = function(self,x,y)
         love.graphics.print(self.text,x,y)
-        self.info = audiomanager:getCurrentTrackInfo()
         self.rArrow.x = x+660
         self.rArrow.y = y+15
         self.rArrow:draw()
         self.lArrow.x = x+100
         self.lArrow.y = y+15
         self.lArrow:draw()
-        love.graphics.print(info.name.." by "..info.author,x+120,y)
+        self.str.x = x+140
+        self.str.y = y
+        self.str:draw()
       end,
       update = function(self,dt)
         self.rArrow:update(dt)
         self.lArrow:update(dt)
+        self.info = audiomanager:getCurrentTrackInfo()
+        self.str:setString(self.info.name.." by "..self.info.author,false)
+        self.str:update(dt)
       end
     },
     [6] = {
