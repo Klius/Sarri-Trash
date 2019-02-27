@@ -33,8 +33,6 @@ function love.load()
   require "objects/settingsScreen"
   require "objects/pauseMenu"
   
-  --Saving
-  saveRecord("t","test")
   --transition
   defTransition = Transition()
   love.mouse.setVisible( false )
