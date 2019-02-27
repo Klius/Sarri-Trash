@@ -4,6 +4,7 @@ sti = require "libs/sti"
 bump = require "libs/bump"
 bump_debug = require "libs/bump_debug"
 Object = require "libs/classic"
+require "libs/save"
 require "objects/scrollingstring"
 require "objects/audio-engine"
 require "objects/gamestates"
@@ -17,7 +18,6 @@ require "objects/controllerScreen"
 require "objects/mapSelect"
 require "objects/statbar"
 require "objects/carSelect"
-require "objects/save"
 function love.load()
   require "objects/minimap"
   require "objects/race"
@@ -32,7 +32,9 @@ function love.load()
   require "objects/audioControl"
   require "objects/settingsScreen"
   require "objects/pauseMenu"
-
+  
+  --Saving
+  saveRecord("t","test")
   --transition
   defTransition = Transition()
   love.mouse.setVisible( false )

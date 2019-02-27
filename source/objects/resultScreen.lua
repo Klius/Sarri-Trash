@@ -197,6 +197,9 @@ resultScreen.confirm = function(self)
     if self.currentSpace == 4 then
       local playerName = self.alphabet[self.recordName[1]]..self.alphabet[self.recordName[2]]..self.alphabet[self.recordName[3]]
       maplist.selectedMapRecordsName[self.currentPosition] =  playerName
+      --Save Records
+      local savestring = maplist.selectedMapRecords[1].."/"..maplist.selectedMapRecordsName[1]..","..maplist.selectedMapRecords[2].."/"..maplist.selectedMapRecordsName[2]..","..maplist.selectedMapRecords[3].."/"..maplist.selectedMapRecordsName[3]
+      saveRecord(maplist.selectedMap,savestring)
       state = gameStates.mapSelect
       audiomanager:changeTrack(audiomanager.audios.menu)
     elseif self.currentSpace < 4 then

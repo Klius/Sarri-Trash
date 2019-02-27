@@ -76,6 +76,7 @@ maplist.loadPreview = function (self)
                               end
                             end
                          end
+                         self:loadRecords()
                         love.graphics.setCanvas(self.preview)
                         local tx = 800 -- math.floor(1600 - 400 / 2)
                         local ty = 800 --math.floor(1600 - 275 / 2)
@@ -90,6 +91,15 @@ maplist.drawPreview = function (self,tx,ty)
                                              
                         love.graphics.setCanvas()
                       end
+maplist.loadRecords = function(self)
+  local savTimes = 0
+  local savNames = 0 
+  savTimes,savNames = loadRecords(self.selectedMap)
+  if savTimes ~= 0 and savNames ~= 0 then
+    self.selectedMapRecords = savTimes
+    self.selectedMapRecordsName = savNames
+  end
+end
 maplist.resetDefaults = function (self)
                         self.selectedMapName = "Under Construction"
                         self.selectedMapRecords = { 99999,99999,99999 }
