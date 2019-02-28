@@ -99,7 +99,7 @@ race.initMinimap = function (self)
   end
   local minimapPath = "assets/maps/minimap/"
   minimapPath = minimapPath..string.gsub(split[k],".lua","_256.png")
-  print(minimapPath)
+  --print(minimapPath)
   self.minimap:changeMap(minimapPath)
 end
 race.timerStart = function (self,player)

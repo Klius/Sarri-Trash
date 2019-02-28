@@ -38,9 +38,26 @@ settingsScreen = {
       end
     },
     [3] = {
-      text = "Back",
+      text = "Camera",
       x=100,
       y=500,
+      description = "Changes Camera behaviour",
+      accessible = true,
+      isSelectorControl = true,
+      control = selectorControl({ [1]={text="Dinamic",value=1} , [2]={text="Static",value=0}},config.dinamic_cam),
+      changeOption = function (control,increment)
+        control:changeOption(increment)
+        config.dinamic_cam = control:getValue()
+      end,
+      draw = function(self)
+        love.graphics.print(self.text,self.x,self.y)
+        self.control:draw(self.x+120,self.y)
+      end
+    },
+    [4] = {
+      text = "Back",
+      x=100,
+      y=600,
       description = "Beat the record on various tracks to unlock new cars",
       accessible = true,
       changeState = function ()
@@ -67,7 +84,7 @@ settingsScreen.draw = function (self)
       love.graphics.print(v.description,(love.graphics.getWidth()/8)*3,(love.graphics.getHeight()/8)*7)
     end
     love.graphics.setFont(self.bigFont)
-    if v.isAudioControl then
+    if v.isAudioControl or v.isSelectorControl then
       v:draw()
     else
       love.graphics.print(v.text,v.x,v.y)
@@ -106,6 +123,8 @@ end
 settingsScreen.changeControl = function(self,increment)
   if self.options[self.currentOption].isAudioControl then
     self.options[self.currentOption].changeVolume(increment)
+  elseif self.options[self.currentOption].isSelectorControl then
+    self.options[self.currentOption].changeOption(self.options[self.currentOption].control,increment)
   end
    audiomanager:playSFX(audiomanager.audios.selectFX)
 end

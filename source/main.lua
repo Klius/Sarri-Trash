@@ -19,6 +19,7 @@ require "objects/mapSelect"
 require "objects/statbar"
 require "objects/carSelect"
 function love.load()
+  config = loadConf()
   require "objects/minimap"
   require "objects/race"
   require "objects/phoneui"
@@ -30,9 +31,10 @@ function love.load()
   require "objects/speedometer"
   require "objects/transition"
   require "objects/audioControl"
+  require "objects/selectorControl"
   require "objects/settingsScreen"
   require "objects/pauseMenu"
-  config = loadConf()
+  
   --transition
   defTransition = Transition()
   love.mouse.setVisible( false )
