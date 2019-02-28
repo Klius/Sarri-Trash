@@ -18,6 +18,7 @@ function selectorControl:draw(x,y)
   for i in ipairs(self.options) do
     if i == self.selected then
       love.graphics.setColor(1,1,1,1)
+      love.graphics.rectangle("fill",x-16,y+10,16,16)
     else
       love.graphics.setColor(0.5,0.5,0.5,1)
     end  
