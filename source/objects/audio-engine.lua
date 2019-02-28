@@ -1,6 +1,6 @@
 Audio = Object:extend()
 
-function Audio:new()
+function Audio:new(musVolume,sfxVolume)
   self.audios = {
     menu = "assets/audio/downtheway-menu.mp3",
     race = {
@@ -30,8 +30,8 @@ function Audio:new()
     gamaovar = "assets/audio/okeydokeysmokey.mp3",
     selectFX = love.audio.newSource("assets/audio/sfx/select.wav","static")
   }
-  self.musicVolume = 0.5
-  self.sfxVolume = 0.4
+  self.musicVolume = musVolume or 0.7
+  self.sfxVolume = sfxVolume or 0.5
   self.currentsrc = love.audio.newSource(self.audios.menu,"stream")
   self.currentsrcfilename = self.audios.menu
   self.currentsrc:setLooping(true)
@@ -85,10 +85,11 @@ end
 function Audio:changeMusicVolume(increment)
   self.musicVolume = self:changeVolume(self.musicVolume,increment)
   self.currentsrc:setVolume(self.musicVolume)
+  config.music = self.musicVolume
 end
 function Audio:changeSFXVolume(increment)
   self.sfxVolume = self:changeVolume(self.sfxVolume,increment)
-  
+  config.sfx = self.sfxVolume
   --self.currentsrc:setVolume(self.musicVolume)
 end
 function Audio:playSFX(sfx)

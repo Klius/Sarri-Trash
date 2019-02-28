@@ -9,7 +9,7 @@ require "objects/scrollingstring"
 require "objects/audio-engine"
 require "objects/gamestates"
 require "objects/transition"
-require "objects/config"
+--require "objects/config"
 require "objects/animations"
 require "objects/arrows"
 require "objects/mainMenuScreen"
@@ -32,7 +32,7 @@ function love.load()
   require "objects/audioControl"
   require "objects/settingsScreen"
   require "objects/pauseMenu"
-  
+  config = loadConf()
   --transition
   defTransition = Transition()
   love.mouse.setVisible( false )
@@ -66,7 +66,7 @@ function love.load()
     player2:spawnPlayer("player2")
   end
   --play music
-  audiomanager = Audio()
+  audiomanager = Audio(config.music,config.sfx)
 end
 
 function love.update(dt)
@@ -295,7 +295,7 @@ function love.gamepadaxis( gamepad, axis, value )
   local direction = gamepad:getGamepadAxis("leftx")
   local button = ""
   local binding = ""
-  if direction > config.joy_sen[1] then
+  if direction > config.joy_sen then
     button = "jright"
     binding = state.buttons[button]
     inputHandler( binding ,gamepad:getGUID())
@@ -303,7 +303,7 @@ function love.gamepadaxis( gamepad, axis, value )
     button = "jleft"
     binding = state.buttonsReleased[button]
     inputHandler( binding , gamepad:getGUID())
-  elseif direction < -config.joy_sen[1] then
+  elseif direction < -config.joy_sen then
     button = "jleft"
     binding = state.buttons[button]
     inputHandler( binding, gamepad:getGUID() )

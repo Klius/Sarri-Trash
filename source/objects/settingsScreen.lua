@@ -44,6 +44,7 @@ settingsScreen = {
       description = "Beat the record on various tracks to unlock new cars",
       accessible = true,
       changeState = function ()
+        saveConf(config)
         defTransition:start()
         state = gameStates.mainMenu
       end
@@ -98,6 +99,7 @@ settingsScreen.selectOption = function(self)
   end
 end
 settingsScreen.back = function(self)
+  saveConf(config)
   state = gameStates.mainMenu
   defTransition:start()
 end

@@ -172,7 +172,7 @@ end
 pauseMenu.selectOption = function(self)
   if self.options[self.currentOption].accessible then
     if self.options[self.currentOption].isCustomControl then
-      self.options[self.currentOption].changeControl(1)
+      self.options[self.currentOption]:changeControl(1)
     else
       self.options[self.currentOption].changeState()
     end

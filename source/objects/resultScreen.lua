@@ -12,7 +12,7 @@ resultScreen = {
               [1] = "1ST",
               [2] = "2ND",
               [3] = "3RD",
-              [0] = "LAST"
+              [0] = "Not Classified"
             },
     title = {
       [gameModes.timeAttack] = "Time Attack on ",
@@ -57,10 +57,13 @@ resultScreen.Initialize = function(self)
       self.currentPosition = 1
       maplist.selectedMapRecords[3] = maplist.selectedMapRecords[2]
       maplist.selectedMapRecords[2] = maplist.selectedMapRecords[1]
+      maplist.selectedMapRecordsName[3] = maplist.selectedMapRecordsName[2]
+      maplist.selectedMapRecordsName[2] = maplist.selectedMapRecordsName[1]
       maplist.selectedMapRecords[1] = race.totalTime
     elseif race.totalTime < maplist.selectedMapRecords[2] then
       self.currentPosition = 2
       maplist.selectedMapRecords[3] = maplist.selectedMapRecords[2]
+      maplist.selectedMapRecordsName[3] = maplist.selectedMapRecordsName[2]
       maplist.selectedMapRecords[2] = race.totalTime
     elseif race.totalTime < maplist.selectedMapRecords[3] then
       self.currentPosition = 3

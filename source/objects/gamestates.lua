@@ -386,6 +386,8 @@ gameStates.pause = {
   buttons = {
     dpup = "moveUp",
     dpdown = "moveDown",
+    dpleft = "changeControlLeft",
+    dpright = "changeControlRight",
     a = "confirm",
     start = "confirm"
   },
